@@ -3,6 +3,8 @@ import HeroSlider from '@/components/HeroSlider';
 import Navigation from '@/components/Navigation';
 import BrandLogos from '@/components/BrandLogos';
 import CardsSection from '@/components/CardsSection';
+import PromoSection from '@/components/PromoSection';
+import WhyChooseUs from '@/components/WhyChooseUs';
 
 export default function Home() {
   return (
@@ -40,6 +42,12 @@ export default function Home() {
 
         {/* Cards Section */}
         <CardsSection />
+
+        {/* Promotional Section */}
+        <PromoSection />
+
+        {/* Why Choose Us Section */}
+        <WhyChooseUs />
 
         <section className="max-w-[1920px] w-full mx-auto relative">
 
