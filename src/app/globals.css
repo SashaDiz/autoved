@@ -97,3 +97,25 @@ body {
   }
 }
 
+/* Sticky positioning utilities for countries section */
+.sticky-left-content {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 1023px) {
+  .sticky-left-content {
+    position: static;
+    height: auto;
+  }
+}
+
+/* Smooth scrolling for right side content */
+.countries-scroll-content {
+  scroll-behavior: smooth;
+}
+

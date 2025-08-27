@@ -3,8 +3,10 @@ import HeroSlider from '@/components/HeroSlider';
 import Navigation from '@/components/Navigation';
 import BrandLogos from '@/components/BrandLogos';
 import CardsSection from '@/components/CardsSection';
+import CountriesSection from '@/components/CountriesSection';
 import PromoSection from '@/components/PromoSection';
 import WhyChooseUs from '@/components/WhyChooseUs';
+import ProcessSection from '@/components/ProcessSection';
 
 export default function Home() {
   return (
@@ -48,6 +50,12 @@ export default function Home() {
 
         {/* Why Choose Us Section */}
         <WhyChooseUs />
+
+        {/* Countries Section */}
+        <CountriesSection />
+
+        {/* Process Section */}
+        <ProcessSection />
 
         <section className="max-w-[1920px] w-full mx-auto relative">
 

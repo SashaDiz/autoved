@@ -143,7 +143,7 @@ export default function Card({
         <div className='absolute bottom-4 right-4'>
 
           {location && (
-            <div className="px-2 py-1 rounded-lg">
+            <div>
               <Image
                 src={`/assets/flags/${location}.svg`}
                 alt={location}
