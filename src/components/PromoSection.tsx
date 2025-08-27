@@ -1,8 +1,25 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 export default function PromoSection() {
+    const phoneRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (phoneRef.current) {
+            // Create a gentle floating animation focused on up and down movement
+            gsap.to(phoneRef.current, {
+                y: -12, // Increased vertical movement to 12 pixels
+                duration: 3.5, // Smooth duration for wave-like motion
+                ease: "sine.inOut", // Very smooth sine easing
+                yoyo: true, // Reverse the animation
+                repeat: -1, // Infinite repeat
+            });
+        }
+    }, []);
+
     return (
         <section className="max-w-[1200px] w-full mx-auto relative pt-16 pb-30 px-4 sm:px-6 lg:px-20">
             <div className="bg-gray-900 rounded-3xl relative overflow-hidden">
@@ -34,7 +51,7 @@ export default function PromoSection() {
 
                     {/* Right Side - Phone Image */}
                     <div className="flex-1 flex items-center justify-center lg:justify-end p-8 lg:p-16 lg:pl-8">
-                        <div className="absolute -top-10 -right-20 rotate-15">
+                        <div ref={phoneRef} className="absolute -top-10 -right-20 rotate-15">
                             <Image
                                 src="/assets/phone_img.webp"
                                 alt="Phone with AutoVed app"
@@ -46,11 +63,6 @@ export default function PromoSection() {
                         </div>
                     </div>
                 </div>
-
-                {/* Background decorative elements */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900"></div>
-                <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-700/50 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-gray-900 to-transparent"></div>
             </div>
         </section>
     );
