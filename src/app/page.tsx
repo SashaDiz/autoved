@@ -7,6 +7,7 @@ import CountriesSection from '@/components/CountriesSection';
 import PromoSection from '@/components/PromoSection';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ProcessSection from '@/components/ProcessSection';
+import PricingSection from '@/components/PricingSection';
 
 export default function Home() {
   return (
@@ -56,6 +57,9 @@ export default function Home() {
 
         {/* Process Section */}
         <ProcessSection />
+
+        {/* Pricing Section */}
+        <PricingSection />
 
         <section className="max-w-[1920px] w-full mx-auto relative">
 

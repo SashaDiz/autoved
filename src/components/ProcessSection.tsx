@@ -55,7 +55,7 @@ export default function ProcessSection() {
             // Create scroll trigger when section enters the screen
             ScrollTrigger.create({
                 trigger: sectionRef.current,
-                start: "top 60%", // Trigger when section is 80% into viewport
+                start: "top 20%", // Trigger when section is 80% into viewport
                 once: true, // Only trigger once per page load
                 onEnter: () => {
 
