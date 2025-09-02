@@ -11,7 +11,7 @@ const SLIDER_CONFIG = {
   slides: [
     {
       id: 'slide-1',
-      backgroundImage: '/assets/bg_img1.jpg',
+      backgroundImage: '/assets/bg_img1.webp',
       carInfo: {
         name: 'Chery Tigo 8',
         specs: '2.0T л., 197 л.с.',
@@ -20,7 +20,7 @@ const SLIDER_CONFIG = {
     },
     {
       id: 'slide-2',
-      backgroundImage: '/assets/bg_img1.jpg', // You can replace with different images
+      backgroundImage: '/assets/bg_img1.webp', // You can replace with different images
       carInfo: {
         name: 'Toyota RAV4',
         specs: '2.5L, 203 л.с.',
@@ -29,7 +29,7 @@ const SLIDER_CONFIG = {
     },
     {
       id: 'slide-3',
-      backgroundImage: '/assets/bg_img1.jpg', // You can replace with different images
+      backgroundImage: '/assets/bg_img1.webp', // You can replace with different images
       carInfo: {
         name: 'BMW X5',
         specs: '3.0T, 340 л.с.',
