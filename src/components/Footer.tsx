@@ -58,7 +58,7 @@ export default function Footer() {
 
       {/* Bottom Section */}
       <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-xs text-gray-400">
-        <div className='max-w-[400px]'>
+        <div className='max-w-[300px]'>
           <p>2025 © Все права защищены.</p>
           <p>Данный сайт носит исключительно информационный характер и не является публичной офертой</p>
         </div>
