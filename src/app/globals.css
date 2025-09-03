@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'TikTok Sans';
-  src: url('/fonts/TikTokSans-Regular.ttf') format('truetype');
+  src: url('/fonts/TikTokSans_28pt-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -10,7 +10,7 @@
 
 @font-face {
   font-family: 'TikTok Sans';
-  src: url('/fonts/TikTokSans-Medium.ttf') format('truetype');
+  src: url('/fonts/TikTokSans_24pt-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -18,7 +18,7 @@
 
 @font-face {
   font-family: 'TikTok Sans';
-  src: url('/fonts/TikTokSans-SemiBold.ttf') format('truetype');
+  src: url('/fonts/TikTokSans_24pt-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -26,7 +26,7 @@
 
 @font-face {
   font-family: 'TikTok Sans';
-  src: url('/fonts/TikTokSans-Bold.ttf') format('truetype');
+  src: url('/fonts/TikTokSans_28pt-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
