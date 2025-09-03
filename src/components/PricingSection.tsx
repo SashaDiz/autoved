@@ -17,7 +17,7 @@ export default function PricingSection() {
             </div>
 
             {/* Car and Pricing Elements Container */}
-            <div className="relative flex items-center justify-center min-h-[500px] lg:min-h-[600px]">
+            <div className="relative flex items-center justify-center min-h-[600px] lg:min-h-[700px]">
                 {/* Main Car Image - Bigger */}
                 <div className="relative z-10">
                     <Image
@@ -25,7 +25,7 @@ export default function PricingSection() {
                         alt="Mercedes sedan"
                         width={1800}
                         height={600}
-                        className="w-full min-w-[500px] lg:min-w-[1200px] lg:max-w-[1800px] h-auto"
+                        className="w-full min-w-[450px] lg:min-w-[900px] lg:max-w-[1400px] h-auto"
                         priority
                     />
                 </div>
@@ -59,7 +59,7 @@ export default function PricingSection() {
                 </div>
 
                 {/* Price Element 3 - Bottom Left */}
-                <div className="absolute bottom-3 left-2 lg:bottom-2 lg:left-8 p-3 lg:p-4 max-w-[200px] lg:max-w-[260px]">
+                <div className="absolute bottom-6 left-2 lg:bottom-8 lg:left-8 p-3 lg:p-4 max-w-[200px] lg:max-w-[260px]">
                     <div className="flex items-start gap-2">
                         <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
                             <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>

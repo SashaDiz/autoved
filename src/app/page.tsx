@@ -8,6 +8,11 @@ import PromoSection from '@/components/PromoSection';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ProcessSection from '@/components/ProcessSection';
 import PricingSection from '@/components/PricingSection';
+import VideoReviewsSection from '@/components/VideoReviewsSection';
+import FAQSection from '@/components/FAQSection';
+import ContactSection from '@/components/ContactSection';
+import ContactFormSection from '@/components/ContactFormSection';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -60,6 +65,21 @@ export default function Home() {
 
         {/* Pricing Section */}
         <PricingSection />
+
+        {/* Video Reviews Section */}
+        <VideoReviewsSection />
+
+        {/* FAQ Section */}
+        <FAQSection />
+
+        {/* Contact Section */}
+        <ContactSection />
+
+        {/* Contact Form Section */}
+        <ContactFormSection />
+
+        {/* Footer */}
+        <Footer />
 
         <section className="max-w-[1920px] w-full mx-auto relative">
 
