@@ -1,17 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AdminData, loadAdminData, saveAdminData } from '@/utils/adminData';
+import { AdminData, loadAdminData, saveAdminSection, initializeDatabase } from '@/utils/adminData';
 import AdminHeroSection from '@/components/AdminHeroSection';
 import AdminPromoSection from '@/components/AdminPromoSection';
 import AdminVideoSection from '@/components/AdminVideoSection';
 import AdminFAQSection from '@/components/AdminFAQSection';
+import AdminCardsSection from '@/components/AdminCardsSection';
 
 interface AdminDashboardProps {
   onLogout: () => void;
 }
 
-type Section = 'hero' | 'promo' | 'videos' | 'faq';
+type Section = 'hero' | 'promo' | 'videos' | 'faq' | 'cards';
 
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState<Section>('hero');
@@ -20,7 +21,19 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
 
   useEffect(() => {
-    setData(loadAdminData());
+    const initAndLoadData = async () => {
+      try {
+        // Initialize database if needed
+        await initializeDatabase();
+        // Load data from database
+        const adminData = await loadAdminData();
+        setData(adminData);
+      } catch (error) {
+        console.error('Failed to load admin data:', error);
+      }
+    };
+    
+    initAndLoadData();
   }, []);
 
   const handleDataChange = (section: keyof AdminData, newData: AdminData[keyof AdminData]) => {
@@ -32,20 +45,15 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     };
     
     setData(updatedData);
-    handleSave(updatedData);
+    handleSave(section, newData);
   };
 
-  const handleSave = async (dataToSave?: AdminData) => {
-    const currentData = dataToSave || data;
-    if (!currentData) return;
-
+  const handleSave = async (section: keyof AdminData, sectionData: AdminData[keyof AdminData]) => {
     setIsSaving(true);
     setSaveStatus('saving');
 
     try {
-      // Simulate save delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-      saveAdminData(currentData);
+      await saveAdminSection(section, sectionData);
       setSaveStatus('saved');
       setTimeout(() => setSaveStatus(null), 2000);
     } catch (error) {
@@ -67,6 +75,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const sections = [
     { id: 'hero' as Section, name: 'Главный экран', icon: '🎯' },
+    { id: 'cards' as Section, name: 'Каталог авто', icon: '🚗' },
     { id: 'promo' as Section, name: 'Промо секция', icon: '📱' },
     { id: 'videos' as Section, name: 'Видео отзывы', icon: '🎥' },
     { id: 'faq' as Section, name: 'Вопросы и ответы', icon: '❓' }
@@ -154,6 +163,12 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 <AdminHeroSection
                   data={data.hero}
                   onChange={(newData) => handleDataChange('hero', newData)}
+                />
+              )}
+              {activeSection === 'cards' && (
+                <AdminCardsSection
+                  data={data.cards}
+                  onChange={(newData) => handleDataChange('cards', newData)}
                 />
               )}
               {activeSection === 'promo' && (

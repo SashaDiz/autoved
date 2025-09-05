@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { loadAdminData } from '@/utils/adminData';
+import { loadAdminData, loadAdminDataSync } from '@/utils/adminData';
 
 export default function FAQSection() {
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>('faq-1');
@@ -10,11 +10,27 @@ export default function FAQSection() {
 
   // Load dynamic data
   useEffect(() => {
-    const data = loadAdminData().faq;
-    setFaqData(data);
-    if (data.length > 0) {
-      setExpandedFAQ(data[0].id);
-    }
+    const fetchData = async () => {
+      try {
+        const adminData = await loadAdminData();
+        const data = adminData.faq;
+        setFaqData(data);
+        if (data.length > 0) {
+          setExpandedFAQ(data[0].id);
+        }
+      } catch (error) {
+        console.error('Failed to load FAQ data:', error);
+        // Fallback to default data
+        const fallbackData = loadAdminDataSync();
+        const data = fallbackData.faq;
+        setFaqData(data);
+        if (data.length > 0) {
+          setExpandedFAQ(data[0].id);
+        }
+      }
+    };
+    
+    fetchData();
   }, []);
 
   const toggleFAQ = (faqId: string) => {

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
-import { loadAdminData, HeroData, HeroSlide } from '@/utils/adminData';
+import { loadAdminData, loadAdminDataSync, HeroData, HeroSlide } from '@/utils/adminData';
 
 // Slider configuration
 const SLIDER_CONFIG = {
@@ -30,7 +30,19 @@ const HeroSlider = () => {
 
   // Load dynamic data
   useEffect(() => {
-    setHeroData(loadAdminData().hero);
+    const fetchData = async () => {
+      try {
+        const data = await loadAdminData();
+        setHeroData(data.hero);
+      } catch (error) {
+        console.error('Failed to load hero data:', error);
+        // Fallback to default data
+        const fallbackData = loadAdminDataSync();
+        setHeroData(fallbackData.hero);
+      }
+    };
+    
+    fetchData();
   }, []);
 
   const slides = heroData?.slides || [];

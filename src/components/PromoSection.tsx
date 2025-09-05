@@ -3,14 +3,26 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import { loadAdminData } from '@/utils/adminData';
+import { loadAdminData, loadAdminDataSync } from '@/utils/adminData';
 
 export default function PromoSection() {
     const phoneRef = useRef<HTMLDivElement>(null);
     const [promoData, setPromoData] = useState<{title: string; subtitle: string} | null>(null);
 
     useEffect(() => {
-        setPromoData(loadAdminData().promo);
+        const fetchData = async () => {
+            try {
+                const data = await loadAdminData();
+                setPromoData(data.promo);
+            } catch (error) {
+                console.error('Failed to load promo data:', error);
+                // Fallback to default data
+                const fallbackData = loadAdminDataSync();
+                setPromoData(fallbackData.promo);
+            }
+        };
+        
+        fetchData();
     }, []);
 
     useEffect(() => {

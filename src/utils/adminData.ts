@@ -37,11 +37,34 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface CarCard {
+  id: string;
+  title: string;
+  engine: string;
+  drive: string;
+  modification: string;
+  distance: string;
+  imageUrl: string;
+  externalLink: string;
+  price: string;
+  year: string;
+  location: string;
+  isNew: boolean;
+  date: string;
+}
+
+export interface CardsData {
+  title: string;
+  subtitle: string;
+  cards: CarCard[];
+}
+
 export interface AdminData {
   hero: HeroData;
   promo: PromoData;
   videoReviews: VideoReview[];
   faq: FAQItem[];
+  cards: CardsData;
 }
 
 // Default data
@@ -160,33 +183,218 @@ export const getDefaultData = (): AdminData => ({
       question: 'Что делать, если авто не проходит таможенное оформление?',
       answer: 'В случае возникновения проблем с таможенным оформлением, мы берем на себя все вопросы по их решению. Наша команда имеет большой опыт работы с таможенными органами и знает все нюансы процедур. Все риски покрываются страховкой.'
     }
-  ]
+  ],
+  cards: {
+    title: "Каталог авто",
+    subtitle: "Здесь представлена лишь небольшая часть автомобилей доступных для заказа из Китая, Японии, Южной Кореи или Германии. Наличие уточняйте у менеджера.",
+    cards: [
+      {
+        id: 'car-1',
+        title: "Hyundai Tucson",
+        engine: "Двигатель 2.0 л., 186 л.с. (дизель)",
+        drive: "2WD",
+        modification: "Premium",
+        distance: "68 500 км.",
+        imageUrl: "/assets/hyunday.jpg",
+        externalLink: "https://auto.ru/cars/hyundai/tucson/",
+        price: "2 670 000 ₽",
+        year: "2022 год / 05 месяц (дата регистрации)",
+        location: "KR",
+        isNew: false,
+        date: "27 июля"
+      },
+      {
+        id: 'car-2',
+        title: "Jeep Wrangler",
+        engine: "2.0T л., 266 л.с.",
+        drive: "4WD",
+        modification: "Sahara",
+        distance: "8 000 км.",
+        imageUrl: "/assets/jeep.jpg",
+        externalLink: "https://auto.ru/cars/jeep/wrangler/",
+        price: "4 500 000 ₽",
+        year: "2021 год / 08 месяц (дата регистрации)",
+        location: "CN",
+        isNew: false,
+        date: "27 июля"
+      },
+      {
+        id: 'car-3',
+        title: "Mercedes-Benz GLC",
+        engine: "2.0T л., 258 л.с.",
+        drive: "4WD",
+        modification: "GLC300L 4MATIC Dynamic Edition",
+        distance: "47 000 км.",
+        imageUrl: "/assets/mercedes-glc.jpg",
+        externalLink: "https://auto.ru/cars/mercedes/glc_class/",
+        price: "4 190 000 ₽",
+        year: "2022 год / 06 месяц (дата регистрации)",
+        location: "CN",
+        isNew: false,
+        date: "27 июля"
+      },
+      {
+        id: 'car-4',
+        title: "BMW X1",
+        engine: "2.0T л., 204 л.с.",
+        drive: "2WD",
+        modification: "sDrive25Li",
+        distance: "32 000 км.",
+        imageUrl: "/assets/bmw-x1.jpg",
+        externalLink: "https://auto.ru/cars/bmw/x1/",
+        price: "3 350 000 ₽",
+        year: "2022 год / 09 месяц (дата регистрации)",
+        location: "CN",
+        isNew: false,
+        date: "27 июля"
+      },
+      {
+        id: 'car-5',
+        title: "Mercedes-Benz E-Class",
+        engine: "2.0T л., 197 л.с.",
+        drive: "2WD",
+        modification: "E260L",
+        distance: "0 км.",
+        imageUrl: "/assets/mercedes-eclass.jpg",
+        externalLink: "https://auto.ru/cars/mercedes/e_class/",
+        price: "3 490 000 ₽",
+        year: "2025 год",
+        location: "CN",
+        isNew: true,
+        date: "27 июля"
+      },
+      {
+        id: 'car-6',
+        title: "BMW 6-SERIES",
+        engine: "2.0T л., 258 л.с.",
+        drive: "RWD",
+        modification: "GT 630i M Sport Touring",
+        distance: "44 000 км.",
+        imageUrl: "/assets/bmw-6.jpg",
+        externalLink: "https://auto.ru/cars/bmw/6er_gt/",
+        price: "3 950 000 ₽",
+        year: "2022 год / 01 месяц",
+        location: "DE",
+        isNew: false,
+        date: "27 июля"
+      },
+      {
+        id: 'car-7',
+        title: "Haval Dargo",
+        engine: "1.5T л., 167 л.с. (гибрид)",
+        drive: "4WD",
+        modification: "PHEV Hi4 5-Pro",
+        distance: "14 000 км.",
+        imageUrl: "/assets/haval.jpg",
+        externalLink: "https://auto.ru/cars/haval/dargo/",
+        price: "3 100 000 ₽",
+        year: "2025 год",
+        location: "CN",
+        isNew: true,
+        date: "27 июля"
+      },
+      {
+        id: 'car-8',
+        title: "Toyota Camry",
+        engine: "2.5 л., 181 л.с.",
+        drive: "FWD",
+        modification: "Comfort",
+        distance: "25 000 км.",
+        imageUrl: "/assets/hyunday.jpg",
+        externalLink: "https://auto.ru/cars/toyota/camry/",
+        price: "2 890 000 ₽",
+        year: "2023 год / 03 месяц (дата регистрации)",
+        location: "JP",
+        isNew: false,
+        date: "28 июля"
+      }
+    ]
+  }
 });
 
-// Local storage keys
-const STORAGE_KEYS = {
-  ADMIN_DATA: 'autoved_admin_data'
-};
 
-// Save data to localStorage
-export const saveAdminData = (data: AdminData): void => {
-  try {
-    localStorage.setItem(STORAGE_KEYS.ADMIN_DATA, JSON.stringify(data));
-  } catch (error) {
-    console.error('Failed to save admin data:', error);
-  }
-};
+// API-based data management functions
 
-// Load data from localStorage
-export const loadAdminData = (): AdminData => {
+// Save data to database via API
+export const saveAdminData = async (data: AdminData): Promise<void> => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.ADMIN_DATA);
-    if (stored) {
-      return JSON.parse(stored);
+    // Save each section separately
+    const sections = [
+      { section: 'hero', data: data.hero },
+      { section: 'promo', data: data.promo },
+      { section: 'videoReviews', data: data.videoReviews },
+      { section: 'faq', data: data.faq },
+      { section: 'cards', data: data.cards }
+    ];
+
+    for (const { section, data: sectionData } of sections) {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section, data: sectionData }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save ${section}`);
+      }
     }
   } catch (error) {
-    console.error('Failed to load admin data:', error);
+    console.error('Failed to save admin data:', error);
+    throw error;
   }
+};
+
+// Save single section to database via API
+export const saveAdminSection = async (section: keyof AdminData, data: AdminData[keyof AdminData]): Promise<void> => {
+  try {
+    const response = await fetch('/api/admin/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ section, data }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to save ${section}`);
+    }
+  } catch (error) {
+    console.error(`Failed to save ${section}:`, error);
+    throw error;
+  }
+};
+
+// Load data from database via API
+export const loadAdminData = async (): Promise<AdminData> => {
+  try {
+    const response = await fetch('/api/admin/data');
+    if (!response.ok) {
+      throw new Error('Failed to load admin data');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to load admin data:', error);
+    return getDefaultData();
+  }
+};
+
+// Initialize database (call this once)
+export const initializeDatabase = async (): Promise<boolean> => {
+  try {
+    const response = await fetch('/api/admin/init', {
+      method: 'POST',
+    });
+    return response.ok;
+  } catch (error) {
+    console.error('Failed to initialize database:', error);
+    return false;
+  }
+};
+
+// Fallback functions for client-side compatibility
+export const loadAdminDataSync = (): AdminData => {
   return getDefaultData();
 };
 

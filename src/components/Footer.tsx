@@ -17,7 +17,7 @@ export default function Footer() {
             className="w-auto h-10"
           />
         </div>
-        <div className="flex justify-between items-center gap-12 w-full xl:w-auto">
+        <div className="flex flex-wrap justify-between items-center gap-12 w-full xl:w-auto">
           {/* Center - Navigation Links */}
           <div className="flex gap-8 text-sm">
             <a href="#services" className="text-white hover:text-gray-300 transition-colors">

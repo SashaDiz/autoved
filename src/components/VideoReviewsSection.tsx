@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { loadAdminData } from '@/utils/adminData';
+import { loadAdminData, loadAdminDataSync } from '@/utils/adminData';
 
 export default function VideoReviewsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,7 +17,19 @@ export default function VideoReviewsSection() {
 
   // Load dynamic data
   useEffect(() => {
-    setVideoReviews(loadAdminData().videoReviews);
+    const fetchData = async () => {
+      try {
+        const data = await loadAdminData();
+        setVideoReviews(data.videoReviews);
+      } catch (error) {
+        console.error('Failed to load video reviews data:', error);
+        // Fallback to default data
+        const fallbackData = loadAdminDataSync();
+        setVideoReviews(fallbackData.videoReviews);
+      }
+    };
+    
+    fetchData();
   }, []);
 
   // Calculate cards per view based on screen size
