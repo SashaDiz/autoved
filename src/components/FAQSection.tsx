@@ -34,13 +34,13 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="max-w-[1920px] w-full mx-auto relative py-30 px-4 sm:px-6 lg:px-20 bg-gray-50">
-      <div className="lg:flex lg:gap-16">
+    <section className="max-w-[1920px] w-full mx-auto relative py-20 sm:py-30 px-4 sm:px-6 xl:px-20 bg-gray-50">
+      <div className="xl:flex xl:gap-16">
         {/* Left Side - Static Content */}
-        <div className="flex-1 flex flex-col justify-between items-start">
+        <div className="flex-1 flex flex-col justify-between items-center sm:items-start mb-10 xl:mb-0">
           <div className="mb-auto max-w-xl">
-            <p className="text-gray-500 text-md font-normal tracking-wide mb-2"># Вопросы и ответы</p>
-            <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 mb-8 leading-tight">
+            <p className="text-gray-500 text-md font-normal tracking-wide mb-2 text-center sm:text-left"># Вопросы и ответы</p>
+            <h2 className="text-4xl xl:text-5xl font-semibold text-gray-900 mb-8 leading-tight text-center sm:text-left">
               Часто задаваемые вопросы
             </h2>
             </div>
@@ -64,7 +64,7 @@ export default function FAQSection() {
         </div>
 
         {/* Right Side - FAQ Items */}
-        <div className="lg:w-1/2">
+        <div className="xl:w-1/2">
           <div className="space-y-4">
             {faqData.map((faq) => (
               <div

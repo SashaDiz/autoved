@@ -13,6 +13,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://vk.com" />
+        <link rel="dns-prefetch" href="https://vk.com" />
+      </head>
       <body className="font-sans antialiased bg-white" suppressHydrationWarning={true}>
         {children}
       </body>

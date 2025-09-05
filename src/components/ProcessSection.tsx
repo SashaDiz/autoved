@@ -127,19 +127,19 @@ export default function ProcessSection() {
     };
 
     return (
-        <section ref={sectionRef} className="max-w-[1920px] w-full mx-auto relative bg-gray-900 text-white py-16 lg:py-24 px-4 sm:px-6 lg:px-20">
+        <section ref={sectionRef} className="max-w-[1920px] w-full mx-auto relative bg-gray-900 text-white py-16 xl:py-24 px-4 sm:px-6 xl:px-20">
             {/* Header */}
-            <div ref={headerRef} className="text-left mb-10 lg:mb-12 max-w-lg">
+            <div ref={headerRef} className="text-center sm:text-left mb-10 xl:mb-12 max-w-lg">
                 <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block">
                     # Как проходит процесс
                 </p>
-                <h2 className="text-4xl lg:text-5xl font-semibold leading-tight">
+                <h2 className="text-4xl xl:text-5xl font-semibold leading-tight">
                 Весь путь&nbsp;&mdash; под нашим контролем
                 </h2>
             </div>
 
             {/* Main Content Layout - 4 columns x 2 rows */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 {/* First Row - Steps 1-4 */}
                 {steps.slice(0, 4).map((step, index) => (
                     <div
@@ -148,7 +148,7 @@ export default function ProcessSection() {
                         className="bg-gray-900 border border-white rounded-xl p-6"
                     >
                         <div className="mb-4 flex items-center gap-4">
-                            <div className="w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0">
+                            <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0">
                                 <Image
                                     src={`/assets/${index + 1}.svg`}
                                     alt={`Step ${index + 1}`}
@@ -157,12 +157,12 @@ export default function ProcessSection() {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <h3 className="text-xl lg:text-[26px] font-semibold text-white leading-tight">
+                            <h3 className="text-xl xl:text-[26px] font-semibold text-white leading-tight">
                                 {step.title}
                             </h3>
                         </div>
 
-                        <p className="text-white text-sm lg:text-base leading-relaxed">
+                        <p className="text-white text-sm xl:text-base leading-relaxed">
                             {step.description}
                         </p>
                     </div>
@@ -176,7 +176,7 @@ export default function ProcessSection() {
                         className="bg-gray-900 border border-white rounded-xl p-6"
                     >
                         <div className="mb-4 flex items-center gap-4">
-                            <div className="w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0">
+                            <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0">
                                 <Image
                                     src={`/assets/${index + 5}.svg`}
                                     alt={`Step ${index + 5}`}
@@ -185,23 +185,23 @@ export default function ProcessSection() {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <h3 className="text-xl lg:text-[26px] font-semibold text-white leading-tight">
+                            <h3 className="text-xl xl:text-[26px] font-semibold text-white leading-tight">
                                 {step.title}
                             </h3>
                         </div>
-                        <p className="text-white text-sm lg:text-base leading-relaxed">
+                        <p className="text-white text-sm xl:text-base leading-relaxed">
                             {step.description}
                         </p>
                     </div>
                 ))}
 
                 {/* Call to Action Card - 4th position in second row */}
-                <div ref={ctaRef} className="bg-green-500 rounded-2xl p-6 lg:p-8 flex flex-col justify-center">
-                    <h3 className="text-xl lg:text-2xl font-semibold text-white mb-6 leading-tight">
+                <div ref={ctaRef} className="bg-green-500 rounded-2xl p-6 xl:p-8 flex flex-col justify-center">
+                    <h3 className="text-xl xl:text-2xl font-semibold text-white mb-6 leading-tight">
                         Запишитесь на бесплатную<br />
                         консультацию сейчас
                     </h3>
-                    <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group">
+                    <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group">
                         Оставить заявку
                         <div className='bg-green-500 rounded-full p-5 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                             <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" fill="white" viewBox="0 0 20 20">

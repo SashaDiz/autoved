@@ -41,21 +41,21 @@ export default function WhyChooseUs() {
     }, []);
 
     return (
-        <section className="max-w-[1920px] w-full mx-auto relative py-30 px-4 sm:px-6 lg:px-20 bg-gray-50">
-            <div className="flex flex-col lg:flex-row gap-16">
+        <section className="max-w-[1920px] w-full mx-auto relative py-20 sm:py-30 px-4 sm:px-6 xl:px-20 bg-gray-50">
+            <div className="flex flex-col xl:flex-row gap-16">
                 {/* Left Side - Text Content */}
-                <div className="flex-1 flex flex-col justify-between items-start">
-                    <div className="mb-auto max-w-xl">
+                <div className="flex-1 flex flex-col justify-between items-center sm:items-start">
+                    <div className="mb-auto max-w-xl text-center sm:text-left">
                         <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block">
                             # Почему выбирают нас
                         </p>
-                        <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
+                        <h2 className="text-4xl xl:text-5xl font-semibold text-gray-900 leading-tight">
                             Надёжность, проверенная временем
                         </h2>
                     </div>
 
                     {/* Contact Button */}
-                    <button className="cursor-pointer text-lg mt-8 lg:mt-0 bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
+                    <button className="cursor-pointer text-lg mt-8 xl:mt-0 bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
                         <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                             <Image
                                 src="/assets/paper-plane.svg"
@@ -65,10 +65,10 @@ export default function WhyChooseUs() {
                                 className="w-5 h-5 text-white transition-transform duration-300 group-hover:scale-110"
                             />
                         </div>
-                        Связаться с менеджером
+                        Связаться с&nbsp;менеджером
                     </button>
 
-                    <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px]">
+                    <p className="text-center sm:text-left text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px]">
                     Напишите нам и&nbsp;мы&nbsp;поможем с&nbsp;подбором, выкупом и&nbsp;доставкой авто.
                     </p>
                 </div>

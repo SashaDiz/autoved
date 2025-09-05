@@ -40,18 +40,18 @@ export default function ContactFormSection() {
   };
 
   return (
-    <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 lg:px-20 bg-gray-900 text-white">
-      <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
+    <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 xl:px-20 bg-gray-900 text-white">
+      <div className="grid xl:grid-cols-2 gap-8 sm:gap-12 xl:gap-16">
         {/* Left Side - Title */}
         <div className='max-w-xl'>
-          <p className="text-gray-400 text-sm sm:text-md font-normal tracking-wide mb-2"># Связаться с нами</p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
+          <p className="text-gray-400 text-sm sm:text-md font-normal tracking-wide mb-2 text-center sm:text-left"># Связаться с нами</p>
+          <h2 className="text-4xl xl:text-5xl font-semibold leading-tight text-center sm:text-left">
             Получите подборку авто под ваш бюджет
           </h2>
         </div>
 
         {/* Right Side - Form */}
-        <div className='p-4 sm:p-6 lg:p-8 bg-white/5 rounded-2xl'>
+        <div className='p-4 sm:p-6 xl:p-8 bg-white/5 rounded-2xl'>
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Name */}
@@ -203,7 +203,7 @@ export default function ContactFormSection() {
               <button
                 type="submit"
                 disabled={!formData.privacyAccepted}
-                className="w-full px-8 sm:px-12 md:px-16 lg:px-20 py-4 lg:py-5 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                className="w-full px-8 sm:px-12 md:px-16 xl:px-20 py-4 xl:py-5 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
               >
                 Отправить
               </button>

@@ -49,20 +49,20 @@ export default function CountriesSection() {
     ];
 
     return (
-        <section className="max-w-[1920px] w-full mx-auto relative py-8 md:py-10 px-4 sm:px-6 lg:px-20">
-            <div className="lg:flex lg:min-h-screen gap-8 md:gap-12 lg:gap-16">
+        <section className="max-w-[1920px] w-full mx-auto relative py-8 md:py-10 px-4 sm:px-6 xl:px-20">
+            <div className="xl:flex xl:min-h-screen gap-8 xl:gap-16">
                 {/* Left Side - Sticky Content */}
-                <div className="lg:w-1/2 sticky-left-content py-6 md:py-8 lg:py-12 xl:py-20 mb-8 lg:mb-0">
+                <div className="xl:w-1/2 xl:sticky-left-content py-6 md:py-8 xl:py-20 mb-8 xl:mb-0 flex flex-col justify-between items-center xl:items-start">
 
                     <div className="mb-auto max-w-xl">
-                        <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block"># Откуда мы доставляем</p>
-                        <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
+                        <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block text-center xl:text-left"># Откуда мы доставляем</p>
+                        <h2 className="text-4xl xl:text-5xl font-semibold text-gray-900 leading-tight text-center xl:text-left">
                             Автомобили под заказ из&nbsp;Азии и&nbsp;Европы
                         </h2>
                     </div>
 
                     {/* Consultation Button - Sticky to bottom */}
-                    <div className="mt-8 lg:mt-0">
+                    <div className="mt-8 xl:mt-0">
                         <button className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
                             <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                                 <Image
@@ -75,14 +75,14 @@ export default function CountriesSection() {
                             </div>
                             Бесплатная консультация
                         </button>
-                        <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px]">
+                        <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px] text-center sm:text-left">
                             Свяжитесь с&nbsp;нами и&nbsp;мы&nbsp;возьмём на&nbsp;себя выкуп, таможенное и&nbsp;доставку авто.
                         </p>
                     </div>
                 </div>
 
                 {/* Right Side - Scrollable Content */}
-                <div className="lg:w-1/2 lg:overflow-y-auto countries-scroll-content py-6 md:py-8 lg:py-12 xl:py-20">
+                <div className="xl:w-1/2 xl:overflow-y-auto countries-scroll-content py-6 md:py-8 xl:py-20">
                     <div className="space-y-4 md:space-y-6">
                         {countries.map((country, index) => (
                             <div
@@ -111,8 +111,8 @@ export default function CountriesSection() {
                                 </div>
 
                                 {/* Content - Bottom on mobile, Right on tablet+ */}
-                                <div className="flex-1 p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col justify-center">
-                                    <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">
+                                <div className="flex-1 p-6 md:p-8 xl:p-10 xl:p-12 flex flex-col justify-center">
+                                    <h3 className="text-lg md:text-xl xl:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">
                                         {country.name}
                                     </h3>
 

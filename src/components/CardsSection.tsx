@@ -533,10 +533,10 @@ export default function CardsSection() {
   }, []);
 
   return (
-    <section className="max-w-[1920px] w-full mx-auto relative py-16 px-4 sm:px-6 lg:px-20">
+    <section className="max-w-[1920px] w-full mx-auto relative py-10 sm:py-16 px-4 sm:px-6 xl:px-20">
       {/* Section Header */}
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 mb-6">
+        <h2 className="text-3xl md:text-4xl xl:text-5xl font-semibold text-gray-900 mb-6">
           Каталог авто
         </h2>
         <p className="text-gray-600 text-lg leading-relaxed max-w-4xl mx-auto">
@@ -546,7 +546,7 @@ export default function CardsSection() {
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16 auto-rows-fr">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 xl:grid-cols-4 gap-6 mb-16 auto-rows-fr">
         {cardsToShow.map((car, index) => (
           <div
             key={index}

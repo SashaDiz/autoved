@@ -35,7 +35,7 @@ const Navigation = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="max-w-[1920px] w-full mx-auto absolute top-0 left-0 right-0 z-20 px-4 sm:px-6 lg:px-20 py-4 sm:py-6">
+    <header className="max-w-[1920px] w-full mx-auto absolute top-0 left-0 right-0 z-20 px-4 sm:px-6 xl:px-20 py-4 sm:py-6">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center z-30">

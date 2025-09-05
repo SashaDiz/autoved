@@ -301,17 +301,17 @@ const HeroSlider = () => {
       {/* Main Container for all content */}
       <div className="max-w-[1920px] w-full mx-auto relative z-10 h-full">
         {/* Static Content */}
-        <div className="relative h-full flex items-end px-4 pb-16 sm:px-6 sm:pb-20 lg:px-20">
-          <div className="max-w-lg w-full">
+        <div className="relative h-full flex items-end px-4 pb-16 sm:px-6 sm:pb-20 xl:px-20">
+          <div className="max-w-lg w-full pb-24 sm:pb-0">
             {/* Main Content Card */}
-            <div ref={heroContentRef} className="bg-white/70 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 mb-8 sm:mb-12 lg:mb-20">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4 leading-tight">
-                Авто из Китая, Японии, Южной Кореи и Германии
+            <div ref={heroContentRef} className="bg-white/70 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-6 sm:p-8 xl:p-10 mb-8 sm:mb-12 xl:mb-20">
+              <h1 className="text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4 leading-tight">
+              Авто из&nbsp;Китая, Японии, Южной Кореи и&nbsp;Германии.
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-900 mb-6 sm:mb-8 leading-relaxed">
-                Доставка от 30 дней, полное сопровождение, таможенное оформление и страхование на каждом этапе.
+              <p className="text-sm sm:text-base xl:text-lg text-gray-900 mb-6 sm:mb-8 leading-relaxed">
+                Доставка от&nbsp;30&nbsp;дней, полное сопровождение, таможенное оформление и&nbsp;страхование на&nbsp;каждом этапе.
               </p>
-              <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start group">
+              <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group">
                 Бесплатная консультация
                 <div className='bg-green-500 rounded-full p-5 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" fill="white" viewBox="0 0 20 20">
@@ -348,20 +348,20 @@ const HeroSlider = () => {
         </div>
 
         {/* Sliding Car Info - Bottom Right */}
-        <div ref={carInfoRef} className="absolute bottom-32 sm:bottom-36 lg:bottom-40 right-4 sm:right-8 lg:right-20">
+        <div ref={carInfoRef} className="absolute bottom-32 sm:bottom-36 xl:bottom-40 right-4 sm:right-8 xl:right-20">
           <div 
             key={currentSlide}
             className="text-right text-white animate-fade-in"
           >
-            <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-1 sm:mb-2">{slides[currentSlide].carInfo.name}</h3>
-            <p className="text-sm sm:text-base lg:text-lg opacity-90">{slides[currentSlide].carInfo.specs}</p>
-            <p className="text-sm sm:text-base lg:text-lg opacity-90">{slides[currentSlide].carInfo.year}</p>
+            <h3 className="text-xl sm:text-2xl xl:text-3xl xl:text-4xl font-bold mb-1 sm:mb-2">{slides[currentSlide].carInfo.name}</h3>
+            <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.specs}</p>
+            <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.year}</p>
           </div>
         </div>
 
         {/* Progress Dots */}
-        <div className="absolute bottom-12 sm:bottom-16 lg:bottom-20 left-1/2 transform -translate-x-1/2">
-        <div ref={progressDotsRef} className="flex space-x-3 sm:space-x-4 lg:space-x-5">
+        <div className="absolute bottom-12 sm:bottom-16 xl:bottom-20 left-1/2 transform -translate-x-1/2">
+        <div ref={progressDotsRef} className="flex space-x-3 sm:space-x-4 xl:space-x-5">
           {slides.map((_, index) => (
             <button
               key={index}

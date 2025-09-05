@@ -4,13 +4,13 @@ import Image from 'next/image';
 
 export default function ContactSection() {
   return (
-    <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 lg:px-20">
-      <div className="grid lg:grid-cols-2 gap-16">
+    <section className="max-w-[1920px] w-full mx-auto relative py-16 sm:py-24 px-4 sm:px-6 xl:px-20">
+      <div className="grid xl:grid-cols-2 gap-16">
         {/* Left Side - Title and Social */}
         <div className="flex flex-col h-full">
-          <div className="flex-1 max-w-xl">
-            <p className="text-gray-500 text-md font-normal tracking-wide mb-2"># Контакты</p>
-            <h2 className="text-4xl lg:text-5xl font-normal text-gray-900 leading-tight">
+          <div className="flex-1 max-w-xl pb-10 xl:pb-0">
+            <p className="text-gray-500 text-md font-normal tracking-wide mb-2 text-center sm:text-left"># Контакты</p>
+            <h2 className="text-3xl xl:text-5xl font-normal text-gray-900 leading-tight text-center sm:text-left">
               <span className="font-semibold">AutoVed</span> – автомобили из&nbsp;Китая, Японии, Южной Кореи и&nbsp;Германии
             </h2>
           </div>
@@ -26,7 +26,7 @@ export default function ContactSection() {
                 alt="Telegram" 
                 width={192} 
                 height={192}
-                className="w-26 h-26 rounded-lg absolute -bottom-8 -right-3"
+                className="w-20 h-20 xl:w-26 xl:h-26 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наш канал</div>
@@ -43,7 +43,7 @@ export default function ContactSection() {
                 alt="VK" 
                 width={192} 
                 height={192}
-                className="w-26 h-26 rounded-lg absolute -bottom-8 -right-3"
+                className="w-20 h-20 xl:w-26 xl:h-26 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наша группа</div>
@@ -109,7 +109,7 @@ export default function ContactSection() {
           </div>
 
           {/* Map */}
-          <div className="bg-gray-200 rounded-2xl overflow-hidden h-64 lg:h-80 relative">
+          <div className="bg-gray-200 rounded-2xl overflow-hidden h-[500px] sm:h-64 xl:h-80 relative">
             <iframe
               src="https://yandex.com/map-widget/v1/?um=constructor%3A5f60597d3dcb98e58401ed40032d21da6654ceaa6afa70ce03837f555aeed561&amp;source=constructor"
               className="w-full h-full"

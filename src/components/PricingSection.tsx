@@ -4,10 +4,10 @@ import Image from 'next/image';
 
 export default function PricingSection() {
     return (
-        <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 lg:px-24">
+        <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 xl:px-24">
             {/* Main Content Container */}
             <div className="text-center mb-16 max-w-3xl mx-auto">
-                <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight mb-4">
+                <h2 className="text-4xl xl:text-5xl font-semibold text-gray-900 leading-tight mb-4">
                     Из чего складывается конечная стоимость автомобиля
                 </h2>
                 <p className="text-gray-600 text-lg leading-relaxed max-w-lg mx-auto">
@@ -18,7 +18,7 @@ export default function PricingSection() {
             {/* Car and Pricing Elements Container */}
             <div className="relative">
                 {/* Desktop Layout - Car with overlaid elements */}
-                <div className="hidden lg:flex lg:items-center lg:justify-center lg:min-h-[700px] lg:relative">
+                <div className="hidden xl:flex xl:items-center xl:justify-center xl:min-h-[700px] xl:relative">
                     {/* Main Car Image - Bigger */}
                     <div className="relative z-10">
                         <Image
@@ -103,7 +103,7 @@ export default function PricingSection() {
                 </div>
 
                 {/* Mobile/Tablet Layout - Stacked elements */}
-                <div className="lg:hidden">
+                <div className="xl:hidden">
                     {/* Car Image */}
                     <div className="relative mb-8">
                         <Image

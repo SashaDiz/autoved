@@ -21,22 +21,22 @@ export default function PromoSection() {
     }, []);
 
     return (
-        <section className="max-w-[1200px] w-full mx-auto relative pt-16 pb-30 px-4 sm:px-6 lg:px-20">
+        <section className="max-w-[1200px] w-full mx-auto relative py-10 pb-20 sm:py-16 sm:pb-30 px-4 sm:px-6 xl:px-20">
             <div className="bg-gray-900 rounded-3xl relative overflow-hidden">
                 {/* Content Container */}
-                <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between h-full">
+                <div className="relative z-10 flex flex-col xl:flex-row items-start justify-between h-full">
                     {/* Left Side - Text Content */}
-                    <div className="flex-1 p-6 lg:p-12 lg:pr-8">
-                        <h2 className="text-3xl lg:text-4xl xl:text-[40px] font-semibold text-white mb-2 leading-tight">
-                            Горячие предложения авто на сегодня
+                    <div className="flex-1 p-6 xl:p-12 xl:pr-8 max-w-[450px]">
+                        <h2 className="text-4xl font-semibold text-white mb-2 leading-tight">
+                        Горячие предложения авто на&nbsp;сегодня
                         </h2>
-                        <p className="text-gray-300 text-md lg:text-lg leading-relaxed mb-6 max-w-lg">
-                            Подпишитесь на наш канала получайте подборку актуальных предложений и новостей из мира авто
+                        <p className="text-gray-300 text-md xl:text-lg leading-relaxed mb-6 max-w-lg">
+                            Подпишитесь на наш канала получайте подборку актуальных предложений и&nbsp;новостей из&nbsp;мира авто
                         </p>
 
                         {/* Telegram Button */}
-                        <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group min-w-2xs">
-                            Перейти в группу
+                        <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group min-w-2xs">
+                            Перейти в&nbsp;группу
                             <div className='bg-green-500 rounded-full p-5 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                                 <Image
                                     src="/assets/paper-plane.svg"
@@ -50,14 +50,14 @@ export default function PromoSection() {
                     </div>
 
                     {/* Right Side - Phone Image */}
-                    <div className="flex-1 flex items-center justify-center lg:justify-end p-8 lg:p-16 lg:pl-8">
-                        <div ref={phoneRef} className="absolute -top-10 -right-20 rotate-15">
+                    <div className="flex-1 flex items-center justify-center xl:justify-end p-0 xl:p-8">
+                        <div ref={phoneRef} className="absolute -top-10 -right-20 rotate-15 hidden md:block">
                             <Image
                                 src="/assets/phone_img.webp"
                                 alt="Phone with AutoVed app"
                                 width={1610}
                                 height={1610}
-                                className="w-120 lg:w-200 h-auto"
+                                className="w-120 xl:w-200 h-auto"
                                 priority
                             />
                         </div>

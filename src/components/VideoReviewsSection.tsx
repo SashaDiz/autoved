@@ -66,7 +66,7 @@ export default function VideoReviewsSection() {
   const [modalVideo, setModalVideo] = useState<string | null>(null);
   const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
   const [cardsPerView, setCardsPerView] = useState(5);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isIframeLoading, setIsIframeLoading] = useState(false);
   const reviewCardsRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -102,6 +102,7 @@ export default function VideoReviewsSection() {
 
   const openModal = (reviewId: string) => {
     setModalVideo(reviewId);
+    setIsIframeLoading(true);
     document.body.style.overflow = 'hidden';
   };
 
@@ -114,10 +115,15 @@ export default function VideoReviewsSection() {
         ease: "power2.in",
         onComplete: () => {
           setModalVideo(null);
+          setIsIframeLoading(false);
           document.body.style.overflow = 'unset';
         }
       });
     }
+  };
+
+  const handleIframeLoad = () => {
+    setIsIframeLoading(false);
   };
 
   // Animate modal entrance
@@ -162,15 +168,15 @@ export default function VideoReviewsSection() {
         }
       );
     }
-  }, []);
+  }, [cardsPerView]);
 
 
   return (
-    <section className="max-w-[1920px] w-full bg-white mx-auto relative py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-20 overflow-x-hidden">
+    <section className="max-w-[1920px] w-full bg-white mx-auto relative py-12 pb-20 sm:py-12 xl:py-16 px-4 sm:px-6 xl:px-20 overflow-x-hidden">
       {/* Section Header */}
-      <div className="text-center mb-12 sm:mb-20 lg:mb-24">
+      <div className="text-center mb-12 sm:mb-20 xl:mb-24">
         <p className="text-gray-500 text-md font-normal tracking-wide mb-2"># Отзывы</p>
-        <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-4xl xl:text-5xl font-semibold text-gray-900 mb-4">
           Отзывы наших клиентов
         </h2>
       </div>
@@ -181,7 +187,7 @@ export default function VideoReviewsSection() {
         {currentIndex > 0 && (
           <button
             onClick={scrollToPrev}
-            className="absolute left-0 sm:-left-2 lg:left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
+            className="absolute left-0 sm:-left-2 xl:left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -192,7 +198,7 @@ export default function VideoReviewsSection() {
         {currentIndex < videoReviews.length - cardsPerView && (
           <button
             onClick={scrollToNext}
-            className="absolute right-0 sm:-right-2 lg:right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
+            className="absolute right-0 sm:-right-2 xl:right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -204,7 +210,7 @@ export default function VideoReviewsSection() {
         <div className="relative">
           <div
             ref={reviewCardsRef}
-            className="flex transition-transform duration-500 ease-in-out gap-2 sm:gap-3 md:gap-4 lg:gap-6"
+            className="flex transition-transform duration-500 ease-in-out gap-2 sm:gap-3 md:gap-4 xl:gap-6"
             style={{
               transform: `translateX(${cardsPerView === 1 ? `calc(50vw - 50% - ${currentIndex * 220}px + 8px)` : `-${currentIndex * (cardsPerView === 2 ? 180 : cardsPerView === 3 ? 200 : cardsPerView === 4 ? 220 : 304)}px`})` // Responsive card spacing with mobile centering
             }}
@@ -218,7 +224,7 @@ export default function VideoReviewsSection() {
               return (
                 <div
                   key={review.id}
-                  className="review-card flex-shrink-0 w-[220px] lg:w-[280px] transition-all duration-300"
+                  className="review-card flex-shrink-0 w-[220px] xl:w-[280px] transition-all duration-300"
                   style={{
                     opacity: isMobile ? (isCurrentCard ? 1 : isSideCard ? 0.4 : 0.1) : (isVisible ? 1 : 0.5),
                     transform: isMobile && isCurrentCard ? 'scale(1)' : isMobile && isSideCard ? 'scale(0.85)' : isMobile ? 'scale(0.7)' : 'scale(1)'
@@ -246,8 +252,8 @@ export default function VideoReviewsSection() {
                       {/* Play Button - Show on Hover */}
                       {hoveredVideo === review.id && (
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300">
-                            <svg className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 xl:w-16 xl:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300">
+                            <svg className="w-7 h-7 sm:w-8 sm:h-8 xl:w-10 xl:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                               <path d="M8 5v14l11-7z" />
                             </svg>
                           </div>
@@ -256,7 +262,7 @@ export default function VideoReviewsSection() {
 
 
                       {/* Customer Info */}
-                      <div className="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-2 sm:left-3 lg:left-4 right-2 sm:right-3 lg:right-4">
+                      <div className="absolute bottom-2 sm:bottom-3 xl:bottom-4 left-2 sm:left-3 xl:left-4 right-2 sm:right-3 xl:right-4">
                         <h3 className="text-white font-semibold text-lg mb-1">
                           {review.customerName} <span className="text-sm font-normal">({review.location})</span>
                         </h3>
@@ -285,7 +291,7 @@ export default function VideoReviewsSection() {
           onClick={closeModal}
         >
           <div
-            className="relative bg-black rounded-2xl overflow-hidden shadow-2xl w-full max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl"
+            className="relative bg-black rounded-2xl overflow-hidden shadow-2xl w-full max-w-[90vw] sm:max-w-md md:max-w-xl xl:max-w-xl"
             style={{ aspectRatio: '9/16' }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -299,6 +305,16 @@ export default function VideoReviewsSection() {
               </svg>
             </button>
 
+            {/* Loading Spinner */}
+            {isIframeLoading && (
+              <div className="absolute inset-0 bg-black/95 flex items-center justify-center z-20">
+                <div className="flex flex-col items-center justify-center text-center">
+                  <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4"></div>
+                  <p className="text-white/80 text-sm">Загрузка видео...</p>
+                </div>
+              </div>
+            )}
+
             {/* VK Video Iframe */}
             <iframe
               src={videoReviews.find(v => v.id === modalVideo)?.vkEmbedUrl}
@@ -306,13 +322,15 @@ export default function VideoReviewsSection() {
               style={{ backgroundColor: '#000', border: 'none' }}
               allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
               allowFullScreen
+              onLoad={handleIframeLoad}
+              loading="eager"
             />
           </div>
         </div>
       )}
 
       {/* Bottom Link */}
-      <div className="text-center mt-8 sm:mt-10 lg:mt-12">
+      <div className="text-center mt-8 sm:mt-10 xl:mt-12">
         <button className="text-gray-500 border border-gray-300 px-8 py-3 rounded-full hover:border-gray-400 hover:text-gray-600 transition-colors font-medium">
           Посмотреть отзывы
         </button>
