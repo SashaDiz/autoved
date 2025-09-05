@@ -49,50 +49,48 @@ export default function CountriesSection() {
     ];
 
     return (
-        <section className="max-w-[1920px] w-full mx-auto relative py-10 px-4 sm:px-6 lg:px-20">
-            <div className="lg:flex lg:min-h-screen gap-16">
+        <section className="max-w-[1920px] w-full mx-auto relative py-8 md:py-10 px-4 sm:px-6 lg:px-20">
+            <div className="lg:flex lg:min-h-screen gap-8 md:gap-12 lg:gap-16">
                 {/* Left Side - Sticky Content */}
-                <div className="lg:w-1/2 sticky-left-content py-6 lg:py-12 xl:py-20">
-                    <div className="flex-1 lg:flex lg:flex-col lg:justify-between">
-                        <div className="mb-6 lg:mb-0">
-                            <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block"># Откуда мы доставляем</p>
-                            <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
-                                Автомобили под заказ<br />
-                                из Азии и Европы
-                            </h2>
-                        </div>
+                <div className="lg:w-1/2 sticky-left-content py-6 md:py-8 lg:py-12 xl:py-20 mb-8 lg:mb-0">
+
+                    <div className="mb-auto max-w-xl">
+                        <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block"># Откуда мы доставляем</p>
+                        <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
+                            Автомобили под заказ из&nbsp;Азии и&nbsp;Европы
+                        </h2>
                     </div>
 
                     {/* Consultation Button - Sticky to bottom */}
                     <div className="mt-8 lg:mt-0">
                         <button className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
-                        <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
-                            <Image
-                                src="/assets/paper-plane.svg"
-                                alt="Send Message"
-                                width={20}
-                                height={20}
-                                className="w-5 h-5 text-white transition-transform duration-300 group-hover:scale-110"
-                            />
-                        </div>
-                        Бесплатная консультация
-                    </button>
-                        <p className="text-gray-500 text-sm mt-4 max-w-sm">
-                            Свяжитесь с нами и мы возьмём на себя выкуп, таможенное и доставку авто.
+                            <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
+                                <Image
+                                    src="/assets/paper-plane.svg"
+                                    alt="Send Message"
+                                    width={20}
+                                    height={20}
+                                    className="w-5 h-5 text-white transition-transform duration-300 group-hover:scale-110"
+                                />
+                            </div>
+                            Бесплатная консультация
+                        </button>
+                        <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px]">
+                            Свяжитесь с&nbsp;нами и&nbsp;мы&nbsp;возьмём на&nbsp;себя выкуп, таможенное и&nbsp;доставку авто.
                         </p>
                     </div>
                 </div>
 
                 {/* Right Side - Scrollable Content */}
-                <div className="lg:w-1/2 lg:overflow-y-auto countries-scroll-content py-6 lg:py-12 xl:py-20">
-                    <div className="space-y-6">
+                <div className="lg:w-1/2 lg:overflow-y-auto countries-scroll-content py-6 md:py-8 lg:py-12 xl:py-20">
+                    <div className="space-y-4 md:space-y-6">
                         {countries.map((country, index) => (
-                            <div 
+                            <div
                                 key={country.id}
-                                className="bg-white rounded-xl border-1 border-gray-200 overflow-hidden flex"
+                                className="bg-white rounded-xl border-1 border-gray-200 overflow-hidden flex flex-col md:flex-row"
                             >
-                                {/* Left Side - Image */}
-                                <div className="relative w-64 h-auto">
+                                {/* Image - Top on mobile, Left on tablet+ */}
+                                <div className="relative w-full h-48 md:w-64 md:h-auto">
                                     <Image
                                         src={country.image}
                                         alt={country.name}
@@ -107,22 +105,22 @@ export default function CountriesSection() {
                                             alt={`${country.name} flag`}
                                             width={24}
                                             height={24}
-                                            className="w-auto h-8 rounded-md"
+                                            className="w-auto h-6 md:h-8 rounded-md"
                                         />
                                     </div>
                                 </div>
 
-                                {/* Right Side - Content */}
-                                <div className="w-1/2 p-10 lg:p-12 flex flex-col justify-center">
-                                    <h3 className="text-2xl lg:text-3xl font-semibold text-gray-900 mb-6">
+                                {/* Content - Bottom on mobile, Right on tablet+ */}
+                                <div className="flex-1 p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col justify-center">
+                                    <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">
                                         {country.name}
                                     </h3>
 
-                                    <div className="space-y-3">
+                                    <div className="space-y-2 md:space-y-3">
                                         {country.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start gap-3">
                                                 <div className="w-1.5 h-1.5 bg-gray-900 rounded-full mt-2 flex-shrink-0"></div>
-                                                <p className="text-gray-900 text-sm lg:text-base leading-relaxed">
+                                                <p className="text-gray-900 text-sm md:text-md leading-relaxed">
                                                     {feature}
                                                 </p>
                                             </div>

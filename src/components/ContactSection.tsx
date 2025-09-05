@@ -4,16 +4,14 @@ import Image from 'next/image';
 
 export default function ContactSection() {
   return (
-    <section className="max-w-[1920px] w-full mx-auto relative py-16 px-4 sm:px-6 lg:px-20">
+    <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 lg:px-20">
       <div className="grid lg:grid-cols-2 gap-16">
         {/* Left Side - Title and Social */}
         <div className="flex flex-col h-full">
-          <div className="flex-1">
+          <div className="flex-1 max-w-xl">
             <p className="text-gray-500 text-md font-normal tracking-wide mb-2"># Контакты</p>
-            <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
-              AutoVed – автомобили из<br />
-              Китая, Японии, Южной<br />
-              Кореи и Германии
+            <h2 className="text-4xl lg:text-5xl font-normal text-gray-900 leading-tight">
+              <span className="font-semibold">AutoVed</span> – автомобили из&nbsp;Китая, Японии, Южной Кореи и&nbsp;Германии
             </h2>
           </div>
 
@@ -21,34 +19,34 @@ export default function ContactSection() {
           <div className="flex gap-4 mt-auto">
             <a 
               href="#" 
-              className="cursor-pointer flex items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
+              className="relative cursor-pointer flex overflow-hidden items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
             >
               <Image 
                 src="/assets/telegram.webp" 
                 alt="Telegram" 
-                width={40} 
-                height={40}
-                className="w-10 h-10 rounded-lg"
+                width={192} 
+                height={192}
+                className="w-26 h-26 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
-                <div className="text-sm font-semibold">Наш канал</div>
+                <div className="text-lg font-semibold">Наш канал</div>
                 <div className="text-sm opacity-80">в Телеграм</div>
               </div>
             </a>
 
             <a 
               href="#" 
-              className="cursor-pointer flex items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
+              className="relative cursor-pointer flex overflow-hidden items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
             >
               <Image 
                 src="/assets/vk.webp" 
                 alt="VK" 
-                width={40} 
-                height={40}
-                className="w-10 h-10 rounded-lg"
+                width={192} 
+                height={192}
+                className="w-26 h-26 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
-                <div className="text-sm font-semibold">Наша группа</div>
+                <div className="text-lg font-semibold">Наша группа</div>
                 <div className="text-sm opacity-80">в ВКонтакте</div>
               </div>
             </a>
@@ -101,40 +99,23 @@ export default function ContactSection() {
 
           {/* About Section */}
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">О нас</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">О нас</h3>
             <p className="text-gray-700 leading-relaxed">
-              Мы более 5 лет занимаемся поставкой автомобилей из Китая, Японии, Южной Кореи и Германии. 
-              За это время мы выстроили стабильные связи с проверенными поставщиками и аукционами, что позволяет 
-              нам гарантировать надёжность на каждом этапе. В нашей команде работают опытные специалисты в области 
-              логистики, таможенного оформления и автоэкспертизы.
+            Мы&nbsp;более 5&nbsp;лет занимаемся поставкой автомобилей из&nbsp;Китая, Японии, Южной Кореи и&nbsp;Германии. 
+За&nbsp;это время мы&nbsp;выстроили стабильные связи с&nbsp;проверенными поставщиками и&nbsp;аукционами, что позволяет 
+нам гарантировать надёжность на&nbsp;каждом этапе. В&nbsp;нашей команде работают опытные специалисты в&nbsp;области 
+логистики, таможенного оформления и&nbsp;автоэкспертизы.
             </p>
           </div>
 
           {/* Map */}
           <div className="bg-gray-200 rounded-2xl overflow-hidden h-64 lg:h-80 relative">
-            {/* Placeholder for map - replace with actual map integration */}
-            <div className="w-full h-full bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <p className="text-gray-600 font-medium">Карта офиса в Москве</p>
-                <p className="text-gray-500 text-sm mt-1">ул. Тверская, 15 офис 301</p>
-              </div>
-            </div>
-            
-            {/* You can replace the placeholder above with actual map integration like: */}
-            {/* 
             <iframe
-              src="https://yandex.ru/map-widget/v1/?um=constructor%3A..."
+              src="https://yandex.com/map-widget/v1/?um=constructor%3A5f60597d3dcb98e58401ed40032d21da6654ceaa6afa70ce03837f555aeed561&amp;source=constructor"
               className="w-full h-full"
               frameBorder="0"
               allowFullScreen
             />
-            */}
           </div>
         </div>
       </div>

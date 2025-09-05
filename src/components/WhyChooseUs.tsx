@@ -46,16 +46,16 @@ export default function WhyChooseUs() {
                 {/* Left Side - Text Content */}
                 <div className="flex-1 flex flex-col justify-between items-start">
                     <div className="mb-auto max-w-xl">
-                        <span className="text-gray-500 text-md font-normal tracking-wide mb-2 block">
+                        <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block">
                             # Почему выбирают нас
-                        </span>
+                        </p>
                         <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
                             Надёжность, проверенная временем
                         </h2>
                     </div>
 
                     {/* Contact Button */}
-                    <button className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
+                    <button className="cursor-pointer text-lg mt-8 lg:mt-0 bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
                         <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                             <Image
                                 src="/assets/paper-plane.svg"
@@ -68,9 +68,8 @@ export default function WhyChooseUs() {
                         Связаться с менеджером
                     </button>
 
-                    <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed">
-                        Напишите нам и мы поможем с подбором,<br />
-                        выкупом и доставкой авто.
+                    <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px]">
+                    Напишите нам и&nbsp;мы&nbsp;поможем с&nbsp;подбором, выкупом и&nbsp;доставкой авто.
                     </p>
                 </div>
 
@@ -92,7 +91,7 @@ export default function WhyChooseUs() {
                                 />
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Скорость</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Скорость</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">
                                     Доставка авто из Китая, Японии, Южной Кореи и Германии — от 30 дней
                                 </p>
@@ -114,7 +113,7 @@ export default function WhyChooseUs() {
                                 />
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Консультации 24/7</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Консультации 24/7</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">
                                     Наши менеджеры всегда на связи, чтобы ответить на ваши вопросы
                                 </p>
@@ -136,7 +135,7 @@ export default function WhyChooseUs() {
                                 />
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Простота</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Простота</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">
                                     Мы предоставляем полное юридическое сопровождение сделки, от вас - только подпись
                                 </p>
@@ -158,7 +157,7 @@ export default function WhyChooseUs() {
                                 />
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Безопасность</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Безопасность</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">
                                     Мы страхуем авто на всех этапах его транспортировки, чтобы защитить вас от рисков
                                 </p>
@@ -180,7 +179,7 @@ export default function WhyChooseUs() {
                                 />
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Опыт</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Опыт</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">
                                     Мы имеем более 5 лет опыта в подборе авто, логистике и таможенном оформлении
                                 </p>
@@ -202,7 +201,7 @@ export default function WhyChooseUs() {
                                 />
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">Надёжность</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Надёжность</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">
                                     За время работы мы набрали базу надёжных партнёров и проверенных площадок в Азии и Европе
                                 </p>

@@ -4,12 +4,11 @@ import Image from 'next/image';
 
 export default function PricingSection() {
     return (
-        <section className="max-w-[1920px] w-full mx-auto relative py-16 px-4 sm:px-6 lg:px-24">
+        <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 lg:px-24">
             {/* Main Content Container */}
-            <div className="text-center mb-16">
-                <h2 className="text-3xl lg:text-4xl xl:text-[44px] font-semibold text-gray-900 mb-4 leading-tight">
-                    Из чего складывается конечная<br />
-                    стоимость автомобиля
+            <div className="text-center mb-16 max-w-3xl mx-auto">
+                <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight mb-4">
+                    Из чего складывается конечная стоимость автомобиля
                 </h2>
                 <p className="text-gray-600 text-lg leading-relaxed max-w-lg mx-auto">
                     Прозрачная цена без скрытых платежей
@@ -17,85 +16,176 @@ export default function PricingSection() {
             </div>
 
             {/* Car and Pricing Elements Container */}
-            <div className="relative flex items-center justify-center min-h-[600px] lg:min-h-[700px]">
-                {/* Main Car Image - Bigger */}
-                <div className="relative z-10">
-                    <Image
-                        src="/assets/mers_1.webp"
-                        alt="Mercedes sedan"
-                        width={1800}
-                        height={600}
-                        className="w-full min-w-[450px] lg:min-w-[900px] lg:max-w-[1400px] h-auto"
-                        priority
-                    />
-                </div>
+            <div className="relative">
+                {/* Desktop Layout - Car with overlaid elements */}
+                <div className="hidden lg:flex lg:items-center lg:justify-center lg:min-h-[700px] lg:relative">
+                    {/* Main Car Image - Bigger */}
+                    <div className="relative z-10">
+                        <Image
+                            src="/assets/mers_1.webp"
+                            alt="Mercedes sedan"
+                            width={1800}
+                            height={600}
+                            className="w-full min-w-[900px] max-w-[1400px] h-auto"
+                            priority
+                        />
+                    </div>
 
-                {/* Price Element 1 - Top Left */}
-                <div className="absolute top-2 left-6 lg:top-4 lg:left-24 p-3 lg:p-4 max-w-[200px] lg:max-w-[240px]">
-                    <div className="flex items-start gap-3">
-                        <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                    {/* Price Element 1 - Top Left */}
+                    <div className="absolute top-4 left-24 p-4 max-w-[240px]">
+                        <div className="flex items-start gap-3">
+                            <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-normal text-gray-900 leading-tight">
+                                    Цена автомобиля на&nbsp;площадке
+                                </h3>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-md lg:text-lg font-normal text-gray-900 leading-tight">
-                                Цена автомобиля на&nbsp;площадке
-                            </h3>
+                    </div>
+
+                    {/* Price Element 2 - Top Right */}
+                    <div className="absolute top-2 right-8 p-4 max-w-[260px]">
+                        <div className="flex items-start gap-2">
+                            <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-normal text-gray-900 leading-tight">
+                                    Доставка (морским, железнодорожным и&nbsp;автомобильным транспортом)
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Price Element 3 - Bottom Left */}
+                    <div className="absolute bottom-8 left-8 p-4 max-w-[260px]">
+                        <div className="flex items-start gap-2">
+                            <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-normal text-gray-900 leading-tight">
+                                Таможенный и&nbsp;утилизационный сборы
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Price Element 4 - Center */}
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 p-4 max-w-[260px]">
+                        <div className="flex items-start gap-2">
+                            <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-normal text-gray-900 leading-tight">
+                                    Страхование на&nbsp;каждом этапе
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Price Element 5 - Bottom Right */}
+                    <div className="absolute bottom-12 right-16 p-4 max-w-[260px]">
+                        <div className="flex items-start gap-2">
+                            <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-normal text-gray-900 leading-tight">
+                                    Комиссия компании за&nbsp;сопровождение
+                                </h3>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Price Element 2 - Top Right */}
-                <div className="absolute top-1 right-2 lg:top-2 lg:right-8 p-3 lg:p-4 max-w-[200px] lg:max-w-[260px]">
-                    <div className="flex items-start gap-2">
-                        <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
-                        </div>
-                        <div>
-                            <h3 className="text-md lg:text-lg font-normal text-gray-900 leading-tight">
-                                Доставка (морским, железнодорожным и&nbsp;автомобильным транспортом)
-                            </h3>
-                        </div>
+                {/* Mobile/Tablet Layout - Stacked elements */}
+                <div className="lg:hidden">
+                    {/* Car Image */}
+                    <div className="relative mb-8">
+                        <Image
+                            src="/assets/mers_1.webp"
+                            alt="Mercedes sedan"
+                            width={1800}
+                            height={600}
+                            className="w-full h-auto"
+                            priority
+                        />
                     </div>
-                </div>
 
-                {/* Price Element 3 - Bottom Left */}
-                <div className="absolute bottom-6 left-2 lg:bottom-8 lg:left-8 p-3 lg:p-4 max-w-[200px] lg:max-w-[260px]">
-                    <div className="flex items-start gap-2">
-                        <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                    {/* Stacked Price Elements */}
+                    <div className="space-y-6">
+                        {/* Price Element 1 */}
+                        <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-md md:text-lg font-normal text-gray-900 leading-tight">
+                                        Цена автомобиля на&nbsp;площадке
+                                    </h3>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-md lg:text-lg font-normal text-gray-900 leading-tight">
-                            Таможенный и&nbsp;утилизационный сборы
-                            </h3>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Price Element 4 - Center */}
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 p-3 lg:p-4 max-w-[200px] lg:max-w-[260px]">
-                    <div className="flex items-start gap-2">
-                        <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                        {/* Price Element 2 */}
+                        <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-md md:text-lg font-normal text-gray-900 leading-tight">
+                                        Доставка (морским, железнодорожным и&nbsp;автомобильным транспортом)
+                                    </h3>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-md lg:text-lg font-normal text-gray-900 leading-tight">
-                                Страхование на&nbsp;каждом этапе
-                            </h3>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Price Element 5 - Bottom Right */}
-                <div className="absolute bottom-8 right-2 lg:bottom-12 lg:right-16 p-3 lg:p-4 max-w-[200px] lg:max-w-[260px]">
-                    <div className="flex items-start gap-2">
-                        <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                        {/* Price Element 3 */}
+                        <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-md md:text-lg font-normal text-gray-900 leading-tight">
+                                    Таможенный и&nbsp;утилизационный сборы
+                                    </h3>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-md lg:text-lg font-normal text-gray-900 leading-tight">
-                                Комиссия компании за&nbsp;сопровождение
-                            </h3>
+
+                        {/* Price Element 4 */}
+                        <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-md md:text-lg font-normal text-gray-900 leading-tight">
+                                        Страхование на&nbsp;каждом этапе
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Price Element 5 */}
+                        <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="p-0.5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-md md:text-lg font-normal text-gray-900 leading-tight">
+                                        Комиссия компании за&nbsp;сопровождение
+                                    </h3>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

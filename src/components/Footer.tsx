@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="max-w-[1920px] flex flex-col justify-between w-full mx-auto relative bg-gray-900 border-t border-gray-800 text-white px-4 sm:px-6 lg:px-20 py-12 min-h-60">
+    <footer className="max-w-[1920px] flex flex-col justify-between w-full mx-auto relative bg-gray-900 border-t border-gray-800 text-white px-4 sm:px-6 lg:px-20 py-12 min-h-80">
       {/* Main Footer Content */}
       <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-auto">
         {/* Left Side - Logo */}
@@ -57,7 +57,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Section */}
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+      <div className="flex flex-col lg:flex-row justify-between items-center gap-4 text-sm text-gray-400">
         <div className='max-w-[300px]'>
           <p>2025 © Все права защищены.</p>
           <p>Данный сайт носит исключительно информационный характер и не является публичной офертой</p>

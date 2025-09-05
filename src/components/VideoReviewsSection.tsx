@@ -75,11 +75,12 @@ export default function VideoReviewsSection() {
     const updateCardsPerView = () => {
       const width = window.innerWidth;
       if (width < 480) setCardsPerView(1); // small mobile
-      else if (width < 640) setCardsPerView(2); // large mobile
+      else if (width < 640) setCardsPerView(1); // large mobile - keep single column
       else if (width < 768) setCardsPerView(2); // small tablet
-      else if (width < 1024) setCardsPerView(3); // iPad Air/Pro portrait
-      else if (width < 1280) setCardsPerView(4); // iPad Pro landscape / small desktop
-      else setCardsPerView(5); // desktop and larger (max 5 cards)
+      else if (width < 1024) setCardsPerView(2); // iPad Air/Pro portrait - reduce to 2
+      else if (width < 1280) setCardsPerView(3); // iPad Pro landscape / small desktop
+      else if (width < 1440) setCardsPerView(4); // medium desktop
+      else setCardsPerView(5); // large desktop (max 5 cards)
     };
 
     updateCardsPerView();
@@ -122,16 +123,16 @@ export default function VideoReviewsSection() {
   // Animate modal entrance
   useEffect(() => {
     if (modalVideo && modalRef.current) {
-      gsap.fromTo(modalRef.current, 
-        { 
-          opacity: 0, 
-          scale: 0.8 
+      gsap.fromTo(modalRef.current,
+        {
+          opacity: 0,
+          scale: 0.8
         },
-        { 
-          opacity: 1, 
-          scale: 1, 
-          duration: 0.4, 
-          ease: "back.out(1.7)" 
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(1.7)"
         }
       );
     }
@@ -141,8 +142,8 @@ export default function VideoReviewsSection() {
   useEffect(() => {
     if (reviewCardsRef.current) {
       const cards = reviewCardsRef.current.querySelectorAll('.review-card');
-      
-      gsap.fromTo(cards, 
+
+      gsap.fromTo(cards,
         {
           opacity: 0,
           y: 60,
@@ -165,9 +166,9 @@ export default function VideoReviewsSection() {
 
 
   return (
-    <section className="max-w-[1920px] w-full bg-white mx-auto relative py-16 px-4 sm:px-6 lg:px-20">
+    <section className="max-w-[1920px] w-full bg-white mx-auto relative py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-20 overflow-x-hidden">
       {/* Section Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 sm:mb-20 lg:mb-24">
         <p className="text-gray-500 text-md font-normal tracking-wide mb-2"># Отзывы</p>
         <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 mb-4">
           Отзывы наших клиентов
@@ -180,9 +181,9 @@ export default function VideoReviewsSection() {
         {currentIndex > 0 && (
           <button
             onClick={scrollToPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
+            className="absolute left-0 sm:-left-2 lg:left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
           >
-            <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -191,36 +192,40 @@ export default function VideoReviewsSection() {
         {currentIndex < videoReviews.length - cardsPerView && (
           <button
             onClick={scrollToNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
+            className="absolute right-0 sm:-right-2 lg:right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl cursor-pointer"
           >
-            <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         )}
 
         {/* Videos Container */}
-        <div>
-          <div 
+        <div className="relative">
+          <div
             ref={reviewCardsRef}
-            className="flex transition-transform duration-500 ease-in-out gap-3 sm:gap-4 lg:gap-6"
-            style={{ 
-              transform: `translateX(-${currentIndex * (cardsPerView === 1 ? 290 : cardsPerView === 2 ? 176 : cardsPerView === 3 ? 196 : cardsPerView === 4 ? 216 : 304)}px)` // Responsive card spacing
+            className="flex transition-transform duration-500 ease-in-out gap-2 sm:gap-3 md:gap-4 lg:gap-6"
+            style={{
+              transform: `translateX(${cardsPerView === 1 ? `calc(50vw - 50% - ${currentIndex * 220}px + 8px)` : `-${currentIndex * (cardsPerView === 2 ? 180 : cardsPerView === 3 ? 200 : cardsPerView === 4 ? 220 : 304)}px`})` // Responsive card spacing with mobile centering
             }}
           >
             {videoReviews.map((review, index) => {
               const isVisible = index >= currentIndex && index < currentIndex + cardsPerView;
-              
+              const isMobile = cardsPerView === 1;
+              const isCurrentCard = isMobile && index === currentIndex;
+              const isSideCard = isMobile && (index === currentIndex - 1 || index === currentIndex + 1);
+
               return (
                 <div
                   key={review.id}
-                  className="review-card flex-shrink-0 w-[280px] sm:w-[160px] md:w-[180px] lg:w-[280px] transition-opacity duration-300"
-                  style={{ 
-                    opacity: isVisible ? 1 : 0.5
+                  className="review-card flex-shrink-0 w-[220px] lg:w-[280px] transition-all duration-300"
+                  style={{
+                    opacity: isMobile ? (isCurrentCard ? 1 : isSideCard ? 0.4 : 0.1) : (isVisible ? 1 : 0.5),
+                    transform: isMobile && isCurrentCard ? 'scale(1)' : isMobile && isSideCard ? 'scale(0.85)' : isMobile ? 'scale(0.7)' : 'scale(1)'
                   }}
                 >
                   <div
-                    className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-2 hover:scale-105 transition-all duration-300 cursor-pointer group"
+                    className="relative bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-1 sm:hover:-translate-y-2 hover:scale-[1.02] sm:hover:scale-105 transition-all duration-300 cursor-pointer group"
                     style={{ aspectRatio: '9/16' }}
                     onClick={() => openModal(review.id)}
                     onMouseEnter={() => setHoveredVideo(review.id)}
@@ -234,16 +239,16 @@ export default function VideoReviewsSection() {
                         fill
                         className="object-cover"
                       />
-                      
+
                       {/* Gradient Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                      
+
                       {/* Play Button - Show on Hover */}
                       {hoveredVideo === review.id && (
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300">
-                            <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z"/>
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300">
+                            <svg className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
                             </svg>
                           </div>
                         </div>
@@ -251,7 +256,7 @@ export default function VideoReviewsSection() {
 
 
                       {/* Customer Info */}
-                      <div className="absolute bottom-4 left-4 right-4">
+                      <div className="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-2 sm:left-3 lg:left-4 right-2 sm:right-3 lg:right-4">
                         <h3 className="text-white font-semibold text-lg mb-1">
                           {review.customerName} <span className="text-sm font-normal">({review.location})</span>
                         </h3>
@@ -274,12 +279,12 @@ export default function VideoReviewsSection() {
 
       {/* Video Modal */}
       {modalVideo && (
-        <div 
+        <div
           ref={modalRef}
           className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={closeModal}
         >
-          <div 
+          <div
             className="relative bg-black rounded-2xl overflow-hidden shadow-2xl w-full max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl"
             style={{ aspectRatio: '9/16' }}
             onClick={(e) => e.stopPropagation()}
@@ -298,9 +303,8 @@ export default function VideoReviewsSection() {
             <iframe
               src={videoReviews.find(v => v.id === modalVideo)?.vkEmbedUrl}
               className="w-full h-full"
-              style={{ backgroundColor: '#000' }}
+              style={{ backgroundColor: '#000', border: 'none' }}
               allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-              frameBorder="0"
               allowFullScreen
             />
           </div>
@@ -308,11 +312,11 @@ export default function VideoReviewsSection() {
       )}
 
       {/* Bottom Link */}
-      <div className="text-center mt-12">
+      <div className="text-center mt-8 sm:mt-10 lg:mt-12">
         <button className="text-gray-500 border border-gray-300 px-8 py-3 rounded-full hover:border-gray-400 hover:text-gray-600 transition-colors font-medium">
           Посмотреть отзывы
         </button>
-        <p className="text-gray-400 text-sm mt-4">
+        <p className="text-gray-400 text-sm mt-4 px-4">
           Больше отзывов на нашей странице в ВКонтакте
         </p>
       </div>

@@ -41,8 +41,7 @@ export default function FAQSection() {
           <div className="mb-auto max-w-xl">
             <p className="text-gray-500 text-md font-normal tracking-wide mb-2"># Вопросы и ответы</p>
             <h2 className="text-4xl lg:text-5xl font-semibold text-gray-900 mb-8 leading-tight">
-              Часто задаваемые<br />
-              вопросы
+              Часто задаваемые вопросы
             </h2>
             </div>
 
@@ -59,8 +58,8 @@ export default function FAQSection() {
                 </div>
                 Задать вопрос менеджеру
               </button>
-              <p className="text-gray-500 text-sm mt-4 max-w-sm">
-                Напишите нам и мы ответим на все ваши вопросы по покупке и доставке авто
+              <p className="text-gray-500 text-sm mt-4 pl-4 leading-relaxed max-w-[300px]">
+              Напишите нам и&nbsp;мы&nbsp;ответим на&nbsp;все ваши вопросы по&nbsp;покупке и&nbsp;доставке авто
               </p>
         </div>
 

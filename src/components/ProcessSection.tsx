@@ -129,11 +129,12 @@ export default function ProcessSection() {
     return (
         <section ref={sectionRef} className="max-w-[1920px] w-full mx-auto relative bg-gray-900 text-white py-16 lg:py-24 px-4 sm:px-6 lg:px-20">
             {/* Header */}
-            <div ref={headerRef} className="text-left mb-10 lg:mb-12">
-                <p className="text-white text-md font-normal tracking-wide mb-2 block"># Как проходит процесс</p>
+            <div ref={headerRef} className="text-left mb-10 lg:mb-12 max-w-lg">
+                <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block">
+                    # Как проходит процесс
+                </p>
                 <h2 className="text-4xl lg:text-5xl font-semibold leading-tight">
-                    Весь путь – под<br />
-                    нашим контролем
+                Весь путь&nbsp;&mdash; под нашим контролем
                 </h2>
             </div>
 
