@@ -38,9 +38,7 @@ export default function Home() {
                   <div className="bg-white/50 w-40 h-14 absolute bottom-0 center backdrop-blur-md"></div>
                 </div>
               <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto">
-                Мы помогаем с покупкой новых и б/у автомобилей напрямую от надёжных 
-                поставщиков из Китая, Японии, Южной Кореи и Германии, и доставкой в любой 
-                регион России уже больше пяти лет.
+              Мы&nbsp;помогаем с&nbsp;покупкой новых и&nbsp;б/у автомобилей напрямую от&nbsp;надёжных поставщиков из&nbsp;Китая, Японии, Южной Кореи и&nbsp;Германии, и&nbsp;доставкой в&nbsp;любой регион России уже больше пяти лет.
               </p>
             </div>
 
@@ -49,31 +47,41 @@ export default function Home() {
         </section>
 
         {/* Cards Section */}
-        <CardsSection />
+        <section id="services">
+          <CardsSection />
+        </section>
 
         {/* Promotional Section */}
         <PromoSection />
 
         {/* Why Choose Us Section */}
-        <WhyChooseUs />
+        <section id="about">
+          <WhyChooseUs />
+        </section>
 
         {/* Countries Section */}
         <CountriesSection />
 
         {/* Process Section */}
-        <ProcessSection />
+        <section id="process">
+          <ProcessSection />
+        </section>
 
         {/* Pricing Section */}
         <PricingSection />
 
         {/* Video Reviews Section */}
-        <VideoReviewsSection />
+        <section id="reviews">
+          <VideoReviewsSection />
+        </section>
 
         {/* FAQ Section */}
         <FAQSection />
 
         {/* Contact Section */}
-        <ContactSection />
+        <section id="contacts">
+          <ContactSection />
+        </section>
 
         {/* Contact Form Section */}
         <ContactFormSection />

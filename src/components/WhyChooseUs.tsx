@@ -8,7 +8,7 @@ export default function WhyChooseUs() {
     const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
-        featureRefs.current.forEach((feature, index) => {
+        featureRefs.current.forEach((feature) => {
             if (feature) {
                 const icon = feature.querySelector('.feature-icon');
 

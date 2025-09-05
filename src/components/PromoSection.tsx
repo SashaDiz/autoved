@@ -1,11 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { loadAdminData } from '@/utils/adminData';
 
 export default function PromoSection() {
     const phoneRef = useRef<HTMLDivElement>(null);
+    const [promoData, setPromoData] = useState<{title: string; subtitle: string} | null>(null);
+
+    useEffect(() => {
+        setPromoData(loadAdminData().promo);
+    }, []);
 
     useEffect(() => {
         if (phoneRef.current) {
@@ -28,10 +34,10 @@ export default function PromoSection() {
                     {/* Left Side - Text Content */}
                     <div className="flex-1 p-6 xl:p-12 xl:pr-8 max-w-[450px] lg:max-w-[600px] xl:max-w-none">
                         <h2 className="text-4xl font-semibold text-white mb-2 leading-tight">
-                        Горячие предложения авто на&nbsp;сегодня
+                            {promoData?.title || "Горячие предложения авто на сегодня"}
                         </h2>
                         <p className="text-gray-300 text-md xl:text-lg leading-relaxed mb-6 max-w-lg">
-                            Подпишитесь на наш канала получайте подборку актуальных предложений и&nbsp;новостей из&nbsp;мира авто
+                            {promoData?.subtitle || "Подпишитесь на наш канала получайте подборку актуальных предложений и новостей из мира авто"}
                         </p>
 
                         {/* Telegram Button */}

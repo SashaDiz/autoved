@@ -3,63 +3,7 @@
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
-
-const videoReviews = [
-  {
-    id: 'review-1',
-    customerName: 'Юрий М.',
-    location: 'Волгоград',
-    carModel: 'BMW 6-SERIES',
-    coverImage: '/assets/bmw-6.jpg',
-    vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239220&hd=2&autoplay=1',
-    action: 'Смотреть'
-  },
-  {
-    id: 'review-2',
-    customerName: 'Евгений А.',
-    location: 'Москва',
-    carModel: 'Honda CR-V',
-    coverImage: '/assets/mercedes-eclass.jpg',
-    vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239289&hd=2&autoplay=1',
-    action: 'Смотреть'
-  },
-  {
-    id: 'review-3',
-    customerName: 'Павел С.',
-    location: 'Москва',
-    carModel: 'Volkswagen Golf',
-    coverImage: '/assets/mercedes-glc.jpg',
-    vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239289&hd=2&autoplay=1',
-    action: 'Смотреть'
-  },
-  {
-    id: 'review-4',
-    customerName: 'Марина С.',
-    location: 'Санкт-Петербург',
-    carModel: 'JEEP Wrangler',
-    coverImage: '/assets/mercedes-vito.jpg',
-    vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239289&hd=2&autoplay=1',
-    action: 'Смотреть'
-  },
-  {
-    id: 'review-5',
-    customerName: 'Александр К.',
-    location: 'Екатеринбург',
-    carModel: 'Toyota Camry',
-    coverImage: '/assets/haval.jpg',
-    vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239289&hd=2&autoplay=1',
-    action: 'Смотреть'
-  },
-  {
-    id: 'review-6',
-    customerName: 'Анна В.',
-    location: 'Новосибирск',
-    carModel: 'Hyundai Tucson',
-    coverImage: '/assets/hyunday.jpg',
-    vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239289&hd=2&autoplay=1',
-    action: 'Смотреть'
-  }
-];
+import { loadAdminData } from '@/utils/adminData';
 
 export default function VideoReviewsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -67,8 +11,14 @@ export default function VideoReviewsSection() {
   const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
   const [cardsPerView, setCardsPerView] = useState(5);
   const [isIframeLoading, setIsIframeLoading] = useState(false);
+  const [videoReviews, setVideoReviews] = useState<{id: string; customerName: string; location: string; carModel: string; coverImage: string; vkEmbedUrl: string; action: string}[]>([]);
   const reviewCardsRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Load dynamic data
+  useEffect(() => {
+    setVideoReviews(loadAdminData().videoReviews);
+  }, []);
 
   // Calculate cards per view based on screen size
   useEffect(() => {

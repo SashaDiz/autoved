@@ -111,7 +111,7 @@ export default function CountriesSection() {
                                 </div>
 
                                 {/* Content - Bottom on mobile, Right on tablet+ */}
-                                <div className="flex-1 p-6 md:p-8 xl:p-10 xl:p-12 flex flex-col justify-center">
+                                <div className="flex-1 p-6 md:p-8 xl:p-12 flex flex-col justify-center">
                                     <h3 className="text-lg md:text-xl xl:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">
                                         {country.name}
                                     </h3>

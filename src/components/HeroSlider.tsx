@@ -3,40 +3,12 @@
 import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
+import { loadAdminData, HeroData, HeroSlide } from '@/utils/adminData';
 
 // Slider configuration
 const SLIDER_CONFIG = {
   autoplayDelay: 5000,
-  transitionDuration: 1200,
-  slides: [
-    {
-      id: 'slide-1',
-      backgroundImage: '/assets/bg_img1.webp',
-      carInfo: {
-        name: 'Chery Tigo 8',
-        specs: '2.0T л., 197 л.с.',
-        year: '2021 год'
-      }
-    },
-    {
-      id: 'slide-2',
-      backgroundImage: '/assets/bg_img1.webp', // You can replace with different images
-      carInfo: {
-        name: 'Toyota RAV4',
-        specs: '2.5L, 203 л.с.',
-        year: '2023 год'
-      }
-    },
-    {
-      id: 'slide-3',
-      backgroundImage: '/assets/bg_img1.webp', // You can replace with different images
-      carInfo: {
-        name: 'BMW X5',
-        specs: '3.0T, 340 л.с.',
-        year: '2022 год'
-      }
-    }
-  ]
+  transitionDuration: 1200
 };
 
 // Hero Slider Component
@@ -44,6 +16,7 @@ const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [heroData, setHeroData] = useState<HeroData | null>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
   const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const progressStartTimeRef = useRef<number>(0);
@@ -55,7 +28,12 @@ const HeroSlider = () => {
   const carInfoRef = useRef<HTMLDivElement>(null);
   const progressDotsRef = useRef<HTMLDivElement>(null);
 
-  const slides = SLIDER_CONFIG.slides;
+  // Load dynamic data
+  useEffect(() => {
+    setHeroData(loadAdminData().hero);
+  }, []);
+
+  const slides = heroData?.slides || [];
 
   // Progress animation
   const startProgress = useCallback(() => {
@@ -280,7 +258,7 @@ const HeroSlider = () => {
   return (
     <section ref={containerRef} className="relative h-screen max-h-[1200px] min-h-[600px] sm:min-h-[700px] overflow-hidden">
       {/* Background Images */}
-      {slides.map((slide, index) => (
+      {slides.map((slide: HeroSlide, index: number) => (
         <div
           key={slide.id}
           className={`absolute inset-0 transition-opacity duration-1200 ease-in-out ${
@@ -306,10 +284,10 @@ const HeroSlider = () => {
             {/* Main Content Card */}
             <div ref={heroContentRef} className="bg-white/70 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-6 sm:p-8 xl:p-10 mb-8 sm:mb-12 xl:mb-20">
               <h1 className="text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4 leading-tight">
-              Авто из&nbsp;Китая, Японии, Южной Кореи и&nbsp;Германии.
+                {heroData?.title || "Авто из Китая, Японии, Южной Кореи и Германии."}
               </h1>
               <p className="text-sm sm:text-base xl:text-lg text-gray-900 mb-6 sm:mb-8 leading-relaxed">
-                Доставка от&nbsp;30&nbsp;дней, полное сопровождение, таможенное оформление и&nbsp;страхование на&nbsp;каждом этапе.
+                {heroData?.subtitle || "Доставка от 30 дней, полное сопровождение, таможенное оформление и страхование на каждом этапе."}
               </p>
               <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-4 w-full xl:w-auto justify-between group">
                 Бесплатная консультация
@@ -349,20 +327,22 @@ const HeroSlider = () => {
 
         {/* Sliding Car Info - Bottom Right */}
         <div ref={carInfoRef} className="absolute bottom-32 sm:bottom-36 xl:bottom-40 right-4 sm:right-8 xl:right-20">
-          <div 
-            key={currentSlide}
-            className="text-right text-white animate-fade-in"
-          >
-            <h3 className="text-xl sm:text-2xl xl:text-4xl font-bold mb-1 xl:mb-2">{slides[currentSlide].carInfo.name}</h3>
-            <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.specs}</p>
-            <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.year}</p>
-          </div>
+          {slides[currentSlide] && (
+            <div 
+              key={currentSlide}
+              className="text-right text-white animate-fade-in"
+            >
+              <h3 className="text-xl sm:text-2xl xl:text-4xl font-bold mb-1 xl:mb-2">{slides[currentSlide].carInfo.name}</h3>
+              <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.specs}</p>
+              <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.year}</p>
+            </div>
+          )}
         </div>
 
         {/* Progress Dots */}
         <div className="absolute bottom-12 sm:bottom-16 xl:bottom-20 left-1/2 transform -translate-x-1/2">
         <div ref={progressDotsRef} className="flex space-x-3 sm:space-x-4 xl:space-x-5">
-          {slides.map((_, index) => (
+          {slides.map((_: HeroSlide, index: number) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}

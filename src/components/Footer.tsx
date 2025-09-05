@@ -20,13 +20,19 @@ export default function Footer() {
         <div className="flex justify-between items-center gap-12 w-full xl:w-auto">
           {/* Center - Navigation Links */}
           <div className="flex gap-8 text-sm">
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
-              Условия
+            <a href="#services" className="text-white hover:text-gray-300 transition-colors">
+              Каталог
             </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
-              Гарантии
+            <a href="#about" className="text-white hover:text-gray-300 transition-colors">
+              О нас
             </a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">
+            <a href="#process" className="text-white hover:text-gray-300 transition-colors">
+              Процесс
+            </a>
+            <a href="#reviews" className="text-white hover:text-gray-300 transition-colors">
+              Отзывы
+            </a>
+            <a href="#contacts" className="text-white hover:text-gray-300 transition-colors">
               Контакты
             </a>
           </div>
@@ -64,11 +70,14 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-6">
-          <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">
+          <a href="#" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
             Политика конфиденциальности
           </a>
-          <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">
+          <a href="#" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
             Оферта
+          </a>
+          <a href="/admin" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
+            Админ
           </a>
         </div>
       </div>

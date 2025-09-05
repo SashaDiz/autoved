@@ -38,7 +38,7 @@ const Navigation = () => {
     <header className="max-w-[1920px] w-full mx-auto absolute top-0 left-0 right-0 z-20 px-4 sm:px-6 xl:px-20 py-4 sm:py-6">
       <div className="flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center z-30">
+        <div className="flex items-center gap-4 z-30">
           <Image 
             src="/assets/logo.svg" 
             alt="AutoVed Logo" 
@@ -46,28 +46,46 @@ const Navigation = () => {
             height={40}
             className="h-8 sm:h-10 w-auto"
           />
+          {/* Admin link - hidden */}
+          <a 
+            href="/admin" 
+            className="opacity-0 hover:opacity-20 transition-opacity text-white text-xs"
+            title="Admin Panel"
+          >
+            •
+          </a>
         </div>
         
         {/* Desktop Navigation Links - Hidden below 748px */}
         <nav className="hidden nav-md:flex">
           <ul className="flex items-center space-x-6 xl:space-x-8">
             <li>
-              <a href="#" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
-                Условия
+              <a href="#services" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
+                Каталог
               </a>
             </li>
             <li>
-              <a href="#" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
-                Гарантии
+              <a href="#about" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
+                О нас
               </a>
             </li>
             <li>
-              <a href="#" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
+              <a href="#process" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
+                Процесс
+              </a>
+            </li>
+            <li>
+              <a href="#reviews" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
+                Отзывы
+              </a>
+            </li>
+            <li>
+              <a href="#contacts" className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base">
                 Контакты
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-900 bg-white px-4 xl:px-6 py-3 xl:py-4 rounded-full transition-colors font-medium text-sm xl:text-base hover:bg-gray-100">
+              <a href="#contacts" className="text-gray-900 bg-white px-4 xl:px-6 py-3 xl:py-4 rounded-full transition-colors font-medium text-sm xl:text-base hover:bg-gray-100">
                 Связаться с нами
               </a>
             </li>
@@ -100,38 +118,47 @@ const Navigation = () => {
               <ul className="flex flex-col items-center space-y-6">
                 <li>
                   <a 
-                    href="#" 
+                    href="#services" 
                     className="text-white hover:text-gray-200 transition-colors font-medium text-lg"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Условия
+                    Услуги
                   </a>
                 </li>
                 <li>
                   <a 
-                    href="#" 
+                    href="#about" 
                     className="text-white hover:text-gray-200 transition-colors font-medium text-lg"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Гарантии
+                    О нас
                   </a>
                 </li>
                 <li>
                   <a 
-                    href="#" 
+                    href="#process" 
                     className="text-white hover:text-gray-200 transition-colors font-medium text-lg"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Контакты
+                    Процесс
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#reviews" 
+                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Отзывы
                   </a>
                 </li>
                 <li className="pt-4">
                   <a 
-                    href="#" 
+                    href="#contacts" 
                     className="text-gray-900 bg-white px-8 py-4 rounded-full transition-colors font-medium text-lg hover:bg-gray-100"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Связаться с нами
+                    Контакты
                   </a>
                 </li>
               </ul>
