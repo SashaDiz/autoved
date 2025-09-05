@@ -9,23 +9,24 @@ AutoVed is a Russian car dealership website built with Next.js 15, focusing on i
 ## Development Commands
 
 - `pnpm dev` - Start development server with Turbopack on port 3000
-- `pnpm build` - Build for production with static export
+- `pnpm build` - Build for production
 - `pnpm start` - Start production server on port 3000
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Fix ESLint issues automatically  
 - `pnpm type-check` - Run TypeScript type checking
 
-Note: The `export` script has been removed as it's no longer needed - `next build` with `output: 'export'` configuration automatically generates static files in the `/out` directory.
+Note: The project now includes API routes for database integration and admin panel functionality.
 
 ## Architecture
 
 ### Tech Stack
-- **Next.js 15.5.0** with App Router and static export configuration
+- **Next.js 15.5.0** with App Router and API routes for database integration
 - **React 19.1.0** with React DOM 19.1.0
 - **TypeScript 5** with strict mode enabled
 - **Tailwind CSS v4** with PostCSS integration and custom fonts
 - **GSAP 3.13.0** for complex animations (hero slider, brand logos)
 - **Zod 4.1.3** for validation
+- **MySQL2 3.14.4** for database connectivity
 - **CORS 2.8.5** for API configuration
 - **ESLint 9** with Next.js configuration for code quality
 - **Custom TikTok Sans font** loaded via font-face declarations
@@ -34,10 +35,20 @@ Note: The `export` script has been removed as it's no longer needed - `next buil
 ```
 src/
 ├── app/
+│   ├── api/
+│   │   └── admin/
+│   │       ├── data/       # API endpoints for admin data CRUD
+│   │       └── init/       # Database initialization endpoint
+│   ├── admin/
+│   │   └── page.tsx        # Admin panel interface
 │   ├── layout.tsx          # Root layout with metadata and TikTok Sans font
 │   ├── page.tsx            # Main homepage with all sections
 │   ├── globals.css         # Global styles, TikTok Sans fonts, Tailwind CSS
 │   └── favicon.ico         # Site favicon
+├── lib/
+│   └── db.ts              # Database connection and configuration
+├── utils/
+│   └── adminData.ts       # Admin data types and API utilities
 └── components/             # Reusable React components
     ├── Navigation.tsx      # Header with responsive mobile menu
     ├── HeroSlider.tsx      # Animated hero slider with GSAP
@@ -58,7 +69,7 @@ src/
 
 ### Key Architectural Patterns
 
-**Static Export Configuration**: Project uses `output: 'export'` in next.config.ts for static site generation, with unoptimized images and trailing slashes enabled. Turbopack is configured for fast development builds.
+**Database Integration**: Project uses MySQL database for dynamic content management through API routes. Admin panel allows real-time content updates that are instantly visible to all visitors worldwide.
 
 **GSAP Animation System**: Complex animations are centralized in components using GSAP timelines for smooth, performant animations throughout the site.
 
@@ -85,7 +96,7 @@ src/
 
 **TypeScript Configuration**: Strict mode enabled with path mapping (`@/*` -> `./src/*`) for clean imports. Target ES2017 with Next.js plugin integration.
 
-**Build & Export**: Static site generation configured for deployment. Built files are exported to `/out` directory with unoptimized images for static hosting compatibility.
+**Build & Deployment**: Server-side rendering with API routes for database connectivity. Environment variables securely manage database credentials.
 
 **Code Quality**: ESLint 9 configuration extends Next.js core web vitals and TypeScript rules. Ignores build directories and generated files.
 

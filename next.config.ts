@@ -5,16 +5,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
-  // Enable static exports
-  output: 'export',
-  // Disable image optimization for static export
+  // Keep images unoptimized for compatibility
   images: {
     unoptimized: true,
   },
   // Optional: Configure trailing slash
   trailingSlash: true,
-  // Optional: Configure asset prefix if deploying to subdirectory
-  // assetPrefix: './',
 };
 
 export default nextConfig;
