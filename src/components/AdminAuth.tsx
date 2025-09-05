@@ -100,14 +100,6 @@ export default function AdminAuth({ onLogin }: AdminAuthProps) {
               )}
             </button>
           </form>
-
-          <div className="mt-8 text-center">
-            <p className="text-xs text-gray-500">
-              Тестовые данные:<br />
-              Логин: admin<br />
-              Пароль: autoved2024
-            </p>
-          </div>
         </div>
       </div>
     </div>
