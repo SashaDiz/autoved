@@ -127,7 +127,7 @@ export default function ProcessSection() {
     };
 
     return (
-        <section ref={sectionRef} className="max-w-[1920px] w-full mx-auto relative bg-gray-900 text-white py-16 xl:py-24 px-4 sm:px-6 xl:px-20">
+        <section ref={sectionRef} className="max-w-[1920px] w-full mx-auto relative bg-gray-900 text-white py-16 xl:py-24 px-6 xl:px-20">
             {/* Header */}
             <div ref={headerRef} className="text-center sm:text-left mb-10 xl:mb-12 max-w-lg">
                 <p className="text-gray-500 text-md font-normal tracking-wide mb-2 block">
@@ -139,7 +139,7 @@ export default function ProcessSection() {
             </div>
 
             {/* Main Content Layout - 4 columns x 2 rows */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {/* First Row - Steps 1-4 */}
                 {steps.slice(0, 4).map((step, index) => (
                     <div

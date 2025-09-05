@@ -311,7 +311,7 @@ const HeroSlider = () => {
               <p className="text-sm sm:text-base xl:text-lg text-gray-900 mb-6 sm:mb-8 leading-relaxed">
                 Доставка от&nbsp;30&nbsp;дней, полное сопровождение, таможенное оформление и&nbsp;страхование на&nbsp;каждом этапе.
               </p>
-              <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group">
+              <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-4 w-full xl:w-auto justify-between group">
                 Бесплатная консультация
                 <div className='bg-green-500 rounded-full p-5 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" fill="white" viewBox="0 0 20 20">
@@ -322,7 +322,7 @@ const HeroSlider = () => {
             </div>
 
             {/* Social Media Buttons */}
-            <div ref={socialButtonsRef} className="flex items-center gap-3 sm:gap-4">
+            <div ref={socialButtonsRef} className="flex items-center gap-3 xl:gap-4">
               <button className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
                 <Image 
                   src="/assets/vk-brands.svg" 
@@ -341,7 +341,7 @@ const HeroSlider = () => {
                   className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
                 />
               </button>
-              <span className="text-white text-md ml-2 hidden sm:block">Подпишитесь на наши соцсети</span>
+              <span className="text-white text-md ml-2 hidden sm:block">Подпишитесь на&nbsp;наши соцсети</span>
               <span className="text-white text-md ml-1 sm:hidden">Соцсети</span>
             </div>
           </div>
@@ -353,7 +353,7 @@ const HeroSlider = () => {
             key={currentSlide}
             className="text-right text-white animate-fade-in"
           >
-            <h3 className="text-xl sm:text-2xl xl:text-3xl xl:text-4xl font-bold mb-1 sm:mb-2">{slides[currentSlide].carInfo.name}</h3>
+            <h3 className="text-xl sm:text-2xl xl:text-4xl font-bold mb-1 xl:mb-2">{slides[currentSlide].carInfo.name}</h3>
             <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.specs}</p>
             <p className="text-sm sm:text-base xl:text-lg opacity-90">{slides[currentSlide].carInfo.year}</p>
           </div>

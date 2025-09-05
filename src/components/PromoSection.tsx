@@ -26,7 +26,7 @@ export default function PromoSection() {
                 {/* Content Container */}
                 <div className="relative z-10 flex flex-col xl:flex-row items-start justify-between h-full">
                     {/* Left Side - Text Content */}
-                    <div className="flex-1 p-6 xl:p-12 xl:pr-8 max-w-[450px]">
+                    <div className="flex-1 p-6 xl:p-12 xl:pr-8 max-w-[450px] lg:max-w-[600px] xl:max-w-none">
                         <h2 className="text-4xl font-semibold text-white mb-2 leading-tight">
                         Горячие предложения авто на&nbsp;сегодня
                         </h2>

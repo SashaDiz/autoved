@@ -540,13 +540,12 @@ export default function CardsSection() {
           Каталог авто
         </h2>
         <p className="text-gray-600 text-lg leading-relaxed max-w-4xl mx-auto">
-          Здесь представлена лишь небольшая часть автомобилей доступных для заказа 
-          из Китая, Японии, Южной Кореи или Германии. Наличие уточняйте у менеджера.
+        Здесь представлена лишь небольшая часть автомобилей доступных для заказа из&nbsp;Китая, Японии, Южной Кореи или Германии. Наличие уточняйте у&nbsp;менеджера.
         </p>
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 xl:grid-cols-4 gap-6 mb-16 auto-rows-fr">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16 auto-rows-fr">
         {cardsToShow.map((car, index) => (
           <div
             key={index}
