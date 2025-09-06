@@ -27,31 +27,37 @@ export default function ImageUpload({
       return;
     }
 
-    // Check file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Размер файла не должен превышать 5MB');
+    // Check file size (max 10MB for S3)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Размер файла не должен превышать 10MB');
       return;
     }
 
     setIsUploading(true);
 
     try {
-      // Convert file to base64 data URL for storage
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setPreviewUrl(dataUrl);
-        onImageChange(dataUrl);
-        setIsUploading(false);
-      };
-      reader.onerror = () => {
-        alert('Ошибка загрузки файла');
-        setIsUploading(false);
-      };
-      reader.readAsDataURL(file);
+      // Create form data for upload
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Upload to S3 via our API
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setPreviewUrl(result.url);
+        onImageChange(result.url);
+      } else {
+        alert(result.error || 'Ошибка загрузки изображения');
+      }
     } catch (error) {
       console.error('Upload error:', error);
       alert('Ошибка загрузки изображения');
+    } finally {
       setIsUploading(false);
     }
   };
@@ -147,7 +153,7 @@ export default function ImageUpload({
               Нажмите или перетащите изображение сюда
             </p>
             <p className="text-xs text-gray-400">
-              PNG, JPG, WebP до 5MB
+              PNG, JPG, WebP до 10MB
             </p>
           </>
         )}
@@ -169,7 +175,7 @@ export default function ImageUpload({
         </label>
         <input
           type="url"
-          value={currentImage.startsWith('data:') ? '' : currentImage}
+          value={currentImage.startsWith('data:') || currentImage.includes('s3.twcstorage.ru') ? '' : currentImage}
           onChange={(e) => onImageChange(e.target.value)}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
           placeholder="https://example.com/image.jpg"

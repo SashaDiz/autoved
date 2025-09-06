@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   // Comment out 'output: export' to enable API routes and database functionality
   // output: 'export', // Only use this for static hosting without admin features
   
+  // Enable standalone output for optimized Docker deployment
+  output: 'standalone',
+  
   // Keep image optimization disabled for compatibility
   images: {
     unoptimized: true,
