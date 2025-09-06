@@ -5,9 +5,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
-  // Enable static exports
-  output: 'export',
-  // Disable image optimization for static export
+  // For production with admin panel, we need server-side rendering
+  // Comment out 'output: export' to enable API routes and database functionality
+  // output: 'export', // Only use this for static hosting without admin features
+  
+  // Keep image optimization disabled for compatibility
   images: {
     unoptimized: true,
   },

@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { getDefaultData } from '@/utils/adminData';
 
-export const dynamic = 'force-static';
+// Remove force-static for server-side functionality  
+// export const dynamic = 'force-static';
 
 export async function POST() {
   try {
