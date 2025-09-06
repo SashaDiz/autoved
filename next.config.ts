@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
-  // Keep images unoptimized for compatibility
+  // Enable static exports
+  output: 'export',
+  // Disable image optimization for static export
   images: {
     unoptimized: true,
   },
