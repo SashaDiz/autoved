@@ -53,7 +53,12 @@ export default function PromoSection() {
                         </p>
 
                         {/* Telegram Button */}
-                        <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group min-w-2xs">
+                        <a 
+                            href="https://t.me/Auto_ved" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full md:max-w-xs justify-between group min-w-2xs hover:border-green-500"
+                        >
                             Перейти в&nbsp;группу
                             <div className='bg-green-500 rounded-full p-5 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                                 <Image
@@ -64,7 +69,7 @@ export default function PromoSection() {
                                     className="w-5 h-5 text-white"
                                 />
                             </div>
-                        </button>
+                        </a>
                     </div>
 
                     {/* Right Side - Phone Image */}

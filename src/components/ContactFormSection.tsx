@@ -17,10 +17,79 @@ export default function ContactFormSection() {
     budget: false
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formState, setFormState] = useState<{
+    isSubmitting: boolean;
+    isSubmitted: boolean;
+    error: string | null;
+    success: string | null;
+  }>({
+    isSubmitting: false,
+    isSubmitted: false,
+    error: null,
+    success: null
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    
+    if (!formData.privacyAccepted) {
+      setFormState(prev => ({ ...prev, error: 'Необходимо согласиться с политикой конфиденциальности' }));
+      return;
+    }
+
+    setFormState({ isSubmitting: true, isSubmitted: false, error: null, success: null });
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          country: formData.country,
+          budget: formData.budget,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setFormState({
+          isSubmitting: false,
+          isSubmitted: true,
+          error: null,
+          success: result.message
+        });
+        
+        // Reset form
+        setFormData({
+          name: '',
+          phone: '',
+          country: 'Любая',
+          budget: 'до 2 млн руб',
+          message: '',
+          privacyAccepted: false
+        });
+      } else {
+        setFormState({
+          isSubmitting: false,
+          isSubmitted: false,
+          error: result.message || 'Произошла ошибка при отправке заявки',
+          success: null
+        });
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setFormState({
+        isSubmitting: false,
+        isSubmitted: false,
+        error: 'Произошла ошибка при отправке заявки. Попробуйте еще раз.',
+        success: null
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -29,6 +98,11 @@ export default function ContactFormSection() {
       ...prev,
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
     }));
+    
+    // Clear any existing errors when user starts typing
+    if (formState.error) {
+      setFormState(prev => ({ ...prev, error: null }));
+    }
   };
 
   const handleSelectFocus = (selectName: 'country' | 'budget') => {
@@ -180,6 +254,15 @@ export default function ContactFormSection() {
               />
             </div>
 
+            {/* Success/Error Messages */}
+            {(formState.success || formState.error) && (
+              <div className={`p-4 rounded-lg ${formState.success ? 'bg-green-500/20 border border-green-500/30' : 'bg-red-500/20 border border-red-500/30'}`}>
+                <p className={`text-sm ${formState.success ? 'text-green-300' : 'text-red-300'}`}>
+                  {formState.success || formState.error}
+                </p>
+              </div>
+            )}
+
             {/* Privacy Checkbox and Submit */}
             <div className="space-y-4">
               <div className="flex items-start gap-3">
@@ -202,10 +285,20 @@ export default function ContactFormSection() {
 
               <button
                 type="submit"
-                disabled={!formData.privacyAccepted}
-                className="w-full px-8 sm:px-12 md:px-16 xl:px-20 py-4 xl:py-5 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                disabled={!formData.privacyAccepted || formState.isSubmitting}
+                className="w-full px-8 sm:px-12 md:px-16 xl:px-20 py-4 xl:py-5 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm sm:text-base flex items-center justify-center gap-2"
               >
-                Отправить
+                {formState.isSubmitting ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                    </svg>
+                    Отправляем...
+                  </>
+                ) : (
+                  'Отправить'
+                )}
               </button>
             </div>
           </form>

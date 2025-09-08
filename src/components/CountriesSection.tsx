@@ -1,8 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
+import ContactModal from './ContactModal';
 
 export default function CountriesSection() {
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+    
     const countries = [
         {
             id: 'china',
@@ -63,7 +67,10 @@ export default function CountriesSection() {
 
                     {/* Consultation Button - Sticky to bottom */}
                     <div className="mt-8 xl:mt-0">
-                        <button className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
+                        <button 
+                            onClick={() => setIsContactModalOpen(true)}
+                            className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group"
+                        >
                             <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                                 <Image
                                     src="/assets/paper-plane.svg"
@@ -132,6 +139,13 @@ export default function CountriesSection() {
                     </div>
                 </div>
             </div>
+
+            {/* Contact Modal */}
+            <ContactModal 
+                isOpen={isContactModalOpen}
+                onClose={() => setIsContactModalOpen(false)}
+                title="Бесплатная консультация"
+            />
         </section>
     );
 }

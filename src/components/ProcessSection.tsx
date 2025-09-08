@@ -198,8 +198,7 @@ export default function ProcessSection() {
                 {/* Call to Action Card - 4th position in second row */}
                 <div ref={ctaRef} className="bg-green-500 rounded-2xl p-6 xl:p-8 flex flex-col justify-center">
                     <h3 className="text-xl xl:text-2xl font-semibold text-white mb-6 leading-tight">
-                        Запишитесь на бесплатную<br />
-                        консультацию сейчас
+                    Запишитесь на&nbsp;бесплатную консультацию сейчас
                     </h3>
                     <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-2 w-full sm:w-auto justify-between group">
                         Оставить заявку

@@ -1,8 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
+import ContactModal from './ContactModal';
 
 export default function PricingSection() {
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
     return (
         <section className="max-w-[1920px] w-full mx-auto relative py-24 px-4 sm:px-6 xl:px-24">
             {/* Main Content Container */}
@@ -193,7 +197,10 @@ export default function PricingSection() {
 
             {/* CTA Button */}
             <div className="text-center mt-16">
-                <button className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group mx-auto">
+                <button 
+                    onClick={() => setIsContactModalOpen(true)}
+                    className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group mx-auto"
+                >
                     <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                         <Image
                             src="/assets/paper-plane.svg"
@@ -210,6 +217,13 @@ export default function PricingSection() {
                     конечную стоимость вашего авто
                 </p>
             </div>
+
+            {/* Contact Modal */}
+            <ContactModal 
+                isOpen={isContactModalOpen}
+                onClose={() => setIsContactModalOpen(false)}
+                title="Узнать стоимость авто"
+            />
         </section>
     );
 }

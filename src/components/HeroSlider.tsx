@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { loadAdminData, loadAdminDataSync, HeroData, HeroSlide } from '@/utils/adminData';
+import ContactModal from './ContactModal';
 
 // Slider configuration
 const SLIDER_CONFIG = {
@@ -17,6 +18,7 @@ const HeroSlider = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [heroData, setHeroData] = useState<HeroData | null>(null);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
   const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const progressStartTimeRef = useRef<number>(0);
@@ -301,7 +303,10 @@ const HeroSlider = () => {
               <p className="text-sm sm:text-base xl:text-lg text-gray-900 mb-6 sm:mb-8 leading-relaxed">
                 {heroData?.subtitle || "Доставка от 30 дней, полное сопровождение, таможенное оформление и страхование на каждом этапе."}
               </p>
-              <button className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-4 w-full xl:w-auto justify-between group">
+              <button 
+                onClick={() => setIsContactModalOpen(true)}
+                className="cursor-pointer bg-white border-2 border-gray-200 shadow-inner text-gray-900 p-2 pl-6 rounded-full text-sm sm:text-base xl:text-lg font-semibold transition-colors flex items-center gap-4 w-full xl:w-auto justify-between group hover:bg-gray-50"
+              >
                 Бесплатная консультация
                 <div className='bg-green-500 rounded-full p-5 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" fill="white" viewBox="0 0 20 20">
@@ -397,6 +402,13 @@ const HeroSlider = () => {
         </div>
       </div>
     </div>
+
+    {/* Contact Modal */}
+    <ContactModal 
+      isOpen={isContactModalOpen}
+      onClose={() => setIsContactModalOpen(false)}
+      title="Свяжитесь с нами"
+    />
     </section>
   );
 };

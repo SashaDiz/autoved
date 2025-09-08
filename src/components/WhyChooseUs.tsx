@@ -1,11 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
+import ContactModal from './ContactModal';
 
 export default function WhyChooseUs() {
     const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
     useEffect(() => {
         featureRefs.current.forEach((feature) => {
@@ -55,7 +57,10 @@ export default function WhyChooseUs() {
                     </div>
 
                     {/* Contact Button */}
-                    <button className="cursor-pointer text-lg mt-8 xl:mt-0 bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
+                    <button 
+                        onClick={() => setIsContactModalOpen(true)}
+                        className="cursor-pointer text-lg mt-8 xl:mt-0 bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group"
+                    >
                         <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                             <Image
                                 src="/assets/paper-plane.svg"
@@ -210,6 +215,13 @@ export default function WhyChooseUs() {
                     </div>
                 </div>
             </div>
+
+            {/* Contact Modal */}
+            <ContactModal 
+                isOpen={isContactModalOpen}
+                onClose={() => setIsContactModalOpen(false)}
+                title="Связаться с менеджером"
+            />
         </section>
     );
 }

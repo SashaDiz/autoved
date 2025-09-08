@@ -3,10 +3,12 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { loadAdminData, loadAdminDataSync } from '@/utils/adminData';
+import ContactModal from './ContactModal';
 
 export default function FAQSection() {
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>('faq-1');
   const [faqData, setFaqData] = useState<{id: string; question: string; answer: string}[]>([]);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   // Load dynamic data
   useEffect(() => {
@@ -50,7 +52,10 @@ export default function FAQSection() {
             </div>
 
             {/* Contact Button */}
-              <button className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group">
+              <button 
+                onClick={() => setIsContactModalOpen(true)}
+                className="cursor-pointer text-lg bg-gray-900 text-white px-2 pr-6 py-2 rounded-full font-semibold transition-all duration-300 hover:bg-gray-800 flex items-center gap-3 group"
+              >
                 <div className='bg-green-500 rounded-full p-4 border-1 border-black/5 shadow-md transition-transform duration-300 group-hover:scale-110'>
                   <Image
                     src="/assets/paper-plane.svg"
@@ -108,6 +113,13 @@ export default function FAQSection() {
           </div>
         </div>
       </div>
+
+      {/* Contact Modal */}
+      <ContactModal 
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        title="Задать вопрос менеджеру"
+      />
     </section>
   );
 }

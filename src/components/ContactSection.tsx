@@ -65,7 +65,12 @@ export default function ContactSection() {
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-semibold text-gray-900">+7 (495) 000-000</span>
+                <a 
+                  href="tel:+79165788898" 
+                  className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
+                >
+                  +7 (916) 578-88-98
+                </a>
                 <span className="text-gray-500 ml-2">(офис)</span>
               </div>
             </div>
@@ -78,7 +83,7 @@ export default function ContactSection() {
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-semibold text-gray-900">help@autoved.ru</span>
+                <span className="text-lg font-semibold text-gray-900">info@vedtime.ru</span>
                 <span className="text-gray-500 ml-2">(офис)</span>
               </div>
             </div>
@@ -92,7 +97,7 @@ export default function ContactSection() {
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-semibold text-gray-900">г. Москва, ул. Тверская, 15 офис 301, 3 этаж</span>
+                <span className="text-lg font-semibold text-gray-900">г. Москва, м. Сокол, Ленинградский Проспект, д. 63, Офис 514</span>
               </div>
             </div>
           </div>
