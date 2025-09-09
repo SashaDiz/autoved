@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { CardsData, CarCard, generateId } from '@/utils/adminData';
+import { CardsData, CarCard } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
+import AddCarModal from '@/components/AddCarModal';
 
 interface AdminCardsSectionProps {
   data: CardsData;
@@ -11,6 +12,7 @@ interface AdminCardsSectionProps {
 
 export default function AdminCardsSection({ data, onChange }: AdminCardsSectionProps) {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const updateTitle = (title: string) => {
     onChange({ ...data, title });
@@ -26,22 +28,7 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
     onChange({ ...data, cards: newCards });
   };
 
-  const addCard = () => {
-    const newCard: CarCard = {
-      id: generateId('car'),
-      title: 'Новый автомобиль',
-      engine: '2.0L, 200 л.с.',
-      drive: '4WD',
-      modification: 'Base',
-      distance: '0 км.',
-      imageUrl: '/assets/hyunday.jpg',
-      externalLink: 'https://auto.ru/',
-      price: '3 000 000 ₽',
-      year: '2024 год',
-      location: 'CN',
-      isNew: true,
-      date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
-    };
+  const handleAddCard = (newCard: CarCard) => {
     onChange({ ...data, cards: [...data.cards, newCard] });
   };
 
@@ -120,7 +107,7 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900">Автомобили ({data.cards.length})</h3>
           <button
-            onClick={addCard}
+            onClick={() => setIsAddModalOpen(true)}
             className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -388,6 +375,13 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
           </div>
         </div>
       </div>
+
+      {/* Add Car Modal */}
+      <AddCarModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddCard}
+      />
     </div>
   );
 }

@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { VideoReview, generateId } from '@/utils/adminData';
+import { VideoReview } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
+import AddVideoModal from '@/components/AddVideoModal';
 
 interface AdminVideoSectionProps {
   data: VideoReview[];
@@ -13,6 +14,7 @@ interface AdminVideoSectionProps {
 export default function AdminVideoSection({ data, onChange }: AdminVideoSectionProps) {
   const [activeReview, setActiveReview] = useState(0);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const updateReview = (index: number, review: VideoReview) => {
     const newReviews = [...data];
@@ -20,16 +22,7 @@ export default function AdminVideoSection({ data, onChange }: AdminVideoSectionP
     onChange(newReviews);
   };
 
-  const addReview = () => {
-    const newReview: VideoReview = {
-      id: generateId('review'),
-      customerName: 'Новый клиент',
-      location: 'Город',
-      carModel: 'Модель автомобиля',
-      coverImage: '/assets/bmw-6.jpg',
-      vkEmbedUrl: 'https://vk.com/video_ext.php?oid=-65024227&id=456239220&hd=2&autoplay=1',
-      action: 'Смотреть'
-    };
+  const handleAddReview = (newReview: VideoReview) => {
     onChange([...data, newReview]);
   };
 
@@ -56,7 +49,7 @@ export default function AdminVideoSection({ data, onChange }: AdminVideoSectionP
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium text-gray-900">Отзывы ({data.length})</h3>
         <button
-          onClick={addReview}
+          onClick={() => setIsAddModalOpen(true)}
           className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -216,6 +209,13 @@ export default function AdminVideoSection({ data, onChange }: AdminVideoSectionP
           <p className="text-sm">Нажмите &ldquo;Добавить отзыв&rdquo; чтобы создать первый</p>
         </div>
       )}
+
+      {/* Add Video Modal */}
+      <AddVideoModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddReview}
+      />
     </div>
   );
 }

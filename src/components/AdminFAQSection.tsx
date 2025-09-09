@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { FAQItem, generateId } from '@/utils/adminData';
+import { FAQItem } from '@/utils/adminData';
+import AddFAQModal from '@/components/AddFAQModal';
 
 interface AdminFAQSectionProps {
   data: FAQItem[];
@@ -10,6 +11,7 @@ interface AdminFAQSectionProps {
 
 export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps) {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const updateFAQ = (index: number, faq: FAQItem) => {
     const newFAQs = [...data];
@@ -17,12 +19,7 @@ export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps
     onChange(newFAQs);
   };
 
-  const addFAQ = () => {
-    const newFAQ: FAQItem = {
-      id: generateId('faq'),
-      question: 'Новый вопрос?',
-      answer: 'Ответ на новый вопрос.'
-    };
+  const handleAddFAQ = (newFAQ: FAQItem) => {
     onChange([...data, newFAQ]);
   };
 
@@ -71,7 +68,7 @@ export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium text-gray-900">Вопросы ({data.length})</h3>
         <button
-          onClick={addFAQ}
+          onClick={() => setIsAddModalOpen(true)}
           className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,6 +184,13 @@ export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps
           <p className="text-sm">Нажмите &ldquo;Добавить вопрос&rdquo; чтобы создать первый</p>
         </div>
       )}
+
+      {/* Add FAQ Modal */}
+      <AddFAQModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddFAQ}
+      />
     </div>
   );
 }

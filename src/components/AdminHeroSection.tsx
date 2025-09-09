@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { HeroData, HeroSlide, generateId } from '@/utils/adminData';
+import { HeroData, HeroSlide } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
+import AddSlideModal from '@/components/AddSlideModal';
 
 interface AdminHeroSectionProps {
   data: HeroData;
@@ -11,6 +12,7 @@ interface AdminHeroSectionProps {
 
 export default function AdminHeroSection({ data, onChange }: AdminHeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const updateTitle = (title: string) => {
     onChange({ ...data, title });
@@ -26,16 +28,7 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
     onChange({ ...data, slides: newSlides });
   };
 
-  const addSlide = () => {
-    const newSlide: HeroSlide = {
-      id: generateId('slide'),
-      backgroundImage: '/assets/bg_img1.webp',
-      carInfo: {
-        name: 'Новый автомобиль',
-        specs: '2.0L, 200 л.с.',
-        year: '2024 год'
-      }
-    };
+  const handleAddSlide = (newSlide: HeroSlide) => {
     onChange({ ...data, slides: [...data.slides, newSlide] });
   };
 
@@ -89,7 +82,7 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900">Слайды ({data.slides.length})</h3>
           <button
-            onClick={addSlide}
+            onClick={() => setIsAddModalOpen(true)}
             className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -227,6 +220,13 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
           </div>
         </div>
       </div>
+
+      {/* Add Slide Modal */}
+      <AddSlideModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddSlide}
+      />
     </div>
   );
 }

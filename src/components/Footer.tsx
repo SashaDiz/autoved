@@ -63,22 +63,21 @@ export default function Footer() {
       </div>
 
       {/* Bottom Section */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 text-sm text-gray-400">
+      <div className="flex flex-col xl:flex-row justify-between items-end gap-4 text-sm text-gray-400">
         <div className='max-w-[300px]'>
           <p>2025 © Все права защищены.</p>
           <p>Данный сайт носит исключительно информационный характер и&nbsp;не&nbsp;является публичной офертой</p>
         </div>
 
         <div className="flex gap-6">
-          <a href="#" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
+          <a href="/politika" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
             Политика конфиденциальности
-          </a>
-          <a href="#" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
-            Оферта
           </a>
           <a href="/admin" className="text-gray-600 hover:text-gray-400 transition-colors text-md">
             Админ
           </a>
+        </div>
+        <div className="flex gap-6">
         </div>
       </div>
     </footer>
