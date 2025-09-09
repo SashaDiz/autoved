@@ -8,27 +8,88 @@ import AddVideoModal from '@/components/AddVideoModal';
 
 interface AdminVideoSectionProps {
   data: VideoReview[];
-  onChange: (data: VideoReview[]) => void;
+  originalData?: VideoReview[];
+  onChange: (data: VideoReview[], changeType: 'header' | 'items') => void;
+  onSaveHeader: () => void;
+  unsavedChanges: { header: boolean };
+  saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminVideoSection({ data, onChange }: AdminVideoSectionProps) {
+export default function AdminVideoSection({ data, originalData, onChange, onSaveHeader, unsavedChanges, saveStatus }: AdminVideoSectionProps) {
   const [activeReview, setActiveReview] = useState(0);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  
+  // State for tracking changes in each review
+  const [reviewChanges, setReviewChanges] = useState<Record<number, VideoReview>>({});
+  const [reviewSaveStatus, setReviewSaveStatus] = useState<Record<number, 'saved' | 'saving' | 'error' | null>>({});
 
   const updateReview = (index: number, review: VideoReview) => {
     const newReviews = [...data];
     newReviews[index] = review;
-    onChange(newReviews);
+    onChange(newReviews, 'items');
+    
+    // Track changes for this review
+    setReviewChanges(prev => ({
+      ...prev,
+      [index]: review
+    }));
+  };
+
+  const saveReview = async (index: number) => {
+    if (!reviewChanges[index]) return;
+    
+    setReviewSaveStatus(prev => ({ ...prev, [index]: 'saving' }));
+    
+    try {
+      // Simulate API call - in real app, this would save to backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Clear the changes for this review
+      setReviewChanges(prev => {
+        const newChanges = { ...prev };
+        delete newChanges[index];
+        return newChanges;
+      });
+      
+      setReviewSaveStatus(prev => ({ ...prev, [index]: 'saved' }));
+      
+      // Clear saved status after 2 seconds
+      setTimeout(() => {
+        setReviewSaveStatus(prev => ({ ...prev, [index]: null }));
+      }, 2000);
+    } catch (error) {
+      setReviewSaveStatus(prev => ({ ...prev, [index]: 'error' }));
+    }
+  };
+
+  const cancelReviewChanges = (index: number) => {
+    // Restore original review data
+    if (originalData && originalData[index]) {
+      const originalReview = originalData[index];
+      const newReviews = [...data];
+      newReviews[index] = originalReview;
+      onChange(newReviews, 'items');
+    }
+    
+    // Clear changes for this review
+    setReviewChanges(prev => {
+      const newChanges = { ...prev };
+      delete newChanges[index];
+      return newChanges;
+    });
+    
+    // Clear save status
+    setReviewSaveStatus(prev => ({ ...prev, [index]: null }));
   };
 
   const handleAddReview = (newReview: VideoReview) => {
-    onChange([...data, newReview]);
+    onChange([...data, newReview], 'items');
   };
 
   const removeReview = (index: number) => {
     const newReviews = data.filter((_, i) => i !== index);
-    onChange(newReviews);
+    onChange(newReviews, 'items');
     if (activeReview >= newReviews.length) {
       setActiveReview(Math.max(0, newReviews.length - 1));
     }
@@ -41,8 +102,10 @@ export default function AdminVideoSection({ data, onChange }: AdminVideoSectionP
   return (
     <div className="space-y-8">
       <div className="border-b border-gray-200 pb-4">
-        <h2 className="text-2xl font-semibold text-gray-900">Видео отзывы</h2>
-        <p className="text-gray-600 mt-2">Управление видео отзывами клиентов</p>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Видео отзывы</h2>
+          <p className="text-gray-600 mt-2">Управление видео отзывами клиентов</p>
+        </div>
       </div>
 
       {/* Add Review Button */}
@@ -100,7 +163,8 @@ export default function AdminVideoSection({ data, onChange }: AdminVideoSectionP
 
             {/* Expanded Review Editor */}
             {expandedReview === index && (
-              <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Имя клиента
@@ -194,6 +258,35 @@ export default function AdminVideoSection({ data, onChange }: AdminVideoSectionP
                     Получите embed URL из ВКонтакте для интеграции видео
                   </p>
                 </div>
+                </div>
+
+                {/* Review Save/Cancel Buttons - Only show when there are unsaved changes */}
+                {reviewChanges[index] && (
+                  <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                    <button
+                      onClick={() => cancelReviewChanges(index)}
+                      className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    >
+                      Отменить
+                    </button>
+                    <button
+                      onClick={() => saveReview(index)}
+                      disabled={reviewSaveStatus[index] === 'saving'}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                        reviewSaveStatus[index] !== 'saving'
+                          ? 'bg-green-600 text-white hover:bg-green-700'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {reviewSaveStatus[index] === 'saving' && (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      )}
+                      {reviewSaveStatus[index] === 'saved' && '✓'}
+                      {reviewSaveStatus[index] === 'error' && '✗'}
+                      {reviewSaveStatus[index] === 'saving' ? 'Сохранение...' : 'Сохранить'}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

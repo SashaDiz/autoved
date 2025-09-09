@@ -7,35 +7,74 @@ import AddSlideModal from '@/components/AddSlideModal';
 
 interface AdminHeroSectionProps {
   data: HeroData;
-  onChange: (data: HeroData) => void;
+  originalData?: HeroData;
+  onChange: (data: HeroData, changeType: 'header' | 'items') => void;
+  onSaveHeader: () => void;
+  onCancelChanges: () => void;
+  unsavedChanges: { header: boolean };
+  saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminHeroSection({ data, onChange }: AdminHeroSectionProps) {
+export default function AdminHeroSection({ data, originalData, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminHeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [slideChanges, setSlideChanges] = useState<Record<number, HeroSlide>>({});
 
   const updateTitle = (title: string) => {
-    onChange({ ...data, title });
+    onChange({ ...data, title }, 'header');
   };
 
   const updateSubtitle = (subtitle: string) => {
-    onChange({ ...data, subtitle });
+    onChange({ ...data, subtitle }, 'header');
   };
 
   const updateSlide = (index: number, slide: HeroSlide) => {
-    const newSlides = [...data.slides];
-    newSlides[index] = slide;
-    onChange({ ...data, slides: newSlides });
+    // Store changes locally
+    setSlideChanges(prev => ({
+      ...prev,
+      [index]: slide
+    }));
+  };
+
+  const saveSlideChanges = (index: number) => {
+    if (slideChanges[index]) {
+      const newSlides = [...data.slides];
+      newSlides[index] = slideChanges[index];
+      onChange({ ...data, slides: newSlides }, 'items');
+    }
+    setSlideChanges(prev => {
+      const newChanges = { ...prev };
+      delete newChanges[index];
+      return newChanges;
+    });
+  };
+
+  const cancelSlideChanges = (index: number) => {
+    setSlideChanges(prev => {
+      const newChanges = { ...prev };
+      delete newChanges[index];
+      return newChanges;
+    });
+  };
+
+  // Check if slide has unsaved changes
+  const hasSlideChanges = (index: number) => {
+    return slideChanges[index] !== undefined;
+  };
+
+  // Get current slide data (either from changes or original)
+  const getCurrentSlideData = (index: number) => {
+    return slideChanges[index] || data.slides[index];
   };
 
   const handleAddSlide = (newSlide: HeroSlide) => {
-    onChange({ ...data, slides: [...data.slides, newSlide] });
+    onChange({ ...data, slides: [...data.slides, newSlide] }, 'items');
   };
 
   const removeSlide = (index: number) => {
     if (data.slides.length <= 1) return; // Don't allow removing the last slide
     const newSlides = data.slides.filter((_, i) => i !== index);
-    onChange({ ...data, slides: newSlides });
+    onChange({ ...data, slides: newSlides }, 'items');
     if (activeSlide >= newSlides.length) {
       setActiveSlide(Math.max(0, newSlides.length - 1));
     }
@@ -44,8 +83,10 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
   return (
     <div className="space-y-8">
       <div className="border-b border-gray-200 pb-4">
-        <h2 className="text-2xl font-semibold text-gray-900">Главный экран (Hero)</h2>
-        <p className="text-gray-600 mt-2">Управление заголовком, подзаголовком и слайдами</p>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Главный экран (Hero)</h2>
+          <p className="text-gray-600 mt-2">Управление заголовком, подзаголовком и слайдами</p>
+        </div>
       </div>
 
       {/* Main Text Content */}
@@ -75,6 +116,34 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
             placeholder="Описание под заголовком"
           />
         </div>
+
+        {/* Header Save/Cancel Buttons - Only show when there are unsaved changes */}
+        {unsavedChanges.header && (
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={onCancelChanges}
+              className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+            >
+              Отменить
+            </button>
+            <button
+              onClick={onSaveHeader}
+              disabled={saveStatus.header === 'saving'}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                saveStatus.header !== 'saving'
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {saveStatus.header === 'saving' && (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              )}
+              {saveStatus.header === 'saved' && '✓'}
+              {saveStatus.header === 'error' && '✗'}
+              {saveStatus.header === 'saving' ? 'Сохранение...' : 'Сохранить'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Slides Management */}
@@ -124,7 +193,7 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
-                  Удалить слайд
+                  Удалить
                 </button>
               )}
             </div>
@@ -132,9 +201,9 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
             <div className="grid grid-cols-1 gap-6">
               <div className="md:col-span-2">
                 <ImageUpload
-                  currentImage={data.slides[activeSlide].backgroundImage}
+                  currentImage={getCurrentSlideData(activeSlide).backgroundImage}
                   onImageChange={(imageUrl) => updateSlide(activeSlide, {
-                    ...data.slides[activeSlide],
+                    ...getCurrentSlideData(activeSlide),
                     backgroundImage: imageUrl
                   })}
                   label="Фоновое изображение слайда"
@@ -150,11 +219,11 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
                 </label>
                 <input
                   type="text"
-                  value={data.slides[activeSlide].carInfo.name}
+                  value={getCurrentSlideData(activeSlide).carInfo.name}
                   onChange={(e) => updateSlide(activeSlide, {
-                    ...data.slides[activeSlide],
+                    ...getCurrentSlideData(activeSlide),
                     carInfo: {
-                      ...data.slides[activeSlide].carInfo,
+                      ...getCurrentSlideData(activeSlide).carInfo,
                       name: e.target.value
                     }
                   })}
@@ -169,11 +238,11 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
                 </label>
                 <input
                   type="text"
-                  value={data.slides[activeSlide].carInfo.specs}
+                  value={getCurrentSlideData(activeSlide).carInfo.specs}
                   onChange={(e) => updateSlide(activeSlide, {
-                    ...data.slides[activeSlide],
+                    ...getCurrentSlideData(activeSlide),
                     carInfo: {
-                      ...data.slides[activeSlide].carInfo,
+                      ...getCurrentSlideData(activeSlide).carInfo,
                       specs: e.target.value
                     }
                   })}
@@ -188,11 +257,11 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
                 </label>
                 <input
                   type="text"
-                  value={data.slides[activeSlide].carInfo.year}
+                  value={getCurrentSlideData(activeSlide).carInfo.year}
                   onChange={(e) => updateSlide(activeSlide, {
-                    ...data.slides[activeSlide],
+                    ...getCurrentSlideData(activeSlide),
                     carInfo: {
-                      ...data.slides[activeSlide].carInfo,
+                      ...getCurrentSlideData(activeSlide).carInfo,
                       year: e.target.value
                     }
                   })}
@@ -201,6 +270,24 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
                 />
               </div>
             </div>
+
+            {/* Slide Save/Cancel Buttons - Only show when there are unsaved changes */}
+            {hasSlideChanges(activeSlide) && (
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => cancelSlideChanges(activeSlide)}
+                  className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  onClick={() => saveSlideChanges(activeSlide)}
+                  className="px-4 py-2 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700 cursor-pointer"
+                >
+                  Сохранить
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -216,7 +303,7 @@ export default function AdminHeroSection({ data, onChange }: AdminHeroSectionPro
             {data.subtitle}
           </p>
           <div className="text-sm text-gray-500">
-            Текущий слайд: <strong>{data.slides[activeSlide]?.carInfo.name}</strong> - {data.slides[activeSlide]?.carInfo.specs}, {data.slides[activeSlide]?.carInfo.year}
+            Текущий слайд: <strong>{getCurrentSlideData(activeSlide)?.carInfo.name}</strong> - {getCurrentSlideData(activeSlide)?.carInfo.specs}, {getCurrentSlideData(activeSlide)?.carInfo.year}
           </div>
         </div>
       </div>

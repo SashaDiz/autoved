@@ -5,36 +5,179 @@ import { CardsData, CarCard } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
 import AddCarModal from '@/components/AddCarModal';
 
+// Utility functions for formatting
+const formatNumber = (value: string): string => {
+  // Remove all non-digit characters
+  const numbers = value.replace(/\D/g, '');
+  if (!numbers) return '';
+  
+  // Add spaces every 3 digits from the right
+  return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
+
+const parseNumber = (value: string): string => {
+  // Remove all non-digit characters
+  return value.replace(/\D/g, '');
+};
+
+const formatPrice = (value: string): string => {
+  return formatNumber(value);
+};
+
+const formatDistance = (value: string): string => {
+  return formatNumber(value);
+};
+
 interface AdminCardsSectionProps {
   data: CardsData;
-  onChange: (data: CardsData) => void;
+  originalData?: CardsData;
+  onChange: (data: CardsData, changeType: 'header' | 'items') => void;
+  onSaveHeader: () => void;
+  onCancelChanges: () => void;
+  unsavedChanges: { header: boolean };
+  saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminCardsSection({ data, onChange }: AdminCardsSectionProps) {
+export default function AdminCardsSection({ data, originalData, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminCardsSectionProps) {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  
+  // State for formatted values for each card
+  const [formattedValues, setFormattedValues] = useState<Record<string, { price: string; distance: string }>>({});
+  
+  // State for tracking changes in each card
+  const [cardChanges, setCardChanges] = useState<Record<number, CarCard>>({});
+  const [cardSaveStatus, setCardSaveStatus] = useState<Record<number, 'saved' | 'saving' | 'error' | null>>({});
 
   const updateTitle = (title: string) => {
-    onChange({ ...data, title });
+    onChange({ ...data, title }, 'header');
   };
 
   const updateSubtitle = (subtitle: string) => {
-    onChange({ ...data, subtitle });
+    onChange({ ...data, subtitle }, 'header');
   };
 
   const updateCard = (index: number, card: CarCard) => {
     const newCards = [...data.cards];
     newCards[index] = card;
-    onChange({ ...data, cards: newCards });
+    onChange({ ...data, cards: newCards }, 'items');
+    
+    // Track changes for this card
+    setCardChanges(prev => ({
+      ...prev,
+      [index]: card
+    }));
+  };
+
+  const saveCard = async (index: number) => {
+    if (!cardChanges[index]) return;
+    
+    setCardSaveStatus(prev => ({ ...prev, [index]: 'saving' }));
+    
+    try {
+      // Simulate API call - in real app, this would save to backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Clear the changes for this card
+      setCardChanges(prev => {
+        const newChanges = { ...prev };
+        delete newChanges[index];
+        return newChanges;
+      });
+      
+      setCardSaveStatus(prev => ({ ...prev, [index]: 'saved' }));
+      
+      // Clear saved status after 2 seconds
+      setTimeout(() => {
+        setCardSaveStatus(prev => ({ ...prev, [index]: null }));
+      }, 2000);
+    } catch (error) {
+      setCardSaveStatus(prev => ({ ...prev, [index]: 'error' }));
+    }
+  };
+
+  const cancelCardChanges = (index: number) => {
+    // Restore original card data
+    if (originalData && originalData.cards[index]) {
+      const originalCard = originalData.cards[index];
+      const newCards = [...data.cards];
+      newCards[index] = originalCard;
+      onChange({ ...data, cards: newCards }, 'items');
+    }
+    
+    // Clear changes for this card
+    setCardChanges(prev => {
+      const newChanges = { ...prev };
+      delete newChanges[index];
+      return newChanges;
+    });
+    
+    // Clear save status
+    setCardSaveStatus(prev => ({ ...prev, [index]: null }));
+  };
+
+  // Helper function to get formatted value for a card
+  const getFormattedValue = (cardId: string, field: 'price' | 'distance'): string => {
+    if (formattedValues[cardId] && formattedValues[cardId][field]) {
+      return formattedValues[cardId][field];
+    }
+    // If no formatted value exists, format the current value
+    const card = data.cards.find(c => c.id === cardId);
+    if (!card) return '';
+    
+    const value = field === 'price' ? card.price : card.distance;
+    // Remove symbols and format
+    const cleanValue = value.replace(/[₽км\s]/g, '');
+    return field === 'price' ? formatPrice(cleanValue) : formatDistance(cleanValue);
+  };
+
+  // Handler for price changes
+  const handlePriceChange = (index: number, value: string) => {
+    const card = data.cards[index];
+    const parsed = parseNumber(value);
+    const formatted = formatPrice(parsed);
+    
+    // Update the card with formatted value including symbol for storage
+    const formattedWithSymbol = parsed ? `${formatted} ₽` : '';
+    updateCard(index, { ...card, price: formattedWithSymbol });
+    
+    // Update formatted values state for display
+    setFormattedValues(prev => ({
+      ...prev,
+      [card.id]: {
+        ...prev[card.id],
+        price: formatted
+      }
+    }));
+  };
+
+  // Handler for distance changes
+  const handleDistanceChange = (index: number, value: string) => {
+    const card = data.cards[index];
+    const parsed = parseNumber(value);
+    const formatted = formatDistance(parsed);
+    
+    // Update the card with formatted value including symbol for storage
+    const formattedWithSymbol = parsed ? `${formatted} км` : '';
+    updateCard(index, { ...card, distance: formattedWithSymbol });
+    
+    // Update formatted values state for display
+    setFormattedValues(prev => ({
+      ...prev,
+      [card.id]: {
+        ...prev[card.id],
+        distance: formatted
+      }
+    }));
   };
 
   const handleAddCard = (newCard: CarCard) => {
-    onChange({ ...data, cards: [...data.cards, newCard] });
+    onChange({ ...data, cards: [...data.cards, newCard] }, 'items');
   };
 
   const removeCard = (index: number) => {
     const newCards = data.cards.filter((_, i) => i !== index);
-    onChange({ ...data, cards: newCards });
+    onChange({ ...data, cards: newCards }, 'items');
     if (expandedCard === index) {
       setExpandedCard(null);
     } else if (expandedCard !== null && expandedCard > index) {
@@ -52,7 +195,7 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
     const newCards = [...data.cards];
     const [movedCard] = newCards.splice(fromIndex, 1);
     newCards.splice(toIndex, 0, movedCard);
-    onChange({ ...data, cards: newCards });
+    onChange({ ...data, cards: newCards }, 'items');
 
     // Update expanded card index if needed
     if (expandedCard === fromIndex) {
@@ -69,8 +212,10 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
   return (
     <div className="space-y-8">
       <div className="border-b border-gray-200 pb-4">
-        <h2 className="text-2xl font-semibold text-gray-900">Каталог автомобилей</h2>
-        <p className="text-gray-600 mt-2">Управление заголовком секции и карточками автомобилей</p>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Каталог автомобилей</h2>
+          <p className="text-gray-600 mt-2">Управление заголовком секции и карточками автомобилей</p>
+        </div>
       </div>
 
       {/* Section Content */}
@@ -100,6 +245,34 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
             placeholder="Описание каталога"
           />
         </div>
+
+        {/* Header Save/Cancel Buttons - Only show when there are unsaved changes */}
+        {unsavedChanges.header && (
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={onCancelChanges}
+              className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+            >
+              Отменить
+            </button>
+            <button
+              onClick={onSaveHeader}
+              disabled={saveStatus.header === 'saving'}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                saveStatus.header !== 'saving'
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {saveStatus.header === 'saving' && (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              )}
+              {saveStatus.header === 'saved' && '✓'}
+              {saveStatus.header === 'error' && '✗'}
+              {saveStatus.header === 'saving' ? 'Сохранение...' : 'Сохранить'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Cards Management */}
@@ -212,13 +385,18 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Цена
                       </label>
-                      <input
-                        type="text"
-                        value={card.price}
-                        onChange={(e) => updateCard(index, { ...card, price: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                        placeholder="3 000 000 ₽"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={getFormattedValue(card.id, 'price')}
+                          onChange={(e) => handlePriceChange(index, e.target.value)}
+                          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          placeholder="3 000 000"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                          ₽
+                        </span>
+                      </div>
                     </div>
 
                     <div>
@@ -267,13 +445,18 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Пробег
                       </label>
-                      <input
-                        type="text"
-                        value={card.distance}
-                        onChange={(e) => updateCard(index, { ...card, distance: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                        placeholder="50 000 км."
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={getFormattedValue(card.id, 'distance')}
+                          onChange={(e) => handleDistanceChange(index, e.target.value)}
+                          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          placeholder="50 000"
+                        />
+                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                          км
+                        </span>
+                      </div>
                     </div>
 
                     <div>
@@ -343,6 +526,34 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
                       />
                     </div>
                   </div>
+
+                  {/* Card Save/Cancel Buttons - Only show when there are unsaved changes */}
+                  {cardChanges[index] && (
+                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                      <button
+                        onClick={() => cancelCardChanges(index)}
+                        className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      >
+                        Отменить
+                      </button>
+                      <button
+                        onClick={() => saveCard(index)}
+                        disabled={cardSaveStatus[index] === 'saving'}
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                          cardSaveStatus[index] !== 'saving'
+                            ? 'bg-green-600 text-white hover:bg-green-700'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      >
+                        {cardSaveStatus[index] === 'saving' && (
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        )}
+                        {cardSaveStatus[index] === 'saved' && '✓'}
+                        {cardSaveStatus[index] === 'error' && '✗'}
+                        {cardSaveStatus[index] === 'saving' ? 'Сохранение...' : 'Сохранить'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

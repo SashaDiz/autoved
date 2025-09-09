@@ -3,29 +3,91 @@
 import { useState } from 'react';
 import { FAQItem } from '@/utils/adminData';
 import AddFAQModal from '@/components/AddFAQModal';
+import RichTextEditor from '@/components/RichTextEditor';
 
 interface AdminFAQSectionProps {
   data: FAQItem[];
-  onChange: (data: FAQItem[]) => void;
+  originalData?: FAQItem[];
+  onChange: (data: FAQItem[], changeType: 'header' | 'items') => void;
+  onSaveHeader: () => void;
+  unsavedChanges: { header: boolean };
+  saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps) {
+export default function AdminFAQSection({ data, originalData, onChange, onSaveHeader, unsavedChanges, saveStatus }: AdminFAQSectionProps) {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  
+  // State for tracking changes in each FAQ
+  const [faqChanges, setFaqChanges] = useState<Record<number, FAQItem>>({});
+  const [faqSaveStatus, setFaqSaveStatus] = useState<Record<number, 'saved' | 'saving' | 'error' | null>>({});
 
   const updateFAQ = (index: number, faq: FAQItem) => {
     const newFAQs = [...data];
     newFAQs[index] = faq;
-    onChange(newFAQs);
+    onChange(newFAQs, 'items');
+    
+    // Track changes for this FAQ
+    setFaqChanges(prev => ({
+      ...prev,
+      [index]: faq
+    }));
+  };
+
+  const saveFAQ = async (index: number) => {
+    if (!faqChanges[index]) return;
+    
+    setFaqSaveStatus(prev => ({ ...prev, [index]: 'saving' }));
+    
+    try {
+      // Simulate API call - in real app, this would save to backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Clear the changes for this FAQ
+      setFaqChanges(prev => {
+        const newChanges = { ...prev };
+        delete newChanges[index];
+        return newChanges;
+      });
+      
+      setFaqSaveStatus(prev => ({ ...prev, [index]: 'saved' }));
+      
+      // Clear saved status after 2 seconds
+      setTimeout(() => {
+        setFaqSaveStatus(prev => ({ ...prev, [index]: null }));
+      }, 2000);
+    } catch (error) {
+      setFaqSaveStatus(prev => ({ ...prev, [index]: 'error' }));
+    }
+  };
+
+  const cancelFAQChanges = (index: number) => {
+    // Restore original FAQ data
+    if (originalData && originalData[index]) {
+      const originalFAQ = originalData[index];
+      const newFAQs = [...data];
+      newFAQs[index] = originalFAQ;
+      onChange(newFAQs, 'items');
+    }
+    
+    // Clear changes for this FAQ
+    setFaqChanges(prev => {
+      const newChanges = { ...prev };
+      delete newChanges[index];
+      return newChanges;
+    });
+    
+    // Clear save status
+    setFaqSaveStatus(prev => ({ ...prev, [index]: null }));
   };
 
   const handleAddFAQ = (newFAQ: FAQItem) => {
-    onChange([...data, newFAQ]);
+    onChange([...data, newFAQ], 'items');
   };
 
   const removeFAQ = (index: number) => {
     const newFAQs = data.filter((_, i) => i !== index);
-    onChange(newFAQs);
+    onChange(newFAQs, 'items');
     if (expandedFAQ === index) {
       setExpandedFAQ(null);
     } else if (expandedFAQ !== null && expandedFAQ > index) {
@@ -43,7 +105,7 @@ export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps
     const newFAQs = [...data];
     const [movedFAQ] = newFAQs.splice(fromIndex, 1);
     newFAQs.splice(toIndex, 0, movedFAQ);
-    onChange(newFAQs);
+    onChange(newFAQs, 'items');
 
     // Update expanded FAQ index if needed
     if (expandedFAQ === fromIndex) {
@@ -60,8 +122,10 @@ export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps
   return (
     <div className="space-y-8">
       <div className="border-b border-gray-200 pb-4">
-        <h2 className="text-2xl font-semibold text-gray-900">Вопросы и ответы (FAQ)</h2>
-        <p className="text-gray-600 mt-2">Управление часто задаваемыми вопросами</p>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Вопросы и ответы (FAQ)</h2>
+          <p className="text-gray-600 mt-2">Управление часто задаваемыми вопросами</p>
+        </div>
       </div>
 
       {/* Add FAQ Button */}
@@ -155,20 +219,47 @@ export default function AdminFAQSection({ data, onChange }: AdminFAQSectionProps
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Ответ
                   </label>
-                  <textarea
+                  <RichTextEditor
                     value={faq.answer}
-                    onChange={(e) => updateFAQ(index, {
+                    onChange={(value) => updateFAQ(index, {
                       ...faq,
-                      answer: e.target.value
+                      answer: value
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
-                    rows={6}
-                    placeholder="Введите ответ... (поддерживается многострочный текст)"
+                    placeholder="Введите ответ... (поддерживается форматирование, ссылки, списки)"
+                    className="w-full"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Поддерживаются переносы строк. Используйте двойной перенос для создания абзацев.
+                    Поддерживается форматирование текста, ссылки, списки. Используйте Ctrl+B для жирного текста, Ctrl+I для курсива, Ctrl+K для ссылок.
                   </p>
                 </div>
+
+                {/* FAQ Save/Cancel Buttons - Only show when there are unsaved changes */}
+                {faqChanges[index] && (
+                  <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                    <button
+                      onClick={() => cancelFAQChanges(index)}
+                      className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    >
+                      Отменить
+                    </button>
+                    <button
+                      onClick={() => saveFAQ(index)}
+                      disabled={faqSaveStatus[index] === 'saving'}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                        faqSaveStatus[index] !== 'saving'
+                          ? 'bg-green-600 text-white hover:bg-green-700'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {faqSaveStatus[index] === 'saving' && (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      )}
+                      {faqSaveStatus[index] === 'saved' && '✓'}
+                      {faqSaveStatus[index] === 'error' && '✗'}
+                      {faqSaveStatus[index] === 'saving' ? 'Сохранение...' : 'Сохранить'}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -17,8 +17,21 @@ type Section = 'hero' | 'promo' | 'videos' | 'faq' | 'cards';
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState<Section>('hero');
   const [data, setData] = useState<AdminData | null>(null);
-  const [, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
+  const [originalData, setOriginalData] = useState<AdminData | null>(null);
+  const [unsavedChanges, setUnsavedChanges] = useState<Record<Section, { header: boolean }>>({
+    hero: { header: false },
+    promo: { header: false },
+    videos: { header: false },
+    faq: { header: false },
+    cards: { header: false }
+  });
+  const [saveStatus, setSaveStatus] = useState<Record<Section, { header: 'saved' | 'saving' | 'error' | null }>>({
+    hero: { header: null },
+    promo: { header: null },
+    videos: { header: null },
+    faq: { header: null },
+    cards: { header: null }
+  });
 
   useEffect(() => {
     const initAndLoadData = async () => {
@@ -28,6 +41,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         // Load data from database
         const adminData = await loadAdminData();
         setData(adminData);
+        setOriginalData(adminData);
       } catch (error) {
         console.error('Failed to load admin data:', error);
       }
@@ -36,7 +50,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     initAndLoadData();
   }, []);
 
-  const handleDataChange = (section: keyof AdminData, newData: AdminData[keyof AdminData]) => {
+  const handleDataChange = (section: keyof AdminData, newData: AdminData[keyof AdminData], changeType: 'header' | 'items' = 'items') => {
     if (!data) return;
 
     const updatedData = {
@@ -45,23 +59,108 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     };
     
     setData(updatedData);
-    handleSave(section, newData);
+    
+    // Only track header changes for global state
+    if (changeType === 'header') {
+      const sectionKey = section === 'videoReviews' ? 'videos' : section as Section;
+      setUnsavedChanges(prev => ({
+        ...prev,
+        [sectionKey]: {
+          ...prev[sectionKey],
+          header: true
+        }
+      }));
+    }
   };
 
-  const handleSave = async (section: keyof AdminData, sectionData: AdminData[keyof AdminData]) => {
-    setIsSaving(true);
-    setSaveStatus('saving');
+  const handleCancelChanges = (section: Section) => {
+    if (!data || !originalData) return;
+
+    const sectionKey = section === 'videos' ? 'videoReviews' : section;
+    const originalSectionData = originalData[sectionKey as keyof AdminData];
+    
+    // Reset data to original
+    setData(prev => prev ? {
+      ...prev,
+      [sectionKey]: originalSectionData
+    } : null);
+    
+    // Clear unsaved changes
+    setUnsavedChanges(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        header: false
+      }
+    }));
+  };
+
+  const handleSaveHeader = async (section: Section) => {
+    if (!data || !originalData) return;
+
+    const sectionKey = section === 'videos' ? 'videoReviews' : section;
+    const sectionData = data[sectionKey as keyof AdminData];
+    
+    setSaveStatus(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        header: 'saving'
+      }
+    }));
 
     try {
-      await saveAdminSection(section, sectionData);
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus(null), 2000);
+      await saveAdminSection(sectionKey as keyof AdminData, sectionData);
+      
+      // Update original data to reflect saved state
+      setOriginalData(prev => prev ? {
+        ...prev,
+        [sectionKey]: sectionData
+      } : null);
+      
+      setUnsavedChanges(prev => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          header: false
+        }
+      }));
+      
+      setSaveStatus(prev => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          header: 'saved'
+        }
+      }));
+      
+      setTimeout(() => {
+        setSaveStatus(prev => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            header: null
+          }
+        }));
+      }, 2000);
     } catch (error) {
       console.error('Save error:', error);
-      setSaveStatus('error');
-      setTimeout(() => setSaveStatus(null), 3000);
-    } finally {
-      setIsSaving(false);
+      setSaveStatus(prev => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          header: 'error'
+        }
+      }));
+      setTimeout(() => {
+        setSaveStatus(prev => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            header: null
+          }
+        }));
+      }, 3000);
     }
   };
 
@@ -91,20 +190,18 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <h1 className="text-xl font-semibold text-gray-900">
                 Админ панель AutoVed
               </h1>
-              {saveStatus && (
+              {saveStatus[activeSection].header && (
                 <div className={`flex items-center gap-2 text-sm ${
-                  saveStatus === 'saved' ? 'text-green-600' :
-                  saveStatus === 'saving' ? 'text-blue-600' :
+                  saveStatus[activeSection].header === 'saved' ? 'text-green-600' :
+                  saveStatus[activeSection].header === 'saving' ? 'text-blue-600' :
                   'text-red-600'
                 }`}>
-                  {saveStatus === 'saving' && (
+                  {saveStatus[activeSection].header === 'saving' && (
                     <div className="w-3 h-3 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin"></div>
                   )}
-                  {saveStatus === 'saved' && '✓'}
-                  {saveStatus === 'error' && '✗'}
-                  {saveStatus === 'saved' && 'Сохранено'}
-                  {saveStatus === 'saving' && 'Сохранение...'}
-                  {saveStatus === 'error' && 'Ошибка сохранения'}
+                  {saveStatus[activeSection].header === 'saved' && '✓'}
+                  {saveStatus[activeSection].header === 'error' && '✗'}
+                  <span className="text-xs">Заголовок сохранен</span>
                 </div>
               )}
             </div>
@@ -149,7 +246,10 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     }`}
                   >
                     <span className="text-lg">{section.icon}</span>
-                    {section.name}
+                    <span className="flex-1">{section.name}</span>
+                    {unsavedChanges[section.id].header && (
+                      <div className="w-2 h-2 bg-blue-500 rounded-full" title="Несохраненные изменения заголовка"></div>
+                    )}
                   </button>
                 ))}
               </nav>
@@ -162,31 +262,54 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               {activeSection === 'hero' && (
                 <AdminHeroSection
                   data={data.hero}
-                  onChange={(newData) => handleDataChange('hero', newData)}
+                  originalData={originalData?.hero}
+                  onChange={(newData, changeType) => handleDataChange('hero', newData, changeType)}
+                  onSaveHeader={() => handleSaveHeader('hero')}
+                  onCancelChanges={() => handleCancelChanges('hero')}
+                  unsavedChanges={unsavedChanges.hero}
+                  saveStatus={saveStatus.hero}
                 />
               )}
               {activeSection === 'cards' && (
                 <AdminCardsSection
                   data={data.cards}
-                  onChange={(newData) => handleDataChange('cards', newData)}
+                  originalData={originalData?.cards}
+                  onChange={(newData, changeType) => handleDataChange('cards', newData, changeType)}
+                  onSaveHeader={() => handleSaveHeader('cards')}
+                  onCancelChanges={() => handleCancelChanges('cards')}
+                  unsavedChanges={unsavedChanges.cards}
+                  saveStatus={saveStatus.cards}
                 />
               )}
               {activeSection === 'promo' && (
                 <AdminPromoSection
                   data={data.promo}
-                  onChange={(newData) => handleDataChange('promo', newData)}
+                  originalData={originalData?.promo}
+                  onChange={(newData, changeType) => handleDataChange('promo', newData, changeType)}
+                  onSaveHeader={() => handleSaveHeader('promo')}
+                  onCancelChanges={() => handleCancelChanges('promo')}
+                  unsavedChanges={unsavedChanges.promo}
+                  saveStatus={saveStatus.promo}
                 />
               )}
               {activeSection === 'videos' && (
                 <AdminVideoSection
                   data={data.videoReviews}
-                  onChange={(newData) => handleDataChange('videoReviews', newData)}
+                  originalData={originalData?.videoReviews}
+                  onChange={(newData, changeType) => handleDataChange('videoReviews', newData, changeType)}
+                  onSaveHeader={() => handleSaveHeader('videos')}
+                  unsavedChanges={unsavedChanges.videos}
+                  saveStatus={saveStatus.videos}
                 />
               )}
               {activeSection === 'faq' && (
                 <AdminFAQSection
                   data={data.faq}
-                  onChange={(newData) => handleDataChange('faq', newData)}
+                  originalData={originalData?.faq}
+                  onChange={(newData, changeType) => handleDataChange('faq', newData, changeType)}
+                  onSaveHeader={() => handleSaveHeader('faq')}
+                  unsavedChanges={unsavedChanges.faq}
+                  saveStatus={saveStatus.faq}
                 />
               )}
             </div>

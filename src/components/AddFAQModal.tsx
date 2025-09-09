@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FAQItem } from '@/utils/adminData';
 import BaseModal from './BaseModal';
+import RichTextEditor from './RichTextEditor';
 
 interface AddFAQModalProps {
   isOpen: boolean;
@@ -73,16 +74,14 @@ export default function AddFAQModal({ isOpen, onClose, onSave }: AddFAQModalProp
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Ответ *
           </label>
-          <textarea
+          <RichTextEditor
             value={faq.answer}
-            onChange={(e) => updateFAQ('answer', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
-            rows={6}
-            placeholder="Введите ответ... (поддерживается многострочный текст)"
-            required
+            onChange={(value) => updateFAQ('answer', value)}
+            placeholder="Введите ответ... (поддерживается форматирование, ссылки, списки)"
+            className="w-full"
           />
           <p className="text-xs text-gray-500 mt-1">
-            Поддерживаются переносы строк. Используйте двойной перенос для создания абзацев.
+            Поддерживается форматирование текста, ссылки, списки. Используйте Ctrl+B для жирного текста, Ctrl+I для курсива, Ctrl+K для ссылок.
           </p>
         </div>
       </div>

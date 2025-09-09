@@ -4,23 +4,30 @@ import { PromoData } from '@/utils/adminData';
 
 interface AdminPromoSectionProps {
   data: PromoData;
-  onChange: (data: PromoData) => void;
+  originalData?: PromoData;
+  onChange: (data: PromoData, changeType: 'header' | 'items') => void;
+  onSaveHeader: () => void;
+  onCancelChanges: () => void;
+  unsavedChanges: { header: boolean };
+  saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminPromoSection({ data, onChange }: AdminPromoSectionProps) {
+export default function AdminPromoSection({ data, originalData, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminPromoSectionProps) {
   const updateTitle = (title: string) => {
-    onChange({ ...data, title });
+    onChange({ ...data, title }, 'header');
   };
 
   const updateSubtitle = (subtitle: string) => {
-    onChange({ ...data, subtitle });
+    onChange({ ...data, subtitle }, 'header');
   };
 
   return (
     <div className="space-y-8">
       <div className="border-b border-gray-200 pb-4">
-        <h2 className="text-2xl font-semibold text-gray-900">Промо секция</h2>
-        <p className="text-gray-600 mt-2">Управление заголовком и подзаголовком промо секции</p>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Промо секция</h2>
+          <p className="text-gray-600 mt-2">Управление заголовком и подзаголовком промо секции</p>
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -49,6 +56,34 @@ export default function AdminPromoSection({ data, onChange }: AdminPromoSectionP
             placeholder="Описание промо секции"
           />
         </div>
+
+        {/* Header Save/Cancel Buttons - Only show when there are unsaved changes */}
+        {unsavedChanges.header && (
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={onCancelChanges}
+              className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+            >
+              Отменить
+            </button>
+            <button
+              onClick={onSaveHeader}
+              disabled={saveStatus.header === 'saving'}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+                saveStatus.header !== 'saving'
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {saveStatus.header === 'saving' && (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              )}
+              {saveStatus.header === 'saved' && '✓'}
+              {saveStatus.header === 'error' && '✗'}
+              {saveStatus.header === 'saving' ? 'Сохранение...' : 'Сохранить'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Preview */}
