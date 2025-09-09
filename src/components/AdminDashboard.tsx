@@ -113,13 +113,13 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
               >
                 Посмотреть сайт
               </a>
               <button
                 onClick={onLogout}
-                className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"
+                className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -142,7 +142,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   <button
                     key={section.id}
                     onClick={() => setActiveSection(section.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-3 ${
+                    className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-3 cursor-pointer ${
                       activeSection === section.id
                         ? 'bg-gray-900 text-white'
                         : 'text-gray-700 hover:bg-gray-100'

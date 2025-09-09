@@ -108,7 +108,7 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
           <h3 className="text-lg font-medium text-gray-900">Автомобили ({data.cards.length})</h3>
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+            className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2 cursor-pointer"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -127,7 +127,7 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
                     <button
                       onClick={() => moveCard(index, index - 1)}
                       disabled={index === 0}
-                      className="text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
@@ -136,7 +136,7 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
                     <button
                       onClick={() => moveCard(index, index + 1)}
                       disabled={index === data.cards.length - 1}
-                      className="text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
@@ -163,13 +163,13 @@ export default function AdminCardsSection({ data, onChange }: AdminCardsSectionP
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => toggleCardDetails(index)}
-                    className="text-gray-600 hover:text-gray-900 transition-colors px-3 py-1 border border-gray-300 rounded-lg text-sm"
+                    className="text-gray-600 hover:text-gray-900 transition-colors px-3 py-1 border border-gray-300 rounded-lg text-sm cursor-pointer"
                   >
                     {expandedCard === index ? 'Свернуть' : 'Редактировать'}
                   </button>
                   <button
                     onClick={() => removeCard(index)}
-                    className="text-red-600 hover:text-red-700 transition-colors"
+                    className="text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
