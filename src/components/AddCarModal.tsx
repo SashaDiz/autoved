@@ -5,6 +5,31 @@ import { CarCard } from '@/utils/adminData';
 import BaseModal from './BaseModal';
 import ImageUpload from './ImageUpload';
 
+// Utility functions for formatting
+const formatNumber = (value: string): string => {
+  // Remove all non-digit characters
+  const numbers = value.replace(/\D/g, '');
+  if (!numbers) return '';
+  
+  // Add spaces every 3 digits from the right
+  return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
+
+const parseNumber = (value: string): string => {
+  // Remove all non-digit characters
+  return value.replace(/\D/g, '');
+};
+
+const formatPrice = (value: string): string => {
+  const formatted = formatNumber(value);
+  return formatted ? `${formatted} ₽` : '';
+};
+
+const formatDistance = (value: string): string => {
+  const formatted = formatNumber(value);
+  return formatted ? `${formatted} км` : '';
+};
+
 interface AddCarModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -27,6 +52,10 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
     date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
   });
 
+  // Separate state for formatted display values
+  const [formattedPrice, setFormattedPrice] = useState('');
+  const [formattedDistance, setFormattedDistance] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
@@ -36,9 +65,11 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
 
     setIsLoading(true);
     try {
-      // Generate ID and save
+      // Generate ID and save with formatted values
       const newCar: CarCard = {
         ...car,
+        price: formatPrice(car.price),
+        distance: formatDistance(car.distance),
         id: `car-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
       };
       await onSave(newCar);
@@ -58,6 +89,8 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
         isNew: false,
         date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
       });
+      setFormattedPrice('');
+      setFormattedDistance('');
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +98,18 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
 
   const updateCar = (field: keyof Omit<CarCard, 'id'>, value: string | boolean) => {
     setCar(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handlePriceChange = (value: string) => {
+    const parsed = parseNumber(value);
+    setCar(prev => ({ ...prev, price: parsed }));
+    setFormattedPrice(formatPrice(parsed));
+  };
+
+  const handleDistanceChange = (value: string) => {
+    const parsed = parseNumber(value);
+    setCar(prev => ({ ...prev, distance: parsed }));
+    setFormattedDistance(formatDistance(parsed));
   };
 
   return (
@@ -107,8 +152,8 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
             </label>
             <input
               type="text"
-              value={car.price}
-              onChange={(e) => updateCar('price', e.target.value)}
+              value={formattedPrice}
+              onChange={(e) => handlePriceChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
               placeholder="3 000 000 ₽"
               required
@@ -164,10 +209,10 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
             </label>
             <input
               type="text"
-              value={car.distance}
-              onChange={(e) => updateCar('distance', e.target.value)}
+              value={formattedDistance}
+              onChange={(e) => handleDistanceChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-              placeholder="50 000 км."
+              placeholder="50 000 км"
             />
           </div>
 
