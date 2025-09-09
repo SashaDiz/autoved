@@ -18,7 +18,9 @@ export default function ContactSection() {
           {/* Social Media Buttons */}
           <div className="flex gap-4 mt-auto">
             <a 
-              href="#" 
+              href="https://t.me/Auto_ved" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="relative cursor-pointer flex overflow-hidden items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
             >
               <Image 
@@ -35,7 +37,9 @@ export default function ContactSection() {
             </a>
 
             <a 
-              href="#" 
+              href="https://vk.com/autoved_group" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="relative cursor-pointer flex overflow-hidden items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
             >
               <Image 
@@ -67,7 +71,7 @@ export default function ContactSection() {
               <div>
                 <a 
                   href="tel:+79165788898" 
-                  className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
+                  className="text-lg font-semibold text-gray-900 hover:text-green-500 transition-colors duration-200 cursor-pointer"
                 >
                   +7 (916) 578-88-98
                 </a>
@@ -83,7 +87,12 @@ export default function ContactSection() {
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-semibold text-gray-900">info@vedtime.ru</span>
+                <a 
+                  href="mailto:info@vedtime.ru" 
+                  className="text-lg font-semibold text-gray-900 hover:text-green-500 transition-colors duration-200 cursor-pointer"
+                >
+                  info@vedtime.ru
+                </a>
                 <span className="text-gray-500 ml-2">(офис)</span>
               </div>
             </div>
@@ -97,7 +106,14 @@ export default function ContactSection() {
                 </svg>
               </div>
               <div>
-                <span className="text-lg font-semibold text-gray-900">г. Москва, м. Сокол, Ленинградский Проспект, д. 63, Офис 514</span>
+                <a 
+                  href="https://yandex.ru/maps/?text=г. Москва, м. Сокол, Ленинградский Проспект, д. 63, Офис 514"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg font-semibold text-gray-900 hover:text-green-500 transition-colors duration-200 cursor-pointer"
+                >
+                  г. Москва, м. Сокол, Ленинградский Проспект, д. 63, Офис 514
+                </a>
               </div>
             </div>
           </div>
