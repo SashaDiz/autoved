@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { CarCard } from '@/utils/adminData';
 import BaseModal from './BaseModal';
 import ImageUpload from './ImageUpload';
@@ -20,15 +20,15 @@ const parseNumber = (value: string): string => {
   return value.replace(/\D/g, '');
 };
 
+// Only format numbers, don't add symbols
 const formatPrice = (value: string): string => {
-  const formatted = formatNumber(value);
-  return formatted ? `${formatted} ₽` : '';
+  return formatNumber(value);
 };
 
 const formatDistance = (value: string): string => {
-  const formatted = formatNumber(value);
-  return formatted ? `${formatted} км` : '';
+  return formatNumber(value);
 };
+
 
 interface AddCarModalProps {
   isOpen: boolean;
@@ -55,6 +55,10 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
   // Separate state for formatted display values
   const [formattedPrice, setFormattedPrice] = useState('');
   const [formattedDistance, setFormattedDistance] = useState('');
+  
+  // Refs for input elements to manage cursor position
+  const priceInputRef = useRef<HTMLInputElement>(null);
+  const distanceInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,11 +69,11 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
 
     setIsLoading(true);
     try {
-      // Generate ID and save with formatted values
+      // Generate ID and save with formatted values including symbols
       const newCar: CarCard = {
         ...car,
-        price: formatPrice(car.price),
-        distance: formatDistance(car.distance),
+        price: car.price ? `${formatPrice(car.price)} ₽` : '',
+        distance: car.distance ? `${formatDistance(car.distance)} км` : '',
         id: `car-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
       };
       await onSave(newCar);
@@ -102,14 +106,18 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
 
   const handlePriceChange = (value: string) => {
     const parsed = parseNumber(value);
+    const newFormatted = formatPrice(parsed);
+    
     setCar(prev => ({ ...prev, price: parsed }));
-    setFormattedPrice(formatPrice(parsed));
+    setFormattedPrice(newFormatted);
   };
 
   const handleDistanceChange = (value: string) => {
     const parsed = parseNumber(value);
+    const newFormatted = formatDistance(parsed);
+    
     setCar(prev => ({ ...prev, distance: parsed }));
-    setFormattedDistance(formatDistance(parsed));
+    setFormattedDistance(newFormatted);
   };
 
   return (
@@ -150,14 +158,20 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Цена *
             </label>
-            <input
-              type="text"
-              value={formattedPrice}
-              onChange={(e) => handlePriceChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-              placeholder="3 000 000 ₽"
-              required
-            />
+            <div className="relative">
+              <input
+                ref={priceInputRef}
+                type="text"
+                value={formattedPrice}
+                onChange={(e) => handlePriceChange(e.target.value)}
+                className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                placeholder="3 000 000"
+                required
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                ₽
+              </span>
+            </div>
           </div>
 
           <div>
@@ -207,13 +221,19 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Пробег
             </label>
-            <input
-              type="text"
-              value={formattedDistance}
-              onChange={(e) => handleDistanceChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-              placeholder="50 000 км"
-            />
+            <div className="relative">
+              <input
+                ref={distanceInputRef}
+                type="text"
+                value={formattedDistance}
+                onChange={(e) => handleDistanceChange(e.target.value)}
+                className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                placeholder="50 000"
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                км
+              </span>
+            </div>
           </div>
 
           <div>
