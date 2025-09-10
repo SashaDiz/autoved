@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию админ-панели
+Disallow: /admin/
+
+# Запрещаем индексацию API маршрутов
+Disallow: /api/
+
+# Разрешаем индексацию всех остальных страниц
+Allow: /politika/
+
+# Указываем путь к sitemap
+Sitemap: https://auto-ved.ru/sitemap.xml
+
+# Дополнительные настройки для поисковых роботов
+Crawl-delay: 1

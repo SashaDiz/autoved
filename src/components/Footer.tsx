@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-wrap justify-between items-center gap-12 w-full xl:w-auto">
           {/* Center - Navigation Links */}
-          <div className="flex gap-8 text-sm">
+          <div className="flex flex-wrap justify-start gap-8 text-sm">
             <a href="#services" className="text-white hover:text-gray-300 transition-colors">
               Каталог
             </a>
@@ -39,7 +39,12 @@ export default function Footer() {
 
           {/* Right Side - Social Icons */}
           <div className="flex items-center gap-3 xl:gap-4">
-            <button className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+            <a 
+              href="https://vk.com/autoved_group" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
+            >
               <Image
                 src="/assets/vk-brands.svg"
                 alt="VK"
@@ -47,8 +52,13 @@ export default function Footer() {
                 height={20}
                 className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
               />
-            </button>
-            <button className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+            </a>
+            <a 
+              href="https://t.me/Auto_ved" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
+            >
               <Image
                 src="/assets/telegram-brands.svg"
                 alt="Telegram"
@@ -56,14 +66,28 @@ export default function Footer() {
                 height={20}
                 className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
               />
-            </button>
+            </a>
+            <a 
+              href="https://www.instagram.com/auto_ved" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
+            >
+              <Image
+                src="/assets/instagram-brands.svg"
+                alt="Instagram"
+                width={20}
+                height={20}
+                className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
+              />
+            </a>
           </div>
         </div>
 
       </div>
 
       {/* Bottom Section */}
-      <div className="flex flex-col xl:flex-row justify-between items-end gap-4 text-sm text-gray-400">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-4 text-sm text-gray-400">
         <div className='max-w-[300px]'>
           <p>2025 © Все права защищены.</p>
           <p>Данный сайт носит исключительно информационный характер и&nbsp;не&nbsp;является публичной офертой</p>

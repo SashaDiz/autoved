@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -10,17 +10,40 @@ interface ContactModalProps {
 
 const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами" }: ContactModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const firstButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
       document.body.style.overflow = 'hidden';
+      // Focus first button when modal opens
+      setTimeout(() => {
+        firstButtonRef.current?.focus();
+      }, 100);
     } else {
       document.body.style.overflow = 'unset';
     }
 
     return () => {
       document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
 
@@ -108,24 +131,29 @@ const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
       onClick={handleBackdropClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="contact-modal-title"
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       
       {/* Modal */}
       <div 
+        ref={modalRef}
         className={`relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-200 ${
           isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
         }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <h2 id="contact-modal-title" className="text-xl font-semibold text-gray-900">{title}</h2>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Закрыть модальное окно"
           >
-            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -134,11 +162,13 @@ const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами
         {/* Content */}
         <div className="p-6">
           <div className="grid grid-cols-2 gap-4">
-            {contactOptions.map((option) => (
+            {contactOptions.map((option, index) => (
               <button
                 key={option.id}
+                ref={index === 0 ? firstButtonRef : undefined}
                 onClick={option.action}
-                className={`${option.bgColor} ${option.textColor} p-4 rounded-xl cursor-pointer flex flex-col items-center gap-3 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl`}
+                className={`${option.bgColor} ${option.textColor} p-4 rounded-xl cursor-pointer flex flex-col items-center gap-3 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                aria-label={`Связаться через ${option.label}`}
               >
                 <div className="flex items-center justify-center">
                   {option.icon}

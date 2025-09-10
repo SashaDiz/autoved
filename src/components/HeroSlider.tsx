@@ -318,7 +318,12 @@ const HeroSlider = () => {
 
             {/* Social Media Buttons */}
             <div ref={socialButtonsRef} className="flex items-center gap-3 xl:gap-4">
-              <button className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+              <a 
+                href="https://vk.com/autoved_group" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
+              >
                 <Image 
                   src="/assets/vk-brands.svg" 
                   alt="VK" 
@@ -326,8 +331,13 @@ const HeroSlider = () => {
                   height={20}
                   className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
                 />
-              </button>
-              <button className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+              </a>
+              <a 
+                href="https://t.me/Auto_ved" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
+              >
                 <Image 
                   src="/assets/telegram-brands.svg" 
                   alt="Telegram" 
@@ -335,7 +345,21 @@ const HeroSlider = () => {
                   height={20}
                   className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
                 />
-              </button>
+              </a>
+              <a 
+                href="https://www.instagram.com/auto_ved" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
+              >
+                <Image 
+                  src="/assets/instagram-brands.svg" 
+                  alt="Instagram" 
+                  width={20} 
+                  height={20}
+                  className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 hover:scale-110"
+                />
+              </a>
               <span className="text-white text-md ml-2 hidden sm:block">Подпишитесь на&nbsp;наши соцсети</span>
               <span className="text-white text-md ml-1 sm:hidden">Соцсети</span>
             </div>

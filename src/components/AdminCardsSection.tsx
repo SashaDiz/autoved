@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CardsData, CarCard } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
 import AddCarModal from '@/components/AddCarModal';
+import { generateCarAltText } from '@/utils/altTextGenerator';
 
 // Utility functions for formatting
 const formatNumber = (value: string): string => {
@@ -321,7 +322,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={card.imageUrl}
-                      alt={card.title}
+                      alt={generateCarAltText(card)}
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/assets/hyunday.jpg';

@@ -2,6 +2,21 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Политика конфиденциальности",
+  description: "Политика обработки персональных данных ООО ВЭДТАЙМ. Узнайте, как мы обрабатываем и защищаем ваши персональные данные на сайте AutoVed.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Политика конфиденциальности | AutoVed",
+    description: "Политика обработки персональных данных ООО ВЭДТАЙМ. Узнайте, как мы обрабатываем и защищаем ваши персональные данные на сайте AutoVed.",
+    url: "https://auto-ved.ru/politika/",
+  },
+};
 
 export default function PrivacyPolicy() {
   return (

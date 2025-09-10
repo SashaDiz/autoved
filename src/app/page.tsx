@@ -17,12 +17,54 @@ import ContactSection from '@/components/ContactSection';
 import ContactFormSection from '@/components/ContactFormSection';
 import Footer from '@/components/Footer';
 import ContactModal from '@/components/ContactModal';
+import StructuredData from '@/components/StructuredData';
 
 export default function Home() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
+  // Структурированные данные для главной страницы
+  const websiteStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AutoVed",
+    "url": "https://auto-ved.ru",
+    "description": "Помогаем с покупкой новых и б/у автомобилей напрямую от надёжных поставщиков из Китая, Японии, Южной Кореи и Германии, и доставкой в любой регион России уже больше пяти лет.",
+    "inLanguage": "ru",
+    "publisher": {
+      "@type": "Organization",
+      "name": "AutoVed",
+      "url": "https://auto-ved.ru"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://auto-ved.ru/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const serviceStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Покупка и доставка автомобилей из-за границы",
+    "description": "Помогаем с покупкой новых и б/у автомобилей напрямую от надёжных поставщиков из Китая, Японии, Южной Кореи и Германии, и доставкой в любой регион России уже больше пяти лет.",
+    "provider": {
+      "@type": "Organization",
+      "name": "AutoVed",
+      "url": "https://auto-ved.ru"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Russia"
+    },
+    "serviceType": "Автомобильные услуги",
+    "category": "Импорт автомобилей"
+  };
+
   return (
-    <main className="min-h-screen">
+    <main id="main-content" className="min-h-screen">
+      {/* Структурированные данные */}
+      <StructuredData data={websiteStructuredData} />
+      <StructuredData data={serviceStructuredData} />
         {/* Navigation */}
         <Navigation />
 
@@ -101,7 +143,8 @@ export default function Home() {
         <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 xl:bottom-14 xl:right-10 z-50 max-w-[350px]">
           <button 
             onClick={() => setIsContactModalOpen(true)}
-            className="cursor-pointer bg-white hover:bg-gray-50 text-gray-900 px-3 p-3 sm:pl-6 rounded-full shadow-2xl flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 max-w-[280px] sm:max-w-none"
+            className="cursor-pointer bg-white hover:bg-gray-50 text-gray-900 px-3 p-3 sm:pl-6 rounded-full shadow-2xl flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 max-w-[280px] sm:max-w-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Открыть форму связи с нами"
           >
             <span className="text-xs sm:text-sm font-medium leading-tight hidden sm:block text-start">
             Есть вопросы? Свяжитесь с нами и&nbsp;мы&nbsp;поможем разобраться.

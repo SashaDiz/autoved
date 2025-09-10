@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { generateCarAltTextFromParams } from '@/utils/altTextGenerator';
 
 interface CardProps {
   title: string;
@@ -119,14 +120,15 @@ export default function Card({
       href={externalLink}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col h-full bg-white rounded-xl border-1 border-gray-200 hover:border-gray-300 overflow-hidden cursor-pointer"
+      className="group flex flex-col h-full bg-white rounded-xl border-1 border-gray-200 hover:border-gray-300 overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       style={{ transformStyle: 'preserve-3d' }}
+      aria-label={`Посмотреть ${title} - ${price}`}
     >
       {/* Card Image */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={imageUrl}
-          alt={title}
+          alt={generateCarAltTextFromParams(title, year, engine, drive, modification)}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-300"
         />
@@ -169,49 +171,56 @@ export default function Card({
           </h3>
 
           {year && (
-            <p className="text-sm text-gray-500">{year}</p>
+            <p className="text-sm text-gray-500" aria-label={`Год выпуска: ${year}`}>{year}</p>
           )}
 
-          <div className="w-full h-px bg-gray-200 my-3"></div>
+          <div className="w-full h-px bg-gray-200 my-3" role="separator" aria-hidden="true"></div>
 
-          <div className='flex flex-col gap-4 items-start flex-grow'>
+          <dl className='flex flex-col gap-4 items-start flex-grow'>
             <div className='flex items-start gap-4 justify-between w-full'>
-              <span className='text-gray-500 text-sm'>Двигатель</span>
-              <p className="text-md text-gray-900 text-end">{engine}</p>
+              <dt className='text-gray-500 text-sm'>Двигатель</dt>
+              <dd className="text-md text-gray-900 text-end">{engine}</dd>
             </div>
 
             <div className='flex items-start gap-4 justify-between w-full'>
-              <span className='text-gray-500 text-sm'>Привод</span>
-              <p className="text-md text-gray-900 text-end">{drive}</p>
-            </div>
-
-
-            <div className='flex items-start gap-4 justify-between w-full'>
-              <span className='text-gray-500 text-sm'>Комплектация</span>
-              <p className="text-md text-gray-900 text-end">{modification}</p>
+              <dt className='text-gray-500 text-sm'>Привод</dt>
+              <dd className="text-md text-gray-900 text-end">{drive}</dd>
             </div>
 
             <div className='flex items-start gap-4 justify-between w-full'>
-              <span className='text-gray-500 text-sm'>Пробег</span>
-              <p className="text-md text-gray-900 text-end">{distance}</p>
+              <dt className='text-gray-500 text-sm'>Комплектация</dt>
+              <dd className="text-md text-gray-900 text-end">{modification}</dd>
             </div>
-          </div>
+
+            <div className='flex items-start gap-4 justify-between w-full'>
+              <dt className='text-gray-500 text-sm'>Пробег</dt>
+              <dd className="text-md text-gray-900 text-end">{distance}</dd>
+            </div>
+          </dl>
         </div>
 
-        <div className="w-full h-px bg-gray-200 my-3"></div>
+        <div className="w-full h-px bg-gray-200 my-3" role="separator" aria-hidden="true"></div>
 
         {/* Call to action */}
         <div className="flex items-center justify-between flex-wrap gap-4 mt-auto">
           <div className='flex flex-col items-start flex-shrink-0'>
-            <p className="text-2xl font-semibold text-gray-900">{price}</p>
-            <p className="text-xs text-gray-500">По курсу на {date}</p>
+            <p className="text-2xl font-semibold text-gray-900" aria-label={`Цена: ${price}`}>{price}</p>
+            <p className="text-xs text-gray-500" aria-label={`Курс на ${date}`}>По курсу на {date}</p>
           </div>
           <div className='flex items-center flex-shrink-0 gap-2'>
             <span className="text-gray-900 font-medium text-sm text-end leading-none group-hover:text-green-600 transition-colors">
               Уточнить
               <br />наличие
             </span>
-            <svg width="32" height="32" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" className='stroke-gray-900 transition-all duration-300 group-hover:stroke-green-600 group-hover:-translate-y-1 group-hover:translate-x-1'>
+            <svg 
+              width="32" 
+              height="32" 
+              viewBox="0 0 30 30" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className='stroke-gray-900 transition-all duration-300 group-hover:stroke-green-600 group-hover:-translate-y-1 group-hover:translate-x-1'
+              aria-hidden="true"
+            >
               <path d="M22.9558 7.04541H14.1174M22.9558 7.04541L22.9553 15.8842M22.9558 7.04541L7.0459 22.9553" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>

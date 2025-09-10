@@ -28,7 +28,7 @@ export default function ContactSection() {
                 alt="Telegram" 
                 width={192} 
                 height={192}
-                className="w-20 h-20 xl:w-26 xl:h-26 rounded-lg absolute -bottom-8 -right-3"
+                className="w-16 h-16 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наш канал</div>
@@ -47,11 +47,30 @@ export default function ContactSection() {
                 alt="VK" 
                 width={192} 
                 height={192}
-                className="w-20 h-20 xl:w-26 xl:h-26 rounded-lg absolute -bottom-8 -right-3"
+                className="w-16 h-16 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наша группа</div>
                 <div className="text-sm opacity-80">в ВКонтакте</div>
+              </div>
+            </a>
+
+            <a 
+              href="https://www.instagram.com/auto_ved" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative cursor-pointer flex overflow-hidden items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
+            >
+              <Image 
+                src="/assets/instagram.webp" 
+                alt="VK" 
+                width={192} 
+                height={192}
+                className="w-16 h-16 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
+              />
+              <div>
+                <div className="text-lg font-semibold">Наша страница</div>
+                <div className="text-sm opacity-80">в Instagram</div>
               </div>
             </a>
           </div>
