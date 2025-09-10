@@ -78,8 +78,8 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://vk.com" />
         <link rel="dns-prefetch" href="https://vk.com" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="icon" href="/assets/favicon.ico" />
+        <link rel="apple-touch-icon" href="/assets/favicon.ico" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
