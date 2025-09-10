@@ -15,7 +15,7 @@ interface AdminHeroSectionProps {
   saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminHeroSection({ data, originalData, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminHeroSectionProps) {
+export default function AdminHeroSection({ data, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminHeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [slideChanges, setSlideChanges] = useState<Record<number, HeroSlide>>({});

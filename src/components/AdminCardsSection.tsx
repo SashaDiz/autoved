@@ -92,7 +92,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
       setTimeout(() => {
         setCardSaveStatus(prev => ({ ...prev, [index]: null }));
       }, 2000);
-    } catch (error) {
+    } catch {
       setCardSaveStatus(prev => ({ ...prev, [index]: 'error' }));
     }
   };

@@ -12,7 +12,7 @@ interface AdminPromoSectionProps {
   saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminPromoSection({ data, originalData, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminPromoSectionProps) {
+export default function AdminPromoSection({ data, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminPromoSectionProps) {
   const updateTitle = (title: string) => {
     onChange({ ...data, title }, 'header');
   };

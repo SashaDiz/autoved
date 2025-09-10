@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -12,6 +12,13 @@ const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const firstButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose();
+    }, 200);
+  }, [onClose]);
 
   useEffect(() => {
     if (isOpen) {
@@ -45,19 +52,12 @@ const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
-  };
-
-  const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      onClose();
-    }, 200);
   };
 
   const contactOptions = [

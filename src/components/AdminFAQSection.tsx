@@ -14,7 +14,7 @@ interface AdminFAQSectionProps {
   saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminFAQSection({ data, originalData, onChange, onSaveHeader, unsavedChanges, saveStatus }: AdminFAQSectionProps) {
+export default function AdminFAQSection({ data, originalData, onChange }: AdminFAQSectionProps) {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   
@@ -56,7 +56,7 @@ export default function AdminFAQSection({ data, originalData, onChange, onSaveHe
       setTimeout(() => {
         setFaqSaveStatus(prev => ({ ...prev, [index]: null }));
       }, 2000);
-    } catch (error) {
+    } catch {
       setFaqSaveStatus(prev => ({ ...prev, [index]: 'error' }));
     }
   };

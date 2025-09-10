@@ -15,7 +15,7 @@ interface AdminVideoSectionProps {
   saveStatus: { header: 'saved' | 'saving' | 'error' | null };
 }
 
-export default function AdminVideoSection({ data, originalData, onChange, onSaveHeader, unsavedChanges, saveStatus }: AdminVideoSectionProps) {
+export default function AdminVideoSection({ data, originalData, onChange }: AdminVideoSectionProps) {
   const [activeReview, setActiveReview] = useState(0);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -58,7 +58,7 @@ export default function AdminVideoSection({ data, originalData, onChange, onSave
       setTimeout(() => {
         setReviewSaveStatus(prev => ({ ...prev, [index]: null }));
       }, 2000);
-    } catch (error) {
+    } catch {
       setReviewSaveStatus(prev => ({ ...prev, [index]: 'error' }));
     }
   };
