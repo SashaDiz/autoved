@@ -185,7 +185,7 @@ const HeroSlider = () => {
 
     if (!heroContent || !socialButtons || !carInfo || !progressDots) return;
 
-    // Get all animatable elements
+    // Get all animatable elements with null checks
     const heroTitle = heroContent.querySelector('h1');
     const heroDescription = heroContent.querySelector('p');
     const heroButton = heroContent.querySelector('button');
@@ -193,76 +193,106 @@ const HeroSlider = () => {
     const carInfoElements = carInfo.querySelectorAll('h3, p');
     const progressDotsElements = progressDots.querySelectorAll('button');
 
-    // Set initial states
-    gsap.set([heroTitle, heroDescription, heroButton], {
-      opacity: 0,
-      y: 60,
-      scale: 0.9,
-      rotationX: 15
-    });
+    // Check if elements exist before animating
+    const heroElements = [heroTitle, heroDescription, heroButton].filter(Boolean);
+    const socialElements = Array.from(socialButtonsElements).filter(Boolean);
+    const carElements = Array.from(carInfoElements).filter(Boolean);
+    const dotsElements = Array.from(progressDotsElements).filter(Boolean);
 
-    gsap.set(socialButtonsElements, {
-      opacity: 0,
-      x: -40,
-      scale: 0.8,
-      rotation: -10
-    });
+    if (heroElements.length === 0 && socialElements.length === 0 && carElements.length === 0 && dotsElements.length === 0) {
+      console.warn('No GSAP animation elements found');
+      return;
+    }
 
-    gsap.set(carInfoElements, {
-      opacity: 0,
-      x: 40,
-      scale: 0.8,
-      rotation: 10
-    });
+    // Set initial states only for existing elements
+    if (heroElements.length > 0) {
+      gsap.set(heroElements, {
+        opacity: 0,
+        y: 60,
+        scale: 0.9,
+        rotationX: 15
+      });
+    }
 
-    gsap.set(progressDotsElements, {
-      opacity: 0,
-      y: 30,
-      scale: 0.6
-    });
+    if (socialElements.length > 0) {
+      gsap.set(socialElements, {
+        opacity: 0,
+        x: -40,
+        scale: 0.8,
+        rotation: -10
+      });
+    }
+
+    if (carElements.length > 0) {
+      gsap.set(carElements, {
+        opacity: 0,
+        x: 40,
+        scale: 0.8,
+        rotation: 10
+      });
+    }
+
+    if (dotsElements.length > 0) {
+      gsap.set(dotsElements, {
+        opacity: 0,
+        y: 30,
+        scale: 0.6
+      });
+    }
 
     // Create timeline for hero animation
     const tl = gsap.timeline({ delay: 0.2 });
 
-    // Animate hero content with stagger
-    tl.to([heroTitle, heroDescription, heroButton], {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      rotationX: 0,
-      duration: 0.7,
-      stagger: 0.12,
-      ease: "back.out(1.4)"
-    })
-    // Animate social buttons
-    .to(socialButtonsElements, {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      rotation: 0,
-      duration: 0.5,
-      stagger: 0.06,
-      ease: "back.out(1.7)"
-    }, "-=0.4")
-    // Animate car info
-    .to(carInfoElements, {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      rotation: 0,
-      duration: 0.5,
-      stagger: 0.06,
-      ease: "back.out(1.7)"
-    }, "-=0.3")
-    // Animate progress dots
-    .to(progressDotsElements, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.4,
-      stagger: 0.05,
-      ease: "back.out(2)"
-    }, "-=0.2");
+    // Animate hero content with stagger (only if elements exist)
+    if (heroElements.length > 0) {
+      tl.to(heroElements, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotationX: 0,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: "back.out(1.4)"
+      });
+    }
+
+    // Animate social buttons (only if elements exist)
+    if (socialElements.length > 0) {
+      tl.to(socialElements, {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        rotation: 0,
+        duration: 0.5,
+        stagger: 0.06,
+        ease: "back.out(1.7)"
+      }, "-=0.4");
+    }
+
+    // Animate car info (only if elements exist)
+    if (carElements.length > 0) {
+      tl.to(carElements, {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        rotation: 0,
+        duration: 0.5,
+        stagger: 0.06,
+        ease: "back.out(1.7)"
+      }, "-=0.3");
+    }
+
+    // Animate progress dots (only if elements exist)
+    if (dotsElements.length > 0) {
+      tl.to(dotsElements, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: "back.out(2)"
+      }, "-=0.2");
+    }
 
     return () => {
       tl.kill();

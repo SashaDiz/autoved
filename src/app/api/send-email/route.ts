@@ -36,13 +36,33 @@ async function sendTelegramNotification(data: { name: string; phone: string; cou
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log('Form submission received:', { 
+      name: body.name, 
+      phone: body.phone, 
+      country: body.country, 
+      budget: body.budget,
+      hasMessage: !!body.message 
+    });
     
     // Validate the form data
     const validatedData = FormSchema.parse(body);
     
     // Check if Telegram configuration is available
-    if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
-      console.error('Telegram configuration missing. Please set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID environment variables.');
+    const hasBotToken = !!process.env.TELEGRAM_BOT_TOKEN;
+    const hasChatId = !!process.env.TELEGRAM_CHAT_ID;
+    
+    console.log('Telegram configuration check:', { 
+      hasBotToken, 
+      hasChatId,
+      botTokenLength: process.env.TELEGRAM_BOT_TOKEN?.length || 0,
+      chatIdLength: process.env.TELEGRAM_CHAT_ID?.length || 0
+    });
+    
+    if (!hasBotToken || !hasChatId) {
+      console.error('Telegram configuration missing:', {
+        TELEGRAM_BOT_TOKEN: hasBotToken ? 'SET' : 'MISSING',
+        TELEGRAM_CHAT_ID: hasChatId ? 'SET' : 'MISSING'
+      });
       return NextResponse.json(
         { success: false, message: 'Telegram service not configured. Please contact administrator.' },
         { status: 500 }
@@ -60,7 +80,15 @@ export async function POST(request: NextRequest) {
     }
     
     // Send Telegram notification
-    const telegramResult = await sendTelegramNotification(validatedData);
+    let telegramResult;
+    try {
+      telegramResult = await sendTelegramNotification(validatedData);
+      console.log('Telegram notification sent successfully');
+    } catch (telegramError) {
+      console.error('Telegram notification failed, but continuing with form submission:', telegramError);
+      // Continue even if Telegram fails - form submission is still valid
+      telegramResult = { success: false, messageId: null };
+    }
     
     // Store in database if needed (you already have MySQL setup)
     // const db = require('@/lib/db');
@@ -70,7 +98,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: true, 
       message: 'Заявка отправлена успешно! Мы свяжемся с вами в ближайшее время.',
-      messageId: telegramResult.messageId
+      messageId: telegramResult.messageId,
+      telegramSent: telegramResult.success
     });
 
   } catch (error) {

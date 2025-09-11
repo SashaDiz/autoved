@@ -48,6 +48,12 @@ export default function BrandLogos() {
         // Kill existing animation
         if (tween) tween.kill();
         
+        // Check if elements have proper dimensions
+        if (firstSet.offsetWidth === 0) {
+          console.warn('BrandLogos: First set width is 0, skipping animation');
+          return;
+        }
+        
         // Get the width of one complete set of brands including the gap
         const firstSetWidth = firstSet.offsetWidth + 24; // 24px = ml-6 gap
         

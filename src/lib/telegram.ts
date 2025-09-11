@@ -34,15 +34,25 @@ ${data.message ? `💬 *Сообщение:*\n${data.message}\n` : ''}
 // Send message to Telegram
 export async function sendTelegramMessage(message: string): Promise<{ success: boolean; messageId?: number; error?: string }> {
   try {
+    console.log('Attempting to send Telegram message...');
+    
     // Check if bot token is configured
     if (!process.env.TELEGRAM_BOT_TOKEN) {
+      console.error('TELEGRAM_BOT_TOKEN is not configured');
       throw new Error('TELEGRAM_BOT_TOKEN is not configured');
     }
 
     // Check if chat ID is configured
     if (!process.env.TELEGRAM_CHAT_ID) {
+      console.error('TELEGRAM_CHAT_ID is not configured');
       throw new Error('TELEGRAM_CHAT_ID is not configured');
     }
+
+    console.log('Telegram configuration found:', {
+      botTokenLength: process.env.TELEGRAM_BOT_TOKEN.length,
+      chatId: process.env.TELEGRAM_CHAT_ID,
+      messageLength: message.length
+    });
 
     // Send message to the configured chat
     const result = await bot.telegram.sendMessage(
@@ -63,6 +73,15 @@ export async function sendTelegramMessage(message: string): Promise<{ success: b
 
   } catch (error) {
     console.error('Error sending Telegram message:', error);
+    
+    // More detailed error logging
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+    }
     
     return {
       success: false,
@@ -101,10 +120,6 @@ export async function getChatId(): Promise<{ success: boolean; chatId?: number; 
 
     // This is a helper function to get chat ID
     // You would need to send a message to the bot first
-    console.log('To get your chat ID:');
-    console.log('1. Start a conversation with your bot on Telegram');
-    console.log('2. Send any message to the bot');
-    console.log('3. Check the logs for the chat ID');
     
     return {
       success: false,
