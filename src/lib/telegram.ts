@@ -28,7 +28,7 @@ export function formatFormMessage(data: {
 💰 *Бюджет:* ${data.budget}
 ${data.message ? `💬 *Сообщение:*\n${data.message}\n` : ''}
 ⏰ *Время:* ${timestamp}
-🌐 *Источник:* AutoVed (vedtime.ru)`;
+🌐 *Источник:* AutoVed (auto-ved.ru)`;
 }
 
 // Send message to Telegram
