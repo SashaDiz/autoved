@@ -67,16 +67,53 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
     return slideChanges[index] || data.slides[index];
   };
 
-  const handleAddSlide = (newSlide: HeroSlide) => {
-    onChange({ ...data, slides: [...data.slides, newSlide] }, 'items');
+  const handleAddSlide = async (newSlide: HeroSlide) => {
+    const updatedData = { ...data, slides: [...data.slides, newSlide] };
+    onChange(updatedData, 'items');
+    
+    // Auto-save to database
+    try {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section: 'hero', data: updatedData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save slide');
+      }
+    } catch (error) {
+      console.error('Failed to save slide:', error);
+    }
   };
 
-  const removeSlide = (index: number) => {
+  const removeSlide = async (index: number) => {
     if (data.slides.length <= 1) return; // Don't allow removing the last slide
     const newSlides = data.slides.filter((_, i) => i !== index);
-    onChange({ ...data, slides: newSlides }, 'items');
+    const updatedData = { ...data, slides: newSlides };
+    onChange(updatedData, 'items');
+    
     if (activeSlide >= newSlides.length) {
       setActiveSlide(Math.max(0, newSlides.length - 1));
+    }
+    
+    // Auto-save to database
+    try {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section: 'hero', data: updatedData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save slide removal');
+      }
+    } catch (error) {
+      console.error('Failed to save slide removal:', error);
     }
   };
 

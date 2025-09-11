@@ -172,17 +172,54 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
     }));
   };
 
-  const handleAddCard = (newCard: CarCard) => {
-    onChange({ ...data, cards: [...data.cards, newCard] }, 'items');
+  const handleAddCard = async (newCard: CarCard) => {
+    const updatedData = { ...data, cards: [...data.cards, newCard] };
+    onChange(updatedData, 'items');
+    
+    // Auto-save to database
+    try {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section: 'cards', data: updatedData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save car card');
+      }
+    } catch (error) {
+      console.error('Failed to save car card:', error);
+    }
   };
 
-  const removeCard = (index: number) => {
+  const removeCard = async (index: number) => {
     const newCards = data.cards.filter((_, i) => i !== index);
-    onChange({ ...data, cards: newCards }, 'items');
+    const updatedData = { ...data, cards: newCards };
+    onChange(updatedData, 'items');
+    
     if (expandedCard === index) {
       setExpandedCard(null);
     } else if (expandedCard !== null && expandedCard > index) {
       setExpandedCard(expandedCard - 1);
+    }
+    
+    // Auto-save to database
+    try {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section: 'cards', data: updatedData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save card removal');
+      }
+    } catch (error) {
+      console.error('Failed to save card removal:', error);
     }
   };
 
@@ -190,13 +227,14 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
     setExpandedCard(expandedCard === index ? null : index);
   };
 
-  const moveCard = (fromIndex: number, toIndex: number) => {
+  const moveCard = async (fromIndex: number, toIndex: number) => {
     if (toIndex < 0 || toIndex >= data.cards.length) return;
     
     const newCards = [...data.cards];
     const [movedCard] = newCards.splice(fromIndex, 1);
     newCards.splice(toIndex, 0, movedCard);
-    onChange({ ...data, cards: newCards }, 'items');
+    const updatedData = { ...data, cards: newCards };
+    onChange(updatedData, 'items');
 
     // Update expanded card index if needed
     if (expandedCard === fromIndex) {
@@ -207,6 +245,23 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
       } else if (fromIndex > expandedCard && toIndex <= expandedCard) {
         setExpandedCard(expandedCard + 1);
       }
+    }
+    
+    // Auto-save to database
+    try {
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section: 'cards', data: updatedData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save card reorder');
+      }
+    } catch (error) {
+      console.error('Failed to save card reorder:', error);
     }
   };
 
