@@ -285,9 +285,10 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
                 <h4 className="font-medium text-gray-900 mb-1">
                   {faq.question}
                 </h4>
-                <p className="text-sm text-gray-600 line-clamp-2">
-                  {faq.answer}
-                </p>
+                <div 
+                  className="text-sm text-gray-600 line-clamp-2 prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ __html: faq.answer }}
+                />
               </div>
               <div className="flex items-center gap-2 ml-4">
                 <button
@@ -339,6 +340,16 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
                     placeholder="Введите ответ... (поддерживается форматирование, ссылки, списки)"
                     className="w-full"
                   />
+                  {/* Preview of the formatted answer */}
+                  {faq.answer && (
+                    <div className="mt-2 p-3 bg-gray-50 rounded-lg border">
+                      <p className="text-xs text-gray-500 mb-2">Предварительный просмотр:</p>
+                      <div 
+                        className="prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: faq.answer }}
+                      />
+                    </div>
+                  )}
                   <p className="text-xs text-gray-500 mt-1">
                     Поддерживается форматирование текста, ссылки, списки. Используйте Ctrl+B для жирного текста, Ctrl+I для курсива, Ctrl+K для ссылок.
                   </p>

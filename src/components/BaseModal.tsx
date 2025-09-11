@@ -10,6 +10,7 @@ interface BaseModalProps {
   onSave?: () => void;
   saveText?: string;
   isLoading?: boolean;
+  saveStatus?: 'saved' | 'saving' | 'error' | null;
 }
 
 export default function BaseModal({ 
@@ -19,7 +20,8 @@ export default function BaseModal({
   children, 
   onSave, 
   saveText = 'Сохранить',
-  isLoading = false 
+  isLoading = false,
+  saveStatus = null
 }: BaseModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const firstButtonRef = useRef<HTMLButtonElement>(null);
@@ -101,17 +103,23 @@ export default function BaseModal({
             {onSave && (
               <button
                 onClick={onSave}
-                disabled={isLoading}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                aria-describedby={isLoading ? "loading-text" : undefined}
+                disabled={isLoading || saveStatus === 'saving'}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+                  saveStatus === 'saving' || isLoading
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+                aria-describedby={isLoading || saveStatus === 'saving' ? "loading-text" : undefined}
               >
-                {isLoading && (
+                {(isLoading || saveStatus === 'saving') && (
                   <>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true"></div>
                     <span id="loading-text" className="sr-only">Загрузка...</span>
                   </>
                 )}
-                {saveText}
+                {saveStatus === 'saved' && '✓'}
+                {saveStatus === 'error' && '✗'}
+                {saveStatus === 'saving' || isLoading ? 'Сохранение...' : saveText}
               </button>
             )}
           </div>

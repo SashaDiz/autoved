@@ -103,12 +103,19 @@ export default function RichTextEditor({
     }
   };
 
-  // Обновление содержимого при изменении value
+  // Инициализация содержимого при первом рендере
   useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== value) {
+    if (editorRef.current && !editorRef.current.innerHTML && value) {
       editorRef.current.innerHTML = value;
     }
-  }, [value]);
+  }, []);
+
+  // Обновление содержимого при изменении value (только если редактор не в фокусе)
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value && !isFocused) {
+      editorRef.current.innerHTML = value;
+    }
+  }, [value, isFocused]);
 
   return (
     <div className={`rich-text-editor border border-gray-300 rounded-lg ${className}`}>

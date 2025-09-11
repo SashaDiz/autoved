@@ -18,6 +18,7 @@ export default function AddFAQModal({ isOpen, onClose, onSave }: AddFAQModalProp
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
 
   const handleSave = async () => {
     if (!faq.question || !faq.answer) {
@@ -25,6 +26,7 @@ export default function AddFAQModal({ isOpen, onClose, onSave }: AddFAQModalProp
     }
 
     setIsLoading(true);
+    setSaveStatus('saving');
     try {
       // Generate ID and save
       const newFAQ: FAQItem = {
@@ -32,12 +34,21 @@ export default function AddFAQModal({ isOpen, onClose, onSave }: AddFAQModalProp
         id: `faq-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
       };
       await onSave(newFAQ);
-      onClose();
-      // Reset form
-      setFaq({
-        question: '',
-        answer: ''
-      });
+      setSaveStatus('saved');
+      
+      // Show success status for 2 seconds, then close modal
+      setTimeout(() => {
+        onClose();
+        // Reset form
+        setFaq({
+          question: '',
+          answer: ''
+        });
+        setSaveStatus(null);
+      }, 2000);
+    } catch (error) {
+      setSaveStatus('error');
+      console.error('Failed to save FAQ:', error);
     } finally {
       setIsLoading(false);
     }
@@ -54,6 +65,7 @@ export default function AddFAQModal({ isOpen, onClose, onSave }: AddFAQModalProp
       title="Добавить новый вопрос"
       onSave={handleSave}
       isLoading={isLoading}
+      saveStatus={saveStatus}
     >
       <div className="space-y-6">
         <div>
@@ -80,6 +92,16 @@ export default function AddFAQModal({ isOpen, onClose, onSave }: AddFAQModalProp
             placeholder="Введите ответ... (поддерживается форматирование, ссылки, списки)"
             className="w-full"
           />
+          {/* Preview of the formatted answer */}
+          {faq.answer && (
+            <div className="mt-2 p-3 bg-gray-50 rounded-lg border">
+              <p className="text-xs text-gray-500 mb-2">Предварительный просмотр:</p>
+              <div 
+                className="prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ __html: faq.answer }}
+              />
+            </div>
+          )}
           <p className="text-xs text-gray-500 mt-1">
             Поддерживается форматирование текста, ссылки, списки. Используйте Ctrl+B для жирного текста, Ctrl+I для курсива, Ctrl+K для ссылок.
           </p>

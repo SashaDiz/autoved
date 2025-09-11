@@ -61,6 +61,7 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
   const distanceInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
 
   const handleSave = async () => {
     if (!car.title || !car.price || !car.engine) {
@@ -68,6 +69,7 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
     }
 
     setIsLoading(true);
+    setSaveStatus('saving');
     try {
       // Generate ID and save with formatted values including symbols
       const newCar: CarCard = {
@@ -77,24 +79,33 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
         id: `car-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
       };
       await onSave(newCar);
-      onClose();
-      // Reset form
-      setCar({
-        title: '',
-        engine: '',
-        drive: '4WD',
-        modification: '',
-        distance: '',
-        imageUrl: '/assets/hyunday.jpg',
-        externalLink: '',
-        price: '',
-        year: '',
-        location: 'CN',
-        isNew: false,
-        date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
-      });
-      setFormattedPrice('');
-      setFormattedDistance('');
+      setSaveStatus('saved');
+      
+      // Show success status for 2 seconds, then close modal
+      setTimeout(() => {
+        onClose();
+        // Reset form
+        setCar({
+          title: '',
+          engine: '',
+          drive: '4WD',
+          modification: '',
+          distance: '',
+          imageUrl: '/assets/hyunday.jpg',
+          externalLink: '',
+          price: '',
+          year: '',
+          location: 'CN',
+          isNew: false,
+          date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
+        });
+        setFormattedPrice('');
+        setFormattedDistance('');
+        setSaveStatus(null);
+      }, 2000);
+    } catch (error) {
+      setSaveStatus('error');
+      console.error('Failed to save car:', error);
     } finally {
       setIsLoading(false);
     }
@@ -127,6 +138,7 @@ export default function AddCarModal({ isOpen, onClose, onSave }: AddCarModalProp
       title="Добавить новый автомобиль"
       onSave={handleSave}
       isLoading={isLoading}
+      saveStatus={saveStatus}
     >
       <div className="space-y-6">
         {/* Image Upload */}

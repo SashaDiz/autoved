@@ -22,6 +22,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
 
   const handleSave = async () => {
     if (!review.customerName || !review.location || !review.carModel || !review.vkEmbedUrl) {
@@ -29,6 +30,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
     }
 
     setIsLoading(true);
+    setSaveStatus('saving');
     try {
       // Generate ID and save
       const newReview: VideoReview = {
@@ -36,16 +38,25 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
         id: `review-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
       };
       await onSave(newReview);
-      onClose();
-      // Reset form
-      setReview({
-        customerName: '',
-        location: '',
-        carModel: '',
-        coverImage: '/assets/bmw-6.jpg',
-        vkEmbedUrl: '',
-        action: 'Смотреть'
-      });
+      setSaveStatus('saved');
+      
+      // Show success status for 2 seconds, then close modal
+      setTimeout(() => {
+        onClose();
+        // Reset form
+        setReview({
+          customerName: '',
+          location: '',
+          carModel: '',
+          coverImage: '/assets/bmw-6.jpg',
+          vkEmbedUrl: '',
+          action: 'Смотреть'
+        });
+        setSaveStatus(null);
+      }, 2000);
+    } catch (error) {
+      setSaveStatus('error');
+      console.error('Failed to save video review:', error);
     } finally {
       setIsLoading(false);
     }
@@ -62,6 +73,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
       title="Добавить новый видео отзыв"
       onSave={handleSave}
       isLoading={isLoading}
+      saveStatus={saveStatus}
     >
       <div className="space-y-6">
         {/* Image Upload */}

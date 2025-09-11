@@ -22,6 +22,7 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error' | null>(null);
 
   const handleSave = async () => {
     if (!slide.carInfo.name || !slide.carInfo.specs || !slide.carInfo.year) {
@@ -29,6 +30,7 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
     }
 
     setIsLoading(true);
+    setSaveStatus('saving');
     try {
       // Generate ID and save
       const newSlide: HeroSlide = {
@@ -36,16 +38,25 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
         id: `slide-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
       };
       await onSave(newSlide);
-      onClose();
-      // Reset form
-      setSlide({
-        backgroundImage: '/assets/bg_img1.webp',
-        carInfo: {
-          name: '',
-          specs: '',
-          year: ''
-        }
-      });
+      setSaveStatus('saved');
+      
+      // Show success status for 2 seconds, then close modal
+      setTimeout(() => {
+        onClose();
+        // Reset form
+        setSlide({
+          backgroundImage: '/assets/bg_img1.webp',
+          carInfo: {
+            name: '',
+            specs: '',
+            year: ''
+          }
+        });
+        setSaveStatus(null);
+      }, 2000);
+    } catch (error) {
+      setSaveStatus('error');
+      console.error('Failed to save slide:', error);
     } finally {
       setIsLoading(false);
     }
@@ -72,6 +83,7 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
       title="Добавить новый слайд"
       onSave={handleSave}
       isLoading={isLoading}
+      saveStatus={saveStatus}
     >
       <div className="space-y-6">
         {/* Image Upload */}

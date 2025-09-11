@@ -29,6 +29,43 @@ const formatDistance = (value: string): string => {
   return formatNumber(value);
 };
 
+// Utility function to parse date string and convert to sortable format
+const parseDateForSorting = (dateStr: string): Date => {
+  if (!dateStr) return new Date(0); // Default to epoch for empty dates
+  
+  // Try to parse different date formats
+  const monthNames = {
+    'января': 0, 'февраля': 1, 'марта': 2, 'апреля': 3, 'мая': 4, 'июня': 5,
+    'июля': 6, 'августа': 7, 'сентября': 8, 'октября': 9, 'ноября': 10, 'декабря': 11
+  };
+  
+  // Parse format like "27 июля"
+  const parts = dateStr.trim().split(' ');
+  if (parts.length === 2) {
+    const day = parseInt(parts[0], 10);
+    const monthName = parts[1].toLowerCase();
+    const month = monthNames[monthName as keyof typeof monthNames];
+    
+    if (!isNaN(day) && month !== undefined) {
+      const currentYear = new Date().getFullYear();
+      return new Date(currentYear, month, day);
+    }
+  }
+  
+  // Fallback: try to parse as regular date
+  const parsed = new Date(dateStr);
+  return isNaN(parsed.getTime()) ? new Date(0) : parsed;
+};
+
+// Function to sort cards by date (newest first)
+const sortCardsByDate = (cards: CarCard[]): CarCard[] => {
+  return [...cards].sort((a, b) => {
+    const dateA = parseDateForSorting(a.date);
+    const dateB = parseDateForSorting(b.date);
+    return dateB.getTime() - dateA.getTime(); // Newest first
+  });
+};
+
 interface AdminCardsSectionProps {
   data: CardsData;
   originalData?: CardsData;
@@ -50,6 +87,20 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
   const [cardChanges, setCardChanges] = useState<Record<number, CarCard>>({});
   const [cardSaveStatus, setCardSaveStatus] = useState<Record<number, 'saved' | 'saving' | 'error' | null>>({});
 
+  // Helper function to get original index from sorted index
+  const getOriginalIndex = (sortedIndex: number): number => {
+    const sortedCards = sortCardsByDate(data.cards);
+    const card = sortedCards[sortedIndex];
+    return data.cards.findIndex(c => c.id === card.id);
+  };
+
+  // Helper function to get sorted index from original index
+  const getSortedIndex = (originalIndex: number): number => {
+    const card = data.cards[originalIndex];
+    const sortedCards = sortCardsByDate(data.cards);
+    return sortedCards.findIndex(c => c.id === card.id);
+  };
+
   const updateTitle = (title: string) => {
     onChange({ ...data, title }, 'header');
   };
@@ -58,63 +109,77 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
     onChange({ ...data, subtitle }, 'header');
   };
 
-  const updateCard = (index: number, card: CarCard) => {
+  const updateCard = (sortedIndex: number, card: CarCard) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
     const newCards = [...data.cards];
-    newCards[index] = card;
+    newCards[originalIndex] = card;
     onChange({ ...data, cards: newCards }, 'items');
     
-    // Track changes for this card
+    // Track changes for this card using original index
     setCardChanges(prev => ({
       ...prev,
-      [index]: card
+      [originalIndex]: card
     }));
   };
 
-  const saveCard = async (index: number) => {
-    if (!cardChanges[index]) return;
+  const saveCard = async (sortedIndex: number) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
+    if (!cardChanges[originalIndex]) return;
     
-    setCardSaveStatus(prev => ({ ...prev, [index]: 'saving' }));
+    setCardSaveStatus(prev => ({ ...prev, [originalIndex]: 'saving' }));
     
     try {
-      // Simulate API call - in real app, this would save to backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save to database
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ section: 'cards', data }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save card changes');
+      }
       
       // Clear the changes for this card
       setCardChanges(prev => {
         const newChanges = { ...prev };
-        delete newChanges[index];
+        delete newChanges[originalIndex];
         return newChanges;
       });
       
-      setCardSaveStatus(prev => ({ ...prev, [index]: 'saved' }));
+      setCardSaveStatus(prev => ({ ...prev, [originalIndex]: 'saved' }));
       
       // Clear saved status after 2 seconds
       setTimeout(() => {
-        setCardSaveStatus(prev => ({ ...prev, [index]: null }));
+        setCardSaveStatus(prev => ({ ...prev, [originalIndex]: null }));
       }, 2000);
-    } catch {
-      setCardSaveStatus(prev => ({ ...prev, [index]: 'error' }));
+    } catch (error) {
+      console.error('Failed to save card changes:', error);
+      setCardSaveStatus(prev => ({ ...prev, [originalIndex]: 'error' }));
     }
   };
 
-  const cancelCardChanges = (index: number) => {
+  const cancelCardChanges = (sortedIndex: number) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
     // Restore original card data
-    if (originalData && originalData.cards[index]) {
-      const originalCard = originalData.cards[index];
+    if (originalData && originalData.cards[originalIndex]) {
+      const originalCard = originalData.cards[originalIndex];
       const newCards = [...data.cards];
-      newCards[index] = originalCard;
+      newCards[originalIndex] = originalCard;
       onChange({ ...data, cards: newCards }, 'items');
     }
     
     // Clear changes for this card
     setCardChanges(prev => {
       const newChanges = { ...prev };
-      delete newChanges[index];
+      delete newChanges[originalIndex];
       return newChanges;
     });
     
     // Clear save status
-    setCardSaveStatus(prev => ({ ...prev, [index]: null }));
+    setCardSaveStatus(prev => ({ ...prev, [originalIndex]: null }));
   };
 
   // Helper function to get formatted value for a card
@@ -133,14 +198,15 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
   };
 
   // Handler for price changes
-  const handlePriceChange = (index: number, value: string) => {
-    const card = data.cards[index];
+  const handlePriceChange = (sortedIndex: number, value: string) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
+    const card = data.cards[originalIndex];
     const parsed = parseNumber(value);
     const formatted = formatPrice(parsed);
     
     // Update the card with formatted value including symbol for storage
     const formattedWithSymbol = parsed ? `${formatted} ₽` : '';
-    updateCard(index, { ...card, price: formattedWithSymbol });
+    updateCard(sortedIndex, { ...card, price: formattedWithSymbol });
     
     // Update formatted values state for display
     setFormattedValues(prev => ({
@@ -153,14 +219,15 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
   };
 
   // Handler for distance changes
-  const handleDistanceChange = (index: number, value: string) => {
-    const card = data.cards[index];
+  const handleDistanceChange = (sortedIndex: number, value: string) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
+    const card = data.cards[originalIndex];
     const parsed = parseNumber(value);
     const formatted = formatDistance(parsed);
     
     // Update the card with formatted value including symbol for storage
     const formattedWithSymbol = parsed ? `${formatted} км` : '';
-    updateCard(index, { ...card, distance: formattedWithSymbol });
+    updateCard(sortedIndex, { ...card, distance: formattedWithSymbol });
     
     // Update formatted values state for display
     setFormattedValues(prev => ({
@@ -173,7 +240,9 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
   };
 
   const handleAddCard = async (newCard: CarCard) => {
-    const updatedData = { ...data, cards: [...data.cards, newCard] };
+    // Add new card and sort by date (newest first)
+    const updatedCards = sortCardsByDate([...data.cards, newCard]);
+    const updatedData = { ...data, cards: updatedCards };
     onChange(updatedData, 'items');
     
     // Auto-save to database
@@ -194,16 +263,31 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
     }
   };
 
-  const removeCard = async (index: number) => {
-    const newCards = data.cards.filter((_, i) => i !== index);
+  const removeCard = async (sortedIndex: number) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
+    const newCards = data.cards.filter((_, i) => i !== originalIndex);
     const updatedData = { ...data, cards: newCards };
     onChange(updatedData, 'items');
     
-    if (expandedCard === index) {
+    // Update expanded card index
+    if (expandedCard === originalIndex) {
       setExpandedCard(null);
-    } else if (expandedCard !== null && expandedCard > index) {
+    } else if (expandedCard !== null && expandedCard > originalIndex) {
       setExpandedCard(expandedCard - 1);
     }
+    
+    // Clear any pending changes for this card
+    setCardChanges(prev => {
+      const newChanges = { ...prev };
+      delete newChanges[originalIndex];
+      return newChanges;
+    });
+    
+    setCardSaveStatus(prev => {
+      const newStatus = { ...prev };
+      delete newStatus[originalIndex];
+      return newStatus;
+    });
     
     // Auto-save to database
     try {
@@ -223,26 +307,30 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
     }
   };
 
-  const toggleCardDetails = (index: number) => {
-    setExpandedCard(expandedCard === index ? null : index);
+  const toggleCardDetails = (sortedIndex: number) => {
+    const originalIndex = getOriginalIndex(sortedIndex);
+    setExpandedCard(expandedCard === originalIndex ? null : originalIndex);
   };
 
-  const moveCard = async (fromIndex: number, toIndex: number) => {
-    if (toIndex < 0 || toIndex >= data.cards.length) return;
+  const moveCard = async (fromSortedIndex: number, toSortedIndex: number) => {
+    const fromOriginalIndex = getOriginalIndex(fromSortedIndex);
+    const toOriginalIndex = getOriginalIndex(toSortedIndex);
+    
+    if (toOriginalIndex < 0 || toOriginalIndex >= data.cards.length) return;
     
     const newCards = [...data.cards];
-    const [movedCard] = newCards.splice(fromIndex, 1);
-    newCards.splice(toIndex, 0, movedCard);
+    const [movedCard] = newCards.splice(fromOriginalIndex, 1);
+    newCards.splice(toOriginalIndex, 0, movedCard);
     const updatedData = { ...data, cards: newCards };
     onChange(updatedData, 'items');
 
     // Update expanded card index if needed
-    if (expandedCard === fromIndex) {
-      setExpandedCard(toIndex);
+    if (expandedCard === fromOriginalIndex) {
+      setExpandedCard(toOriginalIndex);
     } else if (expandedCard !== null) {
-      if (fromIndex < expandedCard && toIndex >= expandedCard) {
+      if (fromOriginalIndex < expandedCard && toOriginalIndex >= expandedCard) {
         setExpandedCard(expandedCard - 1);
-      } else if (fromIndex > expandedCard && toIndex <= expandedCard) {
+      } else if (fromOriginalIndex > expandedCard && toOriginalIndex <= expandedCard) {
         setExpandedCard(expandedCard + 1);
       }
     }
@@ -348,14 +436,16 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
 
         {/* Cards List */}
         <div className="space-y-4">
-          {data.cards.map((card, index) => (
+          {sortCardsByDate(data.cards).map((card, sortedIndex) => {
+            const originalIndex = getOriginalIndex(sortedIndex);
+            return (
             <div key={card.id} className="bg-gray-50 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => moveCard(index, index - 1)}
-                      disabled={index === 0}
+                      onClick={() => moveCard(sortedIndex, sortedIndex - 1)}
+                      disabled={sortedIndex === 0}
                       className="text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -363,15 +453,15 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       </svg>
                     </button>
                     <button
-                      onClick={() => moveCard(index, index + 1)}
-                      disabled={index === data.cards.length - 1}
+                      onClick={() => moveCard(sortedIndex, sortedIndex + 1)}
+                      disabled={sortedIndex === data.cards.length - 1}
                       className="text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                       </svg>
                     </button>
-                    <span className="text-sm text-gray-500 font-mono">#{index + 1}</span>
+                    <span className="text-sm text-gray-500 font-mono">#{sortedIndex + 1}</span>
                   </div>
                   <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -391,13 +481,13 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                 </div>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => toggleCardDetails(index)}
+                    onClick={() => toggleCardDetails(sortedIndex)}
                     className="text-gray-600 hover:text-gray-900 transition-colors px-3 py-1 border border-gray-300 rounded-lg text-sm cursor-pointer"
                   >
-                    {expandedCard === index ? 'Свернуть' : 'Редактировать'}
+                    {expandedCard === originalIndex ? 'Свернуть' : 'Редактировать'}
                   </button>
                   <button
-                    onClick={() => removeCard(index)}
+                    onClick={() => removeCard(sortedIndex)}
                     className="text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -408,13 +498,13 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
               </div>
 
               {/* Expanded Card Editor */}
-              {expandedCard === index && (
+              {expandedCard === originalIndex && (
                 <div className="mt-4 pt-4 border-t border-gray-200 space-y-6">
                   {/* Image Upload */}
                   <div>
                     <ImageUpload
                       currentImage={card.imageUrl}
-                      onImageChange={(imageUrl) => updateCard(index, {
+                      onImageChange={(imageUrl) => updateCard(sortedIndex, {
                         ...card,
                         imageUrl
                       })}
@@ -431,7 +521,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <input
                         type="text"
                         value={card.title}
-                        onChange={(e) => updateCard(index, { ...card, title: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, title: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                         placeholder="BMW X5"
                       />
@@ -445,7 +535,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         <input
                           type="text"
                           value={getFormattedValue(card.id, 'price')}
-                          onChange={(e) => handlePriceChange(index, e.target.value)}
+                          onChange={(e) => handlePriceChange(sortedIndex, e.target.value)}
                           className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                           placeholder="3 000 000"
                         />
@@ -462,7 +552,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <input
                         type="text"
                         value={card.engine}
-                        onChange={(e) => updateCard(index, { ...card, engine: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, engine: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                         placeholder="2.0T л., 258 л.с."
                       />
@@ -474,7 +564,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       </label>
                       <select
                         value={card.drive}
-                        onChange={(e) => updateCard(index, { ...card, drive: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, drive: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                       >
                         <option value="4WD">4WD</option>
@@ -491,7 +581,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <input
                         type="text"
                         value={card.modification}
-                        onChange={(e) => updateCard(index, { ...card, modification: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, modification: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                         placeholder="Premium"
                       />
@@ -505,7 +595,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         <input
                           type="text"
                           value={getFormattedValue(card.id, 'distance')}
-                          onChange={(e) => handleDistanceChange(index, e.target.value)}
+                          onChange={(e) => handleDistanceChange(sortedIndex, e.target.value)}
                           className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                           placeholder="50 000"
                         />
@@ -522,7 +612,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <input
                         type="text"
                         value={card.year}
-                        onChange={(e) => updateCard(index, { ...card, year: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, year: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                         placeholder="2024 год"
                       />
@@ -534,7 +624,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       </label>
                       <select
                         value={card.location}
-                        onChange={(e) => updateCard(index, { ...card, location: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, location: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                       >
                         <option value="CN">Китай (CN)</option>
@@ -551,7 +641,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <input
                         type="text"
                         value={card.date}
-                        onChange={(e) => updateCard(index, { ...card, date: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, date: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                         placeholder="27 июля"
                       />
@@ -562,7 +652,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         <input
                           type="checkbox"
                           checked={card.isNew}
-                          onChange={(e) => updateCard(index, { ...card, isNew: e.target.checked })}
+                          onChange={(e) => updateCard(sortedIndex, { ...card, isNew: e.target.checked })}
                           className="rounded border-gray-300 text-gray-900 focus:ring-gray-900"
                         />
                         <span className="text-sm font-medium text-gray-700">Новый автомобиль</span>
@@ -576,7 +666,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <input
                         type="url"
                         value={card.externalLink}
-                        onChange={(e) => updateCard(index, { ...card, externalLink: e.target.value })}
+                        onChange={(e) => updateCard(sortedIndex, { ...card, externalLink: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                         placeholder="https://auto.ru/cars/bmw/x5/"
                       />
@@ -584,36 +674,37 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                   </div>
 
                   {/* Card Save/Cancel Buttons - Only show when there are unsaved changes */}
-                  {cardChanges[index] && (
+                  {cardChanges[originalIndex] && (
                     <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
                       <button
-                        onClick={() => cancelCardChanges(index)}
+                        onClick={() => cancelCardChanges(sortedIndex)}
                         className="px-4 py-2 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
                       >
                         Отменить
                       </button>
                       <button
-                        onClick={() => saveCard(index)}
-                        disabled={cardSaveStatus[index] === 'saving'}
+                        onClick={() => saveCard(sortedIndex)}
+                        disabled={cardSaveStatus[originalIndex] === 'saving'}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 cursor-pointer ${
-                          cardSaveStatus[index] !== 'saving'
+                          cardSaveStatus[originalIndex] !== 'saving'
                             ? 'bg-green-600 text-white hover:bg-green-700'
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                       >
-                        {cardSaveStatus[index] === 'saving' && (
+                        {cardSaveStatus[originalIndex] === 'saving' && (
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         )}
-                        {cardSaveStatus[index] === 'saved' && '✓'}
-                        {cardSaveStatus[index] === 'error' && '✗'}
-                        {cardSaveStatus[index] === 'saving' ? 'Сохранение...' : 'Сохранить'}
+                        {cardSaveStatus[originalIndex] === 'saved' && '✓'}
+                        {cardSaveStatus[originalIndex] === 'error' && '✗'}
+                        {cardSaveStatus[originalIndex] === 'saving' ? 'Сохранение...' : 'Сохранить'}
                       </button>
                     </div>
                   )}
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {data.cards.length === 0 && (
