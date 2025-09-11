@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { sendTelegramMessage, formatFormMessage, testTelegramConnection } from '@/lib/telegram';
 
 // Define the schema for form validation
 const FormSchema = z.object({
@@ -10,85 +11,26 @@ const FormSchema = z.object({
   message: z.string().optional(),
 });
 
-// Simple email sending function using fetch to a serverless email service
-async function sendEmail(data: { name: string; phone: string; country: string; budget: string; message?: string }) {
-  // Using a simple approach that works without additional dependencies
-  // In production, you should configure proper SMTP settings or use a service like:
-  // - SendGrid
-  // - AWS SES  
-  // - Mailgun
-  // - Resend
-  
-  const emailContent = {
-    to: 'info@vedtime.ru',
-    subject: 'Заявка с сайта Autoved',
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          .header { background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-          .content { background-color: #ffffff; padding: 20px; border: 1px solid #dee2e6; border-radius: 8px; }
-          .field { margin-bottom: 15px; }
-          .label { font-weight: bold; color: #495057; }
-          .value { color: #212529; margin-top: 5px; }
-          .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 14px; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h2 style="margin: 0; color: #198754;">Новая заявка с сайта AutoVed</h2>
-        </div>
-        <div class="content">
-          <div class="field">
-            <div class="label">Имя:</div>
-            <div class="value">${data.name}</div>
-          </div>
-          <div class="field">
-            <div class="label">Телефон:</div>
-            <div class="value">${data.phone}</div>
-          </div>
-          <div class="field">
-            <div class="label">Страна интереса:</div>
-            <div class="value">${data.country}</div>
-          </div>
-          <div class="field">
-            <div class="label">Бюджет:</div>
-            <div class="value">${data.budget}</div>
-          </div>
-          ${data.message ? `
-          <div class="field">
-            <div class="label">Сообщение:</div>
-            <div class="value">${data.message}</div>
-          </div>
-          ` : ''}
-        </div>
-        <div class="footer">
-          <p>Заявка отправлена: ${new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}</p>
-          <p>Источник: AutoVed (vedtime.ru)</p>
-        </div>
-      </body>
-      </html>
-    `
-  };
-
-  // For development/demonstration - in production replace this with actual email service
-  console.log('EMAIL TO SEND:', emailContent);
-  
-  // You can integrate with email services here:
-  // Example for SendGrid:
-  // const sgMail = require('@sendgrid/mail');
-  // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  // await sgMail.send(emailContent);
-
-  // Example for Nodemailer:
-  // const nodemailer = require('nodemailer');
-  // const transporter = nodemailer.createTransporter({...});
-  // await transporter.sendMail(emailContent);
-
-  return { success: true };
+// Telegram notification function
+async function sendTelegramNotification(data: { name: string; phone: string; country: string; budget: string; message?: string }) {
+  try {
+    // Format the message for Telegram
+    const message = formatFormMessage(data);
+    
+    // Send to Telegram
+    const result = await sendTelegramMessage(message);
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to send Telegram message');
+    }
+    
+    console.log('Telegram notification sent successfully:', result.messageId);
+    return { success: true, messageId: result.messageId };
+    
+  } catch (error) {
+    console.error('Error sending Telegram notification:', error);
+    throw new Error(`Failed to send Telegram notification: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -98,8 +40,27 @@ export async function POST(request: NextRequest) {
     // Validate the form data
     const validatedData = FormSchema.parse(body);
     
-    // Send email
-    await sendEmail(validatedData);
+    // Check if Telegram configuration is available
+    if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+      console.error('Telegram configuration missing. Please set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID environment variables.');
+      return NextResponse.json(
+        { success: false, message: 'Telegram service not configured. Please contact administrator.' },
+        { status: 500 }
+      );
+    }
+    
+    // Test Telegram connection first
+    const connectionTest = await testTelegramConnection();
+    if (!connectionTest.success) {
+      console.error('Telegram connection test failed:', connectionTest.error);
+      return NextResponse.json(
+        { success: false, message: 'Telegram service unavailable. Please try again later.' },
+        { status: 500 }
+      );
+    }
+    
+    // Send Telegram notification
+    const telegramResult = await sendTelegramNotification(validatedData);
     
     // Store in database if needed (you already have MySQL setup)
     // const db = require('@/lib/db');
@@ -108,7 +69,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Заявка отправлена успешно! Мы свяжемся с вами в ближайшее время.' 
+      message: 'Заявка отправлена успешно! Мы свяжемся с вами в ближайшее время.',
+      messageId: telegramResult.messageId
     });
 
   } catch (error) {
@@ -118,6 +80,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, message: 'Некорректные данные формы', errors: error.issues },
         { status: 400 }
+      );
+    }
+
+    // Handle Telegram sending errors specifically
+    if (error instanceof Error && error.message.includes('Failed to send Telegram notification')) {
+      return NextResponse.json(
+        { success: false, message: 'Ошибка отправки уведомления. Попробуйте еще раз или свяжитесь с нами напрямую.' },
+        { status: 500 }
       );
     }
 
