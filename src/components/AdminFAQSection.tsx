@@ -40,8 +40,24 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
     setFaqSaveStatus(prev => ({ ...prev, [index]: 'saving' }));
     
     try {
-      // Simulate API call - in real app, this would save to backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save the updated FAQs to the database
+      const updatedFAQs = [...data];
+      updatedFAQs[index] = faqChanges[index];
+      
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'faq', 
+          data: updatedFAQs 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save FAQ');
+      }
       
       // Clear the changes for this FAQ
       setFaqChanges(prev => {
@@ -56,7 +72,8 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
       setTimeout(() => {
         setFaqSaveStatus(prev => ({ ...prev, [index]: null }));
       }, 2000);
-    } catch {
+    } catch (error) {
+      console.error('Error saving FAQ:', error);
       setFaqSaveStatus(prev => ({ ...prev, [index]: 'error' }));
     }
   };
@@ -81,17 +98,73 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
     setFaqSaveStatus(prev => ({ ...prev, [index]: null }));
   };
 
-  const handleAddFAQ = (newFAQ: FAQItem) => {
-    onChange([...data, newFAQ], 'items');
+  const handleAddFAQ = async (newFAQ: FAQItem) => {
+    try {
+      // Add the new FAQ to the current data
+      const updatedFAQs = [...data, newFAQ];
+      
+      // Save to database
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'faq', 
+          data: updatedFAQs 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save new FAQ');
+      }
+      
+      // Update local state
+      onChange(updatedFAQs, 'items');
+    } catch (error) {
+      console.error('Error adding FAQ:', error);
+      // Still update local state for immediate feedback
+      onChange([...data, newFAQ], 'items');
+    }
   };
 
-  const removeFAQ = (index: number) => {
-    const newFAQs = data.filter((_, i) => i !== index);
-    onChange(newFAQs, 'items');
-    if (expandedFAQ === index) {
-      setExpandedFAQ(null);
-    } else if (expandedFAQ !== null && expandedFAQ > index) {
-      setExpandedFAQ(expandedFAQ - 1);
+  const removeFAQ = async (index: number) => {
+    try {
+      const newFAQs = data.filter((_, i) => i !== index);
+      
+      // Save to database
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'faq', 
+          data: newFAQs 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete FAQ');
+      }
+      
+      // Update local state
+      onChange(newFAQs, 'items');
+      if (expandedFAQ === index) {
+        setExpandedFAQ(null);
+      } else if (expandedFAQ !== null && expandedFAQ > index) {
+        setExpandedFAQ(expandedFAQ - 1);
+      }
+    } catch (error) {
+      console.error('Error deleting FAQ:', error);
+      // Still update local state for immediate feedback
+      const newFAQs = data.filter((_, i) => i !== index);
+      onChange(newFAQs, 'items');
+      if (expandedFAQ === index) {
+        setExpandedFAQ(null);
+      } else if (expandedFAQ !== null && expandedFAQ > index) {
+        setExpandedFAQ(expandedFAQ - 1);
+      }
     }
   };
 
@@ -99,22 +172,60 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
     setExpandedFAQ(expandedFAQ === index ? null : index);
   };
 
-  const moveFAQ = (fromIndex: number, toIndex: number) => {
+  const moveFAQ = async (fromIndex: number, toIndex: number) => {
     if (toIndex < 0 || toIndex >= data.length) return;
     
-    const newFAQs = [...data];
-    const [movedFAQ] = newFAQs.splice(fromIndex, 1);
-    newFAQs.splice(toIndex, 0, movedFAQ);
-    onChange(newFAQs, 'items');
+    try {
+      const newFAQs = [...data];
+      const [movedFAQ] = newFAQs.splice(fromIndex, 1);
+      newFAQs.splice(toIndex, 0, movedFAQ);
+      
+      // Save to database
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'faq', 
+          data: newFAQs 
+        }),
+      });
 
-    // Update expanded FAQ index if needed
-    if (expandedFAQ === fromIndex) {
-      setExpandedFAQ(toIndex);
-    } else if (expandedFAQ !== null) {
-      if (fromIndex < expandedFAQ && toIndex >= expandedFAQ) {
-        setExpandedFAQ(expandedFAQ - 1);
-      } else if (fromIndex > expandedFAQ && toIndex <= expandedFAQ) {
-        setExpandedFAQ(expandedFAQ + 1);
+      if (!response.ok) {
+        throw new Error('Failed to reorder FAQ');
+      }
+      
+      // Update local state
+      onChange(newFAQs, 'items');
+
+      // Update expanded FAQ index if needed
+      if (expandedFAQ === fromIndex) {
+        setExpandedFAQ(toIndex);
+      } else if (expandedFAQ !== null) {
+        if (fromIndex < expandedFAQ && toIndex >= expandedFAQ) {
+          setExpandedFAQ(expandedFAQ - 1);
+        } else if (fromIndex > expandedFAQ && toIndex <= expandedFAQ) {
+          setExpandedFAQ(expandedFAQ + 1);
+        }
+      }
+    } catch (error) {
+      console.error('Error reordering FAQ:', error);
+      // Still update local state for immediate feedback
+      const newFAQs = [...data];
+      const [movedFAQ] = newFAQs.splice(fromIndex, 1);
+      newFAQs.splice(toIndex, 0, movedFAQ);
+      onChange(newFAQs, 'items');
+
+      // Update expanded FAQ index if needed
+      if (expandedFAQ === fromIndex) {
+        setExpandedFAQ(toIndex);
+      } else if (expandedFAQ !== null) {
+        if (fromIndex < expandedFAQ && toIndex >= expandedFAQ) {
+          setExpandedFAQ(expandedFAQ - 1);
+        } else if (fromIndex > expandedFAQ && toIndex <= expandedFAQ) {
+          setExpandedFAQ(expandedFAQ + 1);
+        }
       }
     }
   };

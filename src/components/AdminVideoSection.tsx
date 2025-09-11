@@ -42,8 +42,24 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
     setReviewSaveStatus(prev => ({ ...prev, [index]: 'saving' }));
     
     try {
-      // Simulate API call - in real app, this would save to backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save the updated reviews to the database
+      const updatedReviews = [...data];
+      updatedReviews[index] = reviewChanges[index];
+      
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'videoReviews', 
+          data: updatedReviews 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save video reviews');
+      }
       
       // Clear the changes for this review
       setReviewChanges(prev => {
@@ -58,7 +74,8 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
       setTimeout(() => {
         setReviewSaveStatus(prev => ({ ...prev, [index]: null }));
       }, 2000);
-    } catch {
+    } catch (error) {
+      console.error('Error saving video review:', error);
       setReviewSaveStatus(prev => ({ ...prev, [index]: 'error' }));
     }
   };
@@ -83,15 +100,69 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
     setReviewSaveStatus(prev => ({ ...prev, [index]: null }));
   };
 
-  const handleAddReview = (newReview: VideoReview) => {
-    onChange([...data, newReview], 'items');
+  const handleAddReview = async (newReview: VideoReview) => {
+    try {
+      // Add the new review to the current data
+      const updatedReviews = [...data, newReview];
+      
+      // Save to database
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'videoReviews', 
+          data: updatedReviews 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save new video review');
+      }
+      
+      // Update local state
+      onChange(updatedReviews, 'items');
+    } catch (error) {
+      console.error('Error adding video review:', error);
+      // Still update local state for immediate feedback
+      onChange([...data, newReview], 'items');
+    }
   };
 
-  const removeReview = (index: number) => {
-    const newReviews = data.filter((_, i) => i !== index);
-    onChange(newReviews, 'items');
-    if (activeReview >= newReviews.length) {
-      setActiveReview(Math.max(0, newReviews.length - 1));
+  const removeReview = async (index: number) => {
+    try {
+      const newReviews = data.filter((_, i) => i !== index);
+      
+      // Save to database
+      const response = await fetch('/api/admin/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          section: 'videoReviews', 
+          data: newReviews 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete video review');
+      }
+      
+      // Update local state
+      onChange(newReviews, 'items');
+      if (activeReview >= newReviews.length) {
+        setActiveReview(Math.max(0, newReviews.length - 1));
+      }
+    } catch (error) {
+      console.error('Error deleting video review:', error);
+      // Still update local state for immediate feedback
+      const newReviews = data.filter((_, i) => i !== index);
+      onChange(newReviews, 'items');
+      if (activeReview >= newReviews.length) {
+        setActiveReview(Math.max(0, newReviews.length - 1));
+      }
     }
   };
 

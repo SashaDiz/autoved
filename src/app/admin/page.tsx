@@ -9,22 +9,28 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already authenticated
-    const authStatus = localStorage.getItem('adminAuthenticated');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
+    // Check if user is already authenticated (only on client side)
+    if (typeof window !== 'undefined') {
+      const authStatus = localStorage.getItem('adminAuthenticated');
+      if (authStatus === 'true') {
+        setIsAuthenticated(true);
+      }
     }
     setIsLoading(false);
   }, []);
 
   const handleLogin = () => {
     setIsAuthenticated(true);
-    localStorage.setItem('adminAuthenticated', 'true');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('adminAuthenticated', 'true');
+    }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('adminAuthenticated');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('adminAuthenticated');
+    }
   };
 
   if (isLoading) {
