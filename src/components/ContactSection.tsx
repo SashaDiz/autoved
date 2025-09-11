@@ -16,7 +16,7 @@ export default function ContactSection() {
           </div>
 
           {/* Social Media Buttons */}
-          <div className="flex gap-4 mt-auto">
+          <div className="flex flex-col md:flex-row gap-4 mt-auto">
             <a 
               href="https://t.me/Auto_ved" 
               target="_blank"
@@ -28,7 +28,7 @@ export default function ContactSection() {
                 alt="Telegram" 
                 width={192} 
                 height={192}
-                className="w-16 h-16 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
+                className="w-22 h-22 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наш канал</div>
@@ -37,7 +37,7 @@ export default function ContactSection() {
             </a>
 
             <a 
-              href="https://vk.com/autoved_group" 
+              href="https://vk.com/auto_ved" 
               target="_blank"
               rel="noopener noreferrer"
               className="relative cursor-pointer flex overflow-hidden items-center gap-4 bg-black text-white px-6 py-6 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-105 flex-1"
@@ -47,7 +47,7 @@ export default function ContactSection() {
                 alt="VK" 
                 width={192} 
                 height={192}
-                className="w-16 h-16 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
+                className="w-22 h-22 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наша группа</div>
@@ -66,7 +66,7 @@ export default function ContactSection() {
                 alt="VK" 
                 width={192} 
                 height={192}
-                className="w-16 h-16 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
+                className="w-22 h-22 xl:w-22 xl:h-22 rounded-lg absolute -bottom-8 -right-3"
               />
               <div>
                 <div className="text-lg font-semibold">Наша страница</div>

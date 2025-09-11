@@ -319,7 +319,7 @@ const HeroSlider = () => {
             {/* Social Media Buttons */}
             <div ref={socialButtonsRef} className="flex items-center gap-3 xl:gap-4">
               <a 
-                href="https://vk.com/autoved_group" 
+                href="https://vk.com/auto_ved" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cursor-pointer w-10 h-10 sm:w-12 sm:h-12 border-1 border-white rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110"
