@@ -201,7 +201,7 @@ export default function RichTextEditor({
         onKeyDown={handleKeyDown}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={`min-h-[120px] p-3 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent ${
+        className={`min-h-[120px] p-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent ${
           isFocused ? 'ring-2 ring-gray-900' : ''
         }`}
         style={{ minHeight: '120px' }}

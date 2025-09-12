@@ -161,7 +161,7 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
           <textarea
             value={data.title}
             onChange={(e) => updateTitle(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent resize-none"
             rows={2}
             placeholder="Заголовок главного экрана"
           />
@@ -174,7 +174,7 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
           <textarea
             value={data.subtitle}
             onChange={(e) => updateSubtitle(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent resize-none"
             rows={3}
             placeholder="Описание под заголовком"
           />
@@ -290,7 +290,7 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
                       name: e.target.value
                     }
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                   placeholder="Toyota Camry"
                 />
               </div>
@@ -309,7 +309,7 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
                       specs: e.target.value
                     }
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                   placeholder="2.5L, 203 л.с."
                 />
               </div>
@@ -328,7 +328,7 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
                       year: e.target.value
                     }
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                   placeholder="2024 год"
                 />
               </div>

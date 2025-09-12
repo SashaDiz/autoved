@@ -150,7 +150,7 @@ const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами
           <h2 id="contact-modal-title" className="text-xl font-semibold text-gray-900">{title}</h2>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             aria-label="Закрыть модальное окно"
           >
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -167,7 +167,7 @@ const ContactModal = ({ isOpen, onClose, title = "Свяжитесь с нами
                 key={option.id}
                 ref={index === 0 ? firstButtonRef : undefined}
                 onClick={option.action}
-                className={`${option.bgColor} ${option.textColor} p-4 rounded-xl cursor-pointer flex flex-col items-center gap-3 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                className={`${option.bgColor} ${option.textColor} p-4 rounded-xl cursor-pointer flex flex-col items-center gap-3 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2`}
                 aria-label={`Связаться через ${option.label}`}
               >
                 <div className="flex items-center justify-center">

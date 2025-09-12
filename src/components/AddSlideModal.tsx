@@ -105,7 +105,7 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
               type="text"
               value={slide.carInfo.name}
               onChange={(e) => updateCarInfo('name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="Toyota Camry"
               required
             />
@@ -119,7 +119,7 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
               type="text"
               value={slide.carInfo.specs}
               onChange={(e) => updateCarInfo('specs', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="2.5L, 203 л.с."
               required
             />
@@ -133,7 +133,7 @@ export default function AddSlideModal({ isOpen, onClose, onSave }: AddSlideModal
               type="text"
               value={slide.carInfo.year}
               onChange={(e) => updateCarInfo('year', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="2024 год"
               required
             />

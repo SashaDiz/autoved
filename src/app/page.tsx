@@ -143,7 +143,7 @@ export default function Home() {
         <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 xl:bottom-14 xl:right-10 z-50 max-w-[350px]">
           <button 
             onClick={() => setIsContactModalOpen(true)}
-            className="cursor-pointer bg-white hover:bg-gray-50 text-gray-900 px-3 p-3 sm:pl-6 rounded-full shadow-2xl flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 max-w-[280px] sm:max-w-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="cursor-pointer bg-white hover:bg-gray-50 text-gray-900 px-3 p-3 sm:pl-6 rounded-full shadow-2xl flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:scale-105 max-w-[280px] sm:max-w-none focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             aria-label="Открыть форму связи с нами"
           >
             <span className="text-xs sm:text-sm font-medium leading-tight hidden sm:block text-start">

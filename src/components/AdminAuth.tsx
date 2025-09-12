@@ -58,7 +58,7 @@ export default function AdminAuth({ onLogin }: AdminAuthProps) {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent transition-all"
                 placeholder="Введите логин"
                 required
               />
@@ -73,7 +73,7 @@ export default function AdminAuth({ onLogin }: AdminAuthProps) {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent transition-all"
                 placeholder="Введите пароль"
                 required
               />

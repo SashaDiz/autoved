@@ -72,40 +72,48 @@ export function parseCarData(message: TelegramMessage): ParsedCarData | null {
   }
 
   try {
-    // Extract model name (usually in CAPS or after "Модель:")
-    const modelMatch = text.match(/(?:Модель:\s*)?([A-ZА-Я\s]+(?:[A-ZА-Я]+[A-ZА-Я\s]*)*)/);
+    // Extract model name - look for text after 🔥 emoji and before country flag
+    const modelMatch = text.match(/🔥\s*([A-ZА-Я\s]+(?:[A-ZА-Я]+[A-ZА-Я\s]*)*)\s*🇰🇷|🇨🇳|🇯🇵|🇩🇪/) || 
+                      text.match(/(?:Модель:\s*)?([A-ZА-Я\s]+(?:[A-ZА-Я]+[A-ZА-Я\s]*)*)/);
     const title = modelMatch ? modelMatch[1].trim() : '';
 
-    // Extract trim/configuration (usually after model name or "Комплектация:")
-    const trimMatch = text.match(/(?:Комплектация:\s*|Trim:\s*)?([A-Za-zА-Яа-я0-9\s\-\.]+)(?:\s*\n|$)/);
-    const modification = trimMatch ? trimMatch[1].trim() : '';
+    // Extract trim/configuration - look for 🟢Комплектация: or Комплектация:
+    const trimMatch = text.match(/🟢Комплектация:\s*([^\n]+)|(?:Комплектация:\s*|Trim:\s*)?([A-Za-zА-Яа-я0-9\s\-\.]+)(?:\s*\n|$)/);
+    const modification = trimMatch ? (trimMatch[1] || trimMatch[2]).trim() : '';
 
     // Extract registration date (year/month format)
     const yearMatch = text.match(/(\d{4})\s*год\s*\/\s*(\d{1,2})\s*месяц/);
     const year = yearMatch ? `${yearMatch[1]} год / ${yearMatch[2]} месяц (дата регистрации)` : '';
 
-    // Extract engine info
-    const engineMatch = text.match(/(\d+(?:\.\d+)?)\s*л\.\s*,\s*(\d+)\s*л\.с\.?\s*(?:\(([^)]+)\))?/i);
-    const engine = engineMatch ? `${engineMatch[1]} л., ${engineMatch[2]} л.с.${engineMatch[3] ? ` (${engineMatch[3]})` : ''}` : '';
+    // Extract engine info - look for 🟢Двигатель: or Двигатель:
+    const engineMatch = text.match(/🟢Двигатель:\s*(\d+(?:\.\d+)?)\s*л\.\s*,\s*(\d+)\s*л\.с\s*\(([^)]+)\)|(\d+(?:\.\d+)?)\s*л\.\s*,\s*(\d+)\s*л\.с\.?\s*(?:\(([^)]+)\))?/i);
+    const engine = engineMatch ? 
+      (engineMatch[1] ? `${engineMatch[1]} л., ${engineMatch[2]} л.с. (${engineMatch[3]})` : 
+       `${engineMatch[4]} л., ${engineMatch[5]} л.с.${engineMatch[6] ? ` (${engineMatch[6]})` : ''}`) : '';
 
-    // Extract drive type
-    const driveMatch = text.match(/(4WD|AWD|FWD|RWD|2WD|Передний|Задний|Полный)/i);
-    const drive = driveMatch ? DRIVE_MAPPING[driveMatch[1].toUpperCase()] || driveMatch[1] : '';
+    // Extract drive type - look for 🟢Привод: or Привод:
+    const driveMatch = text.match(/🟢Привод:\s*(4WD|AWD|FWD|RWD|2WD|Передний|Задний|Полный)|(4WD|AWD|FWD|RWD|2WD|Передний|Задний|Полный)/i);
+    const drive = driveMatch ? DRIVE_MAPPING[(driveMatch[1] || driveMatch[2]).toUpperCase()] || (driveMatch[1] || driveMatch[2]) : '';
 
-    // Extract mileage
-    const mileageMatch = text.match(/(\d+(?:\s*\d+)*)\s*км\.?/);
-    const distance = mileageMatch ? `${parseInt(mileageMatch[1].replace(/\s/g, '')).toLocaleString('ru-RU')} км.` : '';
+    // Extract mileage - look for 🟢Пробег: or Пробег:
+    const mileageMatch = text.match(/🟢Пробег:\s*(\d+(?:\.\d+)*)\s*км\.?|(\d+(?:\s*\d+)*)\s*км\.?/);
+    const mileageValue = mileageMatch ? (mileageMatch[1] || mileageMatch[2]) : '';
+    const distance = mileageValue ? 
+      `${parseInt(mileageValue.replace(/\./g, '').replace(/\s/g, '')).toLocaleString('ru-RU')} км.` : '';
 
     // Determine if car is new based on mileage (0 км = new)
     const isNew = distance.includes('0 км') || distance === '0 км.';
 
-    // Extract export country
-    const countryMatch = text.match(/Страна\s*экспорта:\s*([^\n]+)/);
-    const location = countryMatch ? COUNTRY_MAPPING[countryMatch[1].trim()] || 'CN' : 'CN';
+    // Extract export country - look for 🟢Страна экспорта: or Страна экспорта:
+    const countryMatch = text.match(/🟢Страна\s*экспорта:\s*([^🇰🇷🇨🇳🇯🇵🇩🇪]+)[🇰🇷🇨🇳🇯🇵🇩🇪]|Страна\s*экспорта:\s*([^\n]+)/);
+    const countryName = countryMatch ? (countryMatch[1] || countryMatch[2]).trim() : '';
+    const location = countryName ? COUNTRY_MAPPING[countryName] || 'CN' : 'CN';
 
-    // Extract price (turnkey in Moscow)
-    const priceMatch = text.match(/(?:Цена\s*\(под\s*ключ\s*в\s*Москве\):\s*)?(\d+(?:\s*\d+)*)\s*₽/);
-    const price = priceMatch ? `${parseInt(priceMatch[1].replace(/\s/g, '')).toLocaleString('ru-RU')} ₽` : '';
+    // Extract price - look for "Цена под ключ до Москвы" or "Цена (под ключ в Москве)"
+    const priceMatch = text.match(/Цена под ключ до Москвы[^0-9]*(\d+(?:\.\d+)*)|(?:Цена\s*\(под\s*ключ\s*в\s*Москве\):\s*)?(\d+(?:\s*\d+)*)\s*₽/);
+    const priceValue = priceMatch ? (priceMatch[1] || priceMatch[2]) : '';
+    const price = priceValue ? 
+      `${parseInt(priceValue.replace(/\./g, '').replace(/\s/g, '')).toLocaleString('ru-RU')} ₽` : '';
 
     // Extract publication date
     const dateMatch = text.match(/по\s*курсу\s*(\d{1,2})\s*сентября|(\d{1,2})\s*сентября/);
@@ -153,7 +161,14 @@ function isCarRelatedMessage(text: string): boolean {
     'Привод:',
     'Пробег:',
     'Цена',
-    '₽'
+    '₽',
+    '🔥', // Fire emoji used in your format
+    '🟢Комплектация:', // Green circle with text
+    '🟢Двигатель:',
+    '🟢Привод:',
+    '🟢Пробег:',
+    '🟢Страна экспорта:',
+    'Цена под ключ до Москвы'
   ];
 
   return carKeywords.some(keyword => text.includes(keyword));

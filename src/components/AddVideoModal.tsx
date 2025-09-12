@@ -95,7 +95,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
               type="text"
               value={review.customerName}
               onChange={(e) => updateReview('customerName', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="Имя клиента"
               required
             />
@@ -109,7 +109,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
               type="text"
               value={review.location}
               onChange={(e) => updateReview('location', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="Город"
               required
             />
@@ -123,7 +123,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
               type="text"
               value={review.carModel}
               onChange={(e) => updateReview('carModel', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="BMW X5"
               required
             />
@@ -137,7 +137,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
               type="text"
               value={review.action}
               onChange={(e) => updateReview('action', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="Смотреть"
             />
           </div>
@@ -150,7 +150,7 @@ export default function AddVideoModal({ isOpen, onClose, onSave }: AddVideoModal
               type="text"
               value={review.vkEmbedUrl}
               onChange={(e) => updateReview('vkEmbedUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
               placeholder="https://vk.com/video_ext.php?..."
               required
             />

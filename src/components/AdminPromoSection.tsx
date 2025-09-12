@@ -38,7 +38,7 @@ export default function AdminPromoSection({ data, onChange, onSaveHeader, onCanc
           <textarea
             value={data.title}
             onChange={(e) => updateTitle(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent resize-none"
             rows={2}
             placeholder="Заголовок промо секции"
           />
@@ -51,7 +51,7 @@ export default function AdminPromoSection({ data, onChange, onSaveHeader, onCanc
           <textarea
             value={data.subtitle}
             onChange={(e) => updateSubtitle(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent resize-none"
             rows={3}
             placeholder="Описание промо секции"
           />

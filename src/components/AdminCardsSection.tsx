@@ -398,7 +398,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
             type="text"
             value={data.title}
             onChange={(e) => updateTitle(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
             placeholder="Каталог авто"
           />
         </div>
@@ -410,7 +410,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
           <textarea
             value={data.subtitle}
             onChange={(e) => updateSubtitle(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent resize-none"
             rows={3}
             placeholder="Описание каталога"
           />
@@ -548,7 +548,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         type="text"
                         value={card.title}
                         onChange={(e) => updateCard(sortedIndex, { ...card, title: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                         placeholder="BMW X5"
                       />
                     </div>
@@ -562,7 +562,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                           type="text"
                           value={getFormattedValue(card.id, 'price')}
                           onChange={(e) => handlePriceChange(sortedIndex, e.target.value)}
-                          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                           placeholder="3 000 000"
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
@@ -579,7 +579,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         type="text"
                         value={card.engine}
                         onChange={(e) => updateCard(sortedIndex, { ...card, engine: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                         placeholder="2.0T л., 258 л.с."
                       />
                     </div>
@@ -591,7 +591,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <select
                         value={card.drive}
                         onChange={(e) => updateCard(sortedIndex, { ...card, drive: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                       >
                         <option value="4WD">4WD</option>
                         <option value="2WD">2WD</option>
@@ -608,7 +608,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         type="text"
                         value={card.modification}
                         onChange={(e) => updateCard(sortedIndex, { ...card, modification: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                         placeholder="Premium"
                       />
                     </div>
@@ -622,7 +622,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                           type="text"
                           value={getFormattedValue(card.id, 'distance')}
                           onChange={(e) => handleDistanceChange(sortedIndex, e.target.value)}
-                          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                           placeholder="50 000"
                         />
                         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
@@ -639,7 +639,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         type="text"
                         value={card.year}
                         onChange={(e) => updateCard(sortedIndex, { ...card, year: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                         placeholder="2024 год"
                       />
                     </div>
@@ -651,7 +651,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                       <select
                         value={card.location}
                         onChange={(e) => updateCard(sortedIndex, { ...card, location: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                       >
                         <option value="CN">Китай (CN)</option>
                         <option value="JP">Япония (JP)</option>
@@ -668,7 +668,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         type="text"
                         value={card.date}
                         onChange={(e) => updateCard(sortedIndex, { ...card, date: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                         placeholder="27 июля"
                       />
                     </div>
@@ -679,7 +679,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                           type="checkbox"
                           checked={card.isNew}
                           onChange={(e) => updateCard(sortedIndex, { ...card, isNew: e.target.checked })}
-                          className="rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                          className="rounded border-gray-300 text-gray-900 focus-visible:ring-gray-900"
                         />
                         <span className="text-sm font-medium text-gray-700">Новый автомобиль</span>
                       </label>
@@ -693,7 +693,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                         type="url"
                         value={card.externalLink}
                         onChange={(e) => updateCard(sortedIndex, { ...card, externalLink: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                         placeholder="https://auto.ru/cars/bmw/x5/"
                       />
                     </div>

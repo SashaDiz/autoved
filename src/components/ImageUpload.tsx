@@ -177,7 +177,7 @@ export default function ImageUpload({
           type="url"
           value={currentImage.startsWith('data:') || currentImage.includes('s3.twcstorage.ru') ? '' : currentImage}
           onChange={(e) => onImageChange(e.target.value)}
-          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
           placeholder="https://example.com/image.jpg"
         />
       </div>

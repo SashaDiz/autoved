@@ -64,7 +64,7 @@ const Navigation = () => {
       {/* Skip to main content link */}
       <a 
         href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       >
         Перейти к основному содержимому
       </a>
@@ -96,7 +96,7 @@ const Navigation = () => {
             <li role="none">
               <a 
                 href="#services" 
-                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                 role="menuitem"
               >
                 Каталог
@@ -105,7 +105,7 @@ const Navigation = () => {
             <li role="none">
               <a 
                 href="#about" 
-                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                 role="menuitem"
               >
                 О нас
@@ -114,7 +114,7 @@ const Navigation = () => {
             <li role="none">
               <a 
                 href="#process" 
-                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                 role="menuitem"
               >
                 Процесс
@@ -123,7 +123,7 @@ const Navigation = () => {
             <li role="none">
               <a 
                 href="#reviews" 
-                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                 role="menuitem"
               >
                 Отзывы
@@ -132,7 +132,7 @@ const Navigation = () => {
             <li role="none">
               <a 
                 href="#contacts" 
-                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                className="text-white hover:text-gray-200 transition-colors font-medium text-sm xl:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                 role="menuitem"
               >
                 Контакты
@@ -141,7 +141,7 @@ const Navigation = () => {
             <li role="none">
               <a 
                 href="#contacts" 
-                className="text-gray-900 bg-white px-4 xl:px-6 py-3 xl:py-4 rounded-full transition-colors font-medium text-sm xl:text-base hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent"
+                className="text-gray-900 bg-white px-4 xl:px-6 py-3 xl:py-4 rounded-full transition-colors font-medium text-sm xl:text-base hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                 role="menuitem"
               >
                 Связаться с нами
@@ -154,7 +154,7 @@ const Navigation = () => {
         <button 
           ref={menuButtonRef}
           onClick={toggleMenu}
-          className="burger-button nav-md:hidden z-30 flex flex-col justify-center items-center w-8 h-8 space-y-1.5 group transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md"
+          className="burger-button nav-md:hidden z-30 flex flex-col justify-center items-center w-8 h-8 space-y-1.5 group transition-transform duration-300 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md"
           aria-label={isMenuOpen ? "Закрыть меню" : "Открыть меню"}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
@@ -189,7 +189,7 @@ const Navigation = () => {
                   <a 
                     ref={firstMenuItemRef}
                     href="#services" 
-                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                     onClick={() => setIsMenuOpen(false)}
                     role="menuitem"
                     tabIndex={isMenuOpen ? 0 : -1}
@@ -200,7 +200,7 @@ const Navigation = () => {
                 <li role="none">
                   <a 
                     href="#about" 
-                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                     onClick={() => setIsMenuOpen(false)}
                     role="menuitem"
                     tabIndex={isMenuOpen ? 0 : -1}
@@ -211,7 +211,7 @@ const Navigation = () => {
                 <li role="none">
                   <a 
                     href="#process" 
-                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                     onClick={() => setIsMenuOpen(false)}
                     role="menuitem"
                     tabIndex={isMenuOpen ? 0 : -1}
@@ -222,7 +222,7 @@ const Navigation = () => {
                 <li role="none">
                   <a 
                     href="#reviews" 
-                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md px-2 py-1"
+                    className="text-white hover:text-gray-200 transition-colors font-medium text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md px-2 py-1"
                     onClick={() => setIsMenuOpen(false)}
                     role="menuitem"
                     tabIndex={isMenuOpen ? 0 : -1}
@@ -233,7 +233,7 @@ const Navigation = () => {
                 <li className="pt-4" role="none">
                   <a 
                     href="#contacts" 
-                    className="text-gray-900 bg-white px-8 py-4 rounded-full transition-colors font-medium text-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent"
+                    className="text-gray-900 bg-white px-8 py-4 rounded-full transition-colors font-medium text-lg hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                     onClick={() => setIsMenuOpen(false)}
                     role="menuitem"
                     tabIndex={isMenuOpen ? 0 : -1}

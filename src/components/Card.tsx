@@ -120,7 +120,7 @@ export default function Card({
       href={externalLink}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col h-full bg-white rounded-xl border-1 border-gray-200 hover:border-gray-300 overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      className="group flex flex-col h-full bg-white rounded-xl border-1 border-gray-200 hover:border-gray-300 overflow-hidden cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       style={{ transformStyle: 'preserve-3d' }}
       aria-label={`Посмотреть ${title} - ${price}`}
     >
@@ -209,7 +209,7 @@ export default function Card({
           </div>
           <div className='flex items-center flex-shrink-0 gap-2'>
             {externalLink.startsWith('https://t.me/') ? (
-              <span className="text-gray-900 font-medium text-sm text-end leading-none group-hover:text-blue-600 transition-colors">
+              <span className="text-gray-900 font-medium text-sm text-end leading-none group-hover:text-green-600 transition-colors">
                 Посмотреть
                 <br />в Telegram
               </span>
@@ -227,7 +227,7 @@ export default function Card({
               xmlns="http://www.w3.org/2000/svg" 
               className={`stroke-gray-900 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 ${
                 externalLink.startsWith('https://t.me/') 
-                  ? 'group-hover:stroke-blue-600' 
+                  ? 'group-hover:stroke-green-600' 
                   : 'group-hover:stroke-green-600'
               }`}
               aria-hidden="true"

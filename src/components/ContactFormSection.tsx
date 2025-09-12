@@ -140,7 +140,7 @@ export default function ContactFormSection() {
                   onChange={handleInputChange}
                   placeholder="Иван Иванов"
                   required
-                  className="w-full px-4 py-3 border-b-1 border-gray-700 text-white placeholder-gray-500 hover:border-white focus:outline-none focus:border-green-500 transition-all duration-300"
+                  className="w-full px-4 py-3 border-b-1 border-gray-700 text-white placeholder-gray-500 hover:border-white focus:outline-none focus-visible:border-green-500 transition-all duration-300"
                 />
               </div>
 
@@ -156,7 +156,7 @@ export default function ContactFormSection() {
                   onChange={handleInputChange}
                   placeholder="+7 (000) 000-000"
                   required
-                  className="w-full px-4 py-3 border-b-1 border-gray-700 text-white placeholder-gray-500 hover:border-white focus:outline-none focus:border-green-500 transition-all duration-300"
+                  className="w-full px-4 py-3 border-b-1 border-gray-700 text-white placeholder-gray-500 hover:border-white focus:outline-none focus-visible:border-green-500 transition-all duration-300"
                 />
               </div>
             </div>
@@ -174,7 +174,7 @@ export default function ContactFormSection() {
                     onChange={handleInputChange}
                     onFocus={() => handleSelectFocus('country')}
                     onBlur={() => handleSelectBlur('country')}
-                    className="w-full px-4 py-3 pr-10 border-b-1 border-gray-700 bg-transparent text-white hover:border-white focus:outline-none focus:border-green-500 transition-all duration-300 appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 pr-10 border-b-1 border-gray-700 bg-transparent text-white hover:border-white focus:outline-none focus-visible:border-green-500 transition-all duration-300 appearance-none cursor-pointer"
                     style={{
                       background: 'linear-gradient(to bottom, transparent 0%, transparent 100%)',
                       backgroundImage: 'none'
@@ -212,7 +212,7 @@ export default function ContactFormSection() {
                     onChange={handleInputChange}
                     onFocus={() => handleSelectFocus('budget')}
                     onBlur={() => handleSelectBlur('budget')}
-                    className="w-full px-4 py-3 pr-10 border-b-1 border-gray-700 bg-transparent text-white hover:border-white focus:outline-none focus:border-green-500 transition-all duration-300 appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 pr-10 border-b-1 border-gray-700 bg-transparent text-white hover:border-white focus:outline-none focus-visible:border-green-500 transition-all duration-300 appearance-none cursor-pointer"
                     style={{
                       background: 'linear-gradient(to bottom, transparent 0%, transparent 100%)',
                       backgroundImage: 'none'
@@ -250,7 +250,7 @@ export default function ContactFormSection() {
                 onChange={handleInputChange}
                 rows={4}
                 placeholder="Опишите подробнее ваши пожелания (марка, модель, комплектация и т.д.)"
-                className="w-full px-4 py-3 border-b-1 border-gray-700 text-white placeholder-gray-500 hover:border-white focus:outline-none focus:border-green-500 transition-all duration-300 resize-none"
+                className="w-full px-4 py-3 border-b-1 border-gray-700 text-white placeholder-gray-500 hover:border-white focus:outline-none focus-visible:border-green-500 transition-all duration-300 resize-none"
               />
             </div>
 
@@ -272,7 +272,7 @@ export default function ContactFormSection() {
                   checked={formData.privacyAccepted}
                   onChange={handleInputChange}
                   required
-                  className="w-5 h-5 mt-0.5 cursor-pointer text-green-500 bg-gray-800 border-gray-600 rounded focus:ring-green-500 focus:ring-2"
+                  className="w-5 h-5 mt-0.5 cursor-pointer text-green-500 bg-gray-800 border-gray-600 rounded focus-visible:ring-green-500 focus-visible:ring-2"
                 />
                 <label className="text-xs sm:text-sm text-gray-300 leading-relaxed">
                   Я прочитал{' '}

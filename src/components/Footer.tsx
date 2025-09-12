@@ -24,7 +24,7 @@ export default function Footer() {
               <li role="none">
                 <a 
                   href="#services" 
-                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md px-2 py-1"
+                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded-md px-2 py-1"
                   role="menuitem"
                 >
                   Каталог
@@ -33,7 +33,7 @@ export default function Footer() {
               <li role="none">
                 <a 
                   href="#about" 
-                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md px-2 py-1"
+                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded-md px-2 py-1"
                   role="menuitem"
                 >
                   О нас
@@ -42,7 +42,7 @@ export default function Footer() {
               <li role="none">
                 <a 
                   href="#process" 
-                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md px-2 py-1"
+                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded-md px-2 py-1"
                   role="menuitem"
                 >
                   Процесс
@@ -51,7 +51,7 @@ export default function Footer() {
               <li role="none">
                 <a 
                   href="#reviews" 
-                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md px-2 py-1"
+                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded-md px-2 py-1"
                   role="menuitem"
                 >
                   Отзывы
@@ -60,7 +60,7 @@ export default function Footer() {
               <li role="none">
                 <a 
                   href="#contacts" 
-                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md px-2 py-1"
+                  className="text-white hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded-md px-2 py-1"
                   role="menuitem"
                 >
                   Контакты

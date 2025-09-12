@@ -274,7 +274,7 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
                       ...review,
                       customerName: e.target.value
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                     placeholder="Имя клиента"
                   />
                 </div>
@@ -290,7 +290,7 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
                       ...review,
                       location: e.target.value
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                     placeholder="Город"
                   />
                 </div>
@@ -306,7 +306,7 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
                       ...review,
                       carModel: e.target.value
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                     placeholder="BMW X5"
                   />
                 </div>
@@ -322,7 +322,7 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
                       ...review,
                       action: e.target.value
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                     placeholder="Смотреть"
                   />
                 </div>
@@ -349,7 +349,7 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
                       ...review,
                       vkEmbedUrl: e.target.value
                     })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:border-transparent"
                     placeholder="https://vk.com/video_ext.php?..."
                   />
                   <p className="text-xs text-gray-500 mt-1">

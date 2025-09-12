@@ -56,8 +56,8 @@ export default function ConfirmationModal({
   if (!isOpen) return null;
 
   const confirmButtonClass = variant === 'danger' 
-    ? 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
-    : 'bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-500';
+    ? 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500'
+    : 'bg-orange-600 text-white hover:bg-orange-700 focus-visible:ring-orange-500';
 
   return (
     <div 
@@ -83,7 +83,7 @@ export default function ConfirmationModal({
             <h3 id="modal-title" className="text-lg font-semibold text-gray-900">{title}</h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md p-1"
+              className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-md p-1"
               aria-label="Закрыть модальное окно"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
