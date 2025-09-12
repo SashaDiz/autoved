@@ -99,11 +99,11 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
   };
 
   // Helper function to get sorted index from original index
-  const getSortedIndex = (originalIndex: number): number => {
-    const card = data.cards[originalIndex];
-    const sortedCards = sortCardsByDate(data.cards);
-    return sortedCards.findIndex(c => c.id === card.id);
-  };
+  // const getSortedIndex = (originalIndex: number): number => {
+  //   const card = data.cards[originalIndex];
+  //   const sortedCards = sortCardsByDate(data.cards);
+  //   return sortedCards.findIndex(c => c.id === card.id);
+  // };
 
   const updateTitle = (title: string) => {
     onChange({ ...data, title }, 'header');

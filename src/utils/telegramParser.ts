@@ -209,7 +209,7 @@ export function validateCarData(data: ParsedCarData): boolean {
 /**
  * Format car data for database insertion
  */
-export function formatCarDataForDB(data: ParsedCarData, imageUrl: string, externalLink?: string, telegramLink?: string): any {
+export function formatCarDataForDB(data: ParsedCarData, imageUrl: string, externalLink?: string, telegramLink?: string): Record<string, unknown> {
   return {
     id: generateCarId(),
     title: data.title,

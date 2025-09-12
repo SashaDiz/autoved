@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { parseCarData, validateCarData, formatCarDataForDB, extractImageFileId, generateTelegramLink, ParsedCarData } from '@/utils/telegramParser';
-import { generateId } from '@/utils/adminData';
+import { parseCarData, validateCarData, formatCarDataForDB, extractImageFileId, generateTelegramLink } from '@/utils/telegramParser';
 
 // Telegram Bot API configuration
 const TELEGRAM_BOT_TOKEN = process.env.PARSER_TELEGRAM_BOT_TOKEN;
@@ -51,7 +50,7 @@ async function downloadAndUploadImage(fileId: string): Promise<string> {
 /**
  * Add new car card to database
  */
-async function addCarCardToDatabase(carData: any): Promise<void> {
+async function addCarCardToDatabase(carData: Record<string, unknown>): Promise<void> {
   const connection = await db.getConnection();
   
   try {
@@ -59,7 +58,7 @@ async function addCarCardToDatabase(carData: any): Promise<void> {
 
     // Get current max sort order
     const [sortResult] = await connection.execute('SELECT MAX(sort_order) as max_sort FROM car_cards');
-    const maxSort = (sortResult as any)[0]?.max_sort || 0;
+    const maxSort = (sortResult as Array<{ max_sort: number }>)[0]?.max_sort || 0;
 
     // Insert new car card
     await connection.execute(

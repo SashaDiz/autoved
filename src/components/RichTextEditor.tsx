@@ -108,7 +108,7 @@ export default function RichTextEditor({
     if (editorRef.current && !editorRef.current.innerHTML && value) {
       editorRef.current.innerHTML = value;
     }
-  }, []);
+  }, [value]);
 
   // Обновление содержимого при изменении value (только если редактор не в фокусе)
   useEffect(() => {

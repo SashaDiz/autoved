@@ -2,7 +2,7 @@
 import { parseCarData, TelegramMessage } from '@/utils/telegramParser';
 
 // Configuration
-const BOT_TOKEN = process.env.PARSER_TELEGRAM_BOT_TOKEN;
+// const BOT_TOKEN = process.env.PARSER_TELEGRAM_BOT_TOKEN;
 const WEBHOOK_SECRET = process.env.PARSER_TELEGRAM_WEBHOOK_SECRET;
 const TARGET_CHAT_ID = process.env.PARSER_TELEGRAM_TARGET_CHAT_ID;
 
@@ -25,10 +25,10 @@ function containsCarHashtag(text: string): boolean {
 /**
  * Process incoming message from Telegram
  */
-export async function processMessage(message: any): Promise<boolean> {
+export async function processMessage(message: TelegramMessage): Promise<boolean> {
   try {
     // Check if message is from target chat
-    if (TARGET_CHAT_ID && message.chat.id.toString() !== TARGET_CHAT_ID) {
+    if (TARGET_CHAT_ID && message.chat?.id && message.chat.id.toString() !== TARGET_CHAT_ID) {
       return false;
     }
 
