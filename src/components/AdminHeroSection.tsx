@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { HeroData, HeroSlide } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
 import AddSlideModal from '@/components/AddSlideModal';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 interface AdminHeroSectionProps {
   data: HeroData;
@@ -18,6 +19,9 @@ interface AdminHeroSectionProps {
 export default function AdminHeroSection({ data, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminHeroSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [slideToDelete, setSlideToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [slideChanges, setSlideChanges] = useState<Record<number, HeroSlide>>({});
 
   const updateTitle = (title: string) => {
@@ -89,18 +93,26 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
     }
   };
 
-  const removeSlide = async (index: number) => {
+  const handleDeleteClick = (index: number) => {
     if (data.slides.length <= 1) return; // Don't allow removing the last slide
-    const newSlides = data.slides.filter((_, i) => i !== index);
-    const updatedData = { ...data, slides: newSlides };
-    onChange(updatedData, 'items');
+    setSlideToDelete(index);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteSlide = async () => {
+    if (slideToDelete === null || data.slides.length <= 1) return;
     
-    if (activeSlide >= newSlides.length) {
-      setActiveSlide(Math.max(0, newSlides.length - 1));
-    }
-    
-    // Auto-save to database
+    setIsDeleting(true);
     try {
+      const newSlides = data.slides.filter((_, i) => i !== slideToDelete);
+      const updatedData = { ...data, slides: newSlides };
+      onChange(updatedData, 'items');
+      
+      if (activeSlide >= newSlides.length) {
+        setActiveSlide(Math.max(0, newSlides.length - 1));
+      }
+      
+      // Auto-save to database
       const response = await fetch('/api/admin/data', {
         method: 'POST',
         headers: {
@@ -112,9 +124,23 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
       if (!response.ok) {
         throw new Error('Failed to save slide removal');
       }
+      
+      // Close modal
+      setIsDeleteModalOpen(false);
+      setSlideToDelete(null);
     } catch (error) {
       console.error('Failed to save slide removal:', error);
+      // Close modal even on error
+      setIsDeleteModalOpen(false);
+      setSlideToDelete(null);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const cancelDeleteSlide = () => {
+    setIsDeleteModalOpen(false);
+    setSlideToDelete(null);
   };
 
   return (
@@ -224,7 +250,7 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
               </h4>
               {data.slides.length > 1 && (
                 <button
-                  onClick={() => removeSlide(activeSlide)}
+                  onClick={() => handleDeleteClick(activeSlide)}
                   className="text-red-600 hover:text-red-700 transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -350,6 +376,19 @@ export default function AdminHeroSection({ data, onChange, onSaveHeader, onCance
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddSlide}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={cancelDeleteSlide}
+        onConfirm={confirmDeleteSlide}
+        title="Удалить слайд"
+        message={slideToDelete !== null ? `Вы уверены, что хотите удалить слайд ${slideToDelete + 1}? Это действие нельзя отменить.` : ''}
+        confirmText="Удалить"
+        cancelText="Отмена"
+        isLoading={isDeleting}
+        variant="danger"
       />
     </div>
   );

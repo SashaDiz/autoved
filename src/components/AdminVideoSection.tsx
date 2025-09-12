@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { VideoReview } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
 import AddVideoModal from '@/components/AddVideoModal';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 interface AdminVideoSectionProps {
   data: VideoReview[];
@@ -19,6 +20,9 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
   const [activeReview, setActiveReview] = useState(0);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // State for tracking changes in each review
   const [reviewChanges, setReviewChanges] = useState<Record<number, VideoReview>>({});
@@ -130,9 +134,17 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
     }
   };
 
-  const removeReview = async (index: number) => {
+  const handleDeleteClick = (index: number) => {
+    setReviewToDelete(index);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteReview = async () => {
+    if (reviewToDelete === null) return;
+    
+    setIsDeleting(true);
     try {
-      const newReviews = data.filter((_, i) => i !== index);
+      const newReviews = data.filter((_, i) => i !== reviewToDelete);
       
       // Save to database
       const response = await fetch('/api/admin/data', {
@@ -155,15 +167,30 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
       if (activeReview >= newReviews.length) {
         setActiveReview(Math.max(0, newReviews.length - 1));
       }
+      
+      // Close modal
+      setIsDeleteModalOpen(false);
+      setReviewToDelete(null);
     } catch (error) {
       console.error('Error deleting video review:', error);
       // Still update local state for immediate feedback
-      const newReviews = data.filter((_, i) => i !== index);
+      const newReviews = data.filter((_, i) => i !== reviewToDelete);
       onChange(newReviews, 'items');
       if (activeReview >= newReviews.length) {
         setActiveReview(Math.max(0, newReviews.length - 1));
       }
+      
+      // Close modal
+      setIsDeleteModalOpen(false);
+      setReviewToDelete(null);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const cancelDeleteReview = () => {
+    setIsDeleteModalOpen(false);
+    setReviewToDelete(null);
   };
 
   const toggleReviewDetails = (index: number) => {
@@ -222,7 +249,7 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
                   {expandedReview === index ? 'Свернуть' : 'Редактировать'}
                 </button>
                 <button
-                  onClick={() => removeReview(index)}
+                  onClick={() => handleDeleteClick(index)}
                   className="text-red-600 hover:text-red-700 transition-colors ml-2 cursor-pointer"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -379,6 +406,19 @@ export default function AdminVideoSection({ data, originalData, onChange }: Admi
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddReview}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={cancelDeleteReview}
+        onConfirm={confirmDeleteReview}
+        title="Удалить видео-отзыв"
+        message={reviewToDelete !== null ? `Вы уверены, что хотите удалить видео-отзыв от "${data[reviewToDelete]?.customerName}"? Это действие нельзя отменить.` : ''}
+        confirmText="Удалить"
+        cancelText="Отмена"
+        isLoading={isDeleting}
+        variant="danger"
       />
     </div>
   );

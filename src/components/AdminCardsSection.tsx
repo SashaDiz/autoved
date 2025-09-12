@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CardsData, CarCard } from '@/utils/adminData';
 import ImageUpload from '@/components/ImageUpload';
 import AddCarModal from '@/components/AddCarModal';
+import ConfirmationModal from '@/components/ConfirmationModal';
 import { generateCarAltText } from '@/utils/altTextGenerator';
 
 // Utility functions for formatting
@@ -79,6 +80,9 @@ interface AdminCardsSectionProps {
 export default function AdminCardsSection({ data, originalData, onChange, onSaveHeader, onCancelChanges, unsavedChanges, saveStatus }: AdminCardsSectionProps) {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [cardToDelete, setCardToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // State for formatted values for each card
   const [formattedValues, setFormattedValues] = useState<Record<string, { price: string; distance: string }>>({});
@@ -263,34 +267,42 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
     }
   };
 
-  const removeCard = async (sortedIndex: number) => {
-    const originalIndex = getOriginalIndex(sortedIndex);
-    const newCards = data.cards.filter((_, i) => i !== originalIndex);
-    const updatedData = { ...data, cards: newCards };
-    onChange(updatedData, 'items');
+  const handleDeleteClick = (sortedIndex: number) => {
+    setCardToDelete(sortedIndex);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteCard = async () => {
+    if (cardToDelete === null) return;
     
-    // Update expanded card index
-    if (expandedCard === originalIndex) {
-      setExpandedCard(null);
-    } else if (expandedCard !== null && expandedCard > originalIndex) {
-      setExpandedCard(expandedCard - 1);
-    }
-    
-    // Clear any pending changes for this card
-    setCardChanges(prev => {
-      const newChanges = { ...prev };
-      delete newChanges[originalIndex];
-      return newChanges;
-    });
-    
-    setCardSaveStatus(prev => {
-      const newStatus = { ...prev };
-      delete newStatus[originalIndex];
-      return newStatus;
-    });
-    
-    // Auto-save to database
+    setIsDeleting(true);
     try {
+      const originalIndex = getOriginalIndex(cardToDelete);
+      const newCards = data.cards.filter((_, i) => i !== originalIndex);
+      const updatedData = { ...data, cards: newCards };
+      onChange(updatedData, 'items');
+      
+      // Update expanded card index
+      if (expandedCard === originalIndex) {
+        setExpandedCard(null);
+      } else if (expandedCard !== null && expandedCard > originalIndex) {
+        setExpandedCard(expandedCard - 1);
+      }
+      
+      // Clear any pending changes for this card
+      setCardChanges(prev => {
+        const newChanges = { ...prev };
+        delete newChanges[originalIndex];
+        return newChanges;
+      });
+      
+      setCardSaveStatus(prev => {
+        const newStatus = { ...prev };
+        delete newStatus[originalIndex];
+        return newStatus;
+      });
+      
+      // Auto-save to database
       const response = await fetch('/api/admin/data', {
         method: 'POST',
         headers: {
@@ -302,9 +314,23 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
       if (!response.ok) {
         throw new Error('Failed to save card removal');
       }
+      
+      // Close modal
+      setIsDeleteModalOpen(false);
+      setCardToDelete(null);
     } catch (error) {
       console.error('Failed to save card removal:', error);
+      // Close modal even on error
+      setIsDeleteModalOpen(false);
+      setCardToDelete(null);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const cancelDeleteCard = () => {
+    setIsDeleteModalOpen(false);
+    setCardToDelete(null);
   };
 
   const toggleCardDetails = (sortedIndex: number) => {
@@ -487,7 +513,7 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
                     {expandedCard === originalIndex ? 'Свернуть' : 'Редактировать'}
                   </button>
                   <button
-                    onClick={() => removeCard(sortedIndex)}
+                    onClick={() => handleDeleteClick(sortedIndex)}
                     className="text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -739,6 +765,19 @@ export default function AdminCardsSection({ data, originalData, onChange, onSave
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddCard}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={cancelDeleteCard}
+        onConfirm={confirmDeleteCard}
+        title="Удалить автомобиль"
+        message={cardToDelete !== null ? `Вы уверены, что хотите удалить автомобиль "${data.cards[getOriginalIndex(cardToDelete)]?.title}"? Это действие нельзя отменить.` : ''}
+        confirmText="Удалить"
+        cancelText="Отмена"
+        isLoading={isDeleting}
+        variant="danger"
       />
     </div>
   );

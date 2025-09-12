@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FAQItem } from '@/utils/adminData';
 import AddFAQModal from '@/components/AddFAQModal';
 import RichTextEditor from '@/components/RichTextEditor';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 interface AdminFAQSectionProps {
   data: FAQItem[];
@@ -17,6 +18,9 @@ interface AdminFAQSectionProps {
 export default function AdminFAQSection({ data, originalData, onChange }: AdminFAQSectionProps) {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [faqToDelete, setFaqToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // State for tracking changes in each FAQ
   const [faqChanges, setFaqChanges] = useState<Record<number, FAQItem>>({});
@@ -128,9 +132,17 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
     }
   };
 
-  const removeFAQ = async (index: number) => {
+  const handleDeleteClick = (index: number) => {
+    setFaqToDelete(index);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteFAQ = async () => {
+    if (faqToDelete === null) return;
+    
+    setIsDeleting(true);
     try {
-      const newFAQs = data.filter((_, i) => i !== index);
+      const newFAQs = data.filter((_, i) => i !== faqToDelete);
       
       // Save to database
       const response = await fetch('/api/admin/data', {
@@ -150,22 +162,37 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
       
       // Update local state
       onChange(newFAQs, 'items');
-      if (expandedFAQ === index) {
+      if (expandedFAQ === faqToDelete) {
         setExpandedFAQ(null);
-      } else if (expandedFAQ !== null && expandedFAQ > index) {
+      } else if (expandedFAQ !== null && expandedFAQ > faqToDelete) {
         setExpandedFAQ(expandedFAQ - 1);
       }
+      
+      // Close modal
+      setIsDeleteModalOpen(false);
+      setFaqToDelete(null);
     } catch (error) {
       console.error('Error deleting FAQ:', error);
       // Still update local state for immediate feedback
-      const newFAQs = data.filter((_, i) => i !== index);
+      const newFAQs = data.filter((_, i) => i !== faqToDelete);
       onChange(newFAQs, 'items');
-      if (expandedFAQ === index) {
+      if (expandedFAQ === faqToDelete) {
         setExpandedFAQ(null);
-      } else if (expandedFAQ !== null && expandedFAQ > index) {
+      } else if (expandedFAQ !== null && expandedFAQ > faqToDelete) {
         setExpandedFAQ(expandedFAQ - 1);
       }
+      
+      // Close modal
+      setIsDeleteModalOpen(false);
+      setFaqToDelete(null);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const cancelDeleteFAQ = () => {
+    setIsDeleteModalOpen(false);
+    setFaqToDelete(null);
   };
 
   const toggleFAQDetails = (index: number) => {
@@ -298,7 +325,7 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
                   {expandedFAQ === index ? 'Свернуть' : 'Редактировать'}
                 </button>
                 <button
-                  onClick={() => removeFAQ(index)}
+                  onClick={() => handleDeleteClick(index)}
                   className="text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -403,6 +430,19 @@ export default function AdminFAQSection({ data, originalData, onChange }: AdminF
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddFAQ}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={cancelDeleteFAQ}
+        onConfirm={confirmDeleteFAQ}
+        title="Удалить вопрос"
+        message={faqToDelete !== null ? `Вы уверены, что хотите удалить вопрос "${data[faqToDelete]?.question}"? Это действие нельзя отменить.` : ''}
+        confirmText="Удалить"
+        cancelText="Отмена"
+        isLoading={isDeleting}
+        variant="danger"
       />
     </div>
   );
