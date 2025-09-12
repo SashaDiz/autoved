@@ -208,17 +208,28 @@ export default function Card({
             <p className="text-xs text-gray-500" aria-label={`Курс на ${date}`}>По курсу на {date}</p>
           </div>
           <div className='flex items-center flex-shrink-0 gap-2'>
-            <span className="text-gray-900 font-medium text-sm text-end leading-none group-hover:text-green-600 transition-colors">
-              Уточнить
-              <br />наличие
-            </span>
+            {externalLink.startsWith('https://t.me/') ? (
+              <span className="text-gray-900 font-medium text-sm text-end leading-none group-hover:text-blue-600 transition-colors">
+                Посмотреть
+                <br />в Telegram
+              </span>
+            ) : (
+              <span className="text-gray-900 font-medium text-sm text-end leading-none group-hover:text-green-600 transition-colors">
+                Уточнить
+                <br />наличие
+              </span>
+            )}
             <svg 
               width="32" 
               height="32" 
               viewBox="0 0 30 30" 
               fill="none" 
               xmlns="http://www.w3.org/2000/svg" 
-              className='stroke-gray-900 transition-all duration-300 group-hover:stroke-green-600 group-hover:-translate-y-1 group-hover:translate-x-1'
+              className={`stroke-gray-900 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 ${
+                externalLink.startsWith('https://t.me/') 
+                  ? 'group-hover:stroke-blue-600' 
+                  : 'group-hover:stroke-green-600'
+              }`}
               aria-hidden="true"
             >
               <path d="M22.9558 7.04541H14.1174M22.9558 7.04541L22.9553 15.8842M22.9558 7.04541L7.0459 22.9553" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

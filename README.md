@@ -64,8 +64,9 @@ TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 TELEGRAM_CHAT_ID=your_telegram_chat_id
 ```
 
-4. Настройте Telegram бота:
+4. Настройте Telegram ботов:
 ```bash
+# Основной бот для уведомлений:
 # 1. Создайте бота через @BotFather в Telegram
 # 2. Получите токен бота
 # 3. Добавьте бота в группу или канал
@@ -73,6 +74,15 @@ TELEGRAM_CHAT_ID=your_telegram_chat_id
 # 5. Добавьте переменные в .env.local:
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 TELEGRAM_CHAT_ID=your_chat_id_here
+
+# Парсер бот для мониторинга сообщений:
+# 1. Создайте второго бота через @BotFather
+# 2. Получите токен парсер бота
+# 3. Добавьте бота в группу/канал с автомобилями
+# 4. Получите Chat ID: node test-parser-chat-id.js
+# 5. Добавьте переменные в .env.local:
+PARSER_TELEGRAM_BOT_TOKEN=your_parser_bot_token_here
+PARSER_TELEGRAM_TARGET_CHAT_ID=your_parser_chat_id_here
 ```
 
 5. Инициализируйте базу данных:

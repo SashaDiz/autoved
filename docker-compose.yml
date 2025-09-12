@@ -7,19 +7,20 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      # Database Configuration
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-      # S3 Storage Configuration
-      - S3_ENDPOINT=${S3_ENDPOINT:-https://s3.twcstorage.ru}
+      - S3_ENDPOINT=${S3_ENDPOINT}
       - S3_BUCKET_NAME=${S3_BUCKET_NAME}
       - S3_ACCESS_KEY=${S3_ACCESS_KEY}
       - S3_SECRET_KEY=${S3_SECRET_KEY}
-      - S3_REGION=${S3_REGION:-ru-1}
-      # Telegram Bot Configuration
+      - S3_REGION=${S3_REGION}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
-    restart: unless-stopped
+      - PARSER_TELEGRAM_BOT_TOKEN=${PARSER_TELEGRAM_BOT_TOKEN}
+      - PARSER_TELEGRAM_WEBHOOK_SECRET=${PARSER_TELEGRAM_WEBHOOK_SECRET}
+      - PARSER_TELEGRAM_TARGET_CHAT_ID=${PARSER_TELEGRAM_TARGET_CHAT_ID}
+      - PARSER_TELEGRAM_WEBHOOK_URL=${PARSER_TELEGRAM_WEBHOOK_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
